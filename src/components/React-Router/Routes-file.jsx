@@ -1,6 +1,7 @@
 import {Routes, Route} from 'react-router-dom';
 import Home from '../../views/Home/Home';
 import About from '../../views/About/About';
+import CreatePost from '../CreatePost/CreatePost.jsx';
 
 const RoutePage = () => {
     return (
@@ -9,6 +10,7 @@ const RoutePage = () => {
             <Route path="/" element={<Home />}/>
             <Route path="/home" element={<Home />} />
             <Route path="/about" element={<About />} />
+            <Route path="/create-post" element={<CreatePost />} />
         </Routes>
       </div>
     );
