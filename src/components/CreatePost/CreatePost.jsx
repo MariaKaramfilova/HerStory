@@ -35,6 +35,8 @@ export default function CreatePost() {
 
     const formContent = new FormData();
     formContent.append('file', postFile);
+    
+
   }
   /** 
    * const user = {
@@ -52,6 +54,7 @@ export default function CreatePost() {
       text: 'test',
       upvoted: [uuid, uuid] (set, array?)
       user/author: uuid of user,
+      topic: ekjnskdfj,
   }
   const comment = {
     uuid: 6546512
@@ -63,14 +66,13 @@ export default function CreatePost() {
   }
   */
   return (
-    <Container className='align-items-center justify-content-center' style={{ minHeight: "100vh" }}>
-      <div className="w-100" style={{ maxWidth: "60%" }}>
+    <Container className='align-items-center justify-content-center w-100' style={{ minHeight: "100vh", maxWidth: "60%" }}>
         <h2 className='text-center mb-4'>Create a post</h2>
         <Form>
           {error && <Alert variant='danger'>{error}</Alert>}
           <Form.Group>
-            <Row>
-              <Col xs={7}>
+            <Row className='mb-3'>
+              <Col>
                 <Form.Select aria-label='Choose topic' onChange={(e) => setPostTopic(e.target.value)} required>
                   <option>Choose topic</option>
                   <option>One</option>
@@ -79,15 +81,15 @@ export default function CreatePost() {
                 </Form.Select>
               </Col>
               <Col>
-                <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
+                <ToggleButtonGroup type="radio" name="options" defaultValue={1} className='w-100'>
                   <ToggleButton id="tbg-radio-1" value={1} onClick={() => setIsTypeText(true)}>Text post</ToggleButton>
                   <ToggleButton id="tbg-radio-2" value={2} onClick={() => setIsTypeText(false)}>Image/video post</ToggleButton>
                 </ToggleButtonGroup>
               </Col>
             </Row>
-            <Form.Control type="text" placeholder="Add post title" onChange={(e) => setPostTitle(e.target.value)} required />
+            <Form.Control type="text" placeholder="Add post title" onChange={(e) => setPostTitle(e.target.value)} required className='mb-3'/>
           </Form.Group>
-          {isTypeText ? (<Form.Group>
+          {isTypeText ? (<Form.Group className='mb-3'>
             <Form.Control as="textarea" placeholder="Write post description" onChange={(e) => setPostDescription(e.target.value)} style={{ minHeight: '30vh' }} required />
           </Form.Group>) :
             (<Form.Group controlId="formFile" className="mb-3 " >
@@ -95,7 +97,6 @@ export default function CreatePost() {
             </Form.Group>)}
           <Button type="submit" onClick={handleSubmit}>Create post</Button>
         </Form>
-      </div>
     </Container>
   )
 }
