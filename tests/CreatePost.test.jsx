@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 import { render, screen } from '@testing-library/react';
-import App from '../src/App.jsx';
 import React from 'react';
 import '@testing-library/jest-dom'
 import CreatePost from '../src/components/CreatePost/CreatePost.jsx';
