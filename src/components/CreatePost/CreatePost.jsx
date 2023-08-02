@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Container, Col, Row, ToggleButtonGroup, ToggleButton } from 'react-bootstrap'
+import { Button, Container, Col, Row, ToggleButtonGroup, ToggleButton, Alert } from 'react-bootstrap'
 import { Form } from 'react-bootstrap'
 
 export default function CreatePost() {
@@ -11,6 +11,7 @@ export default function CreatePost() {
   const [postTitle, setPostTitle] = useState('');
   const [postDescription, setPostDescription] = useState('');
   const [postFile, setPostFile] = useState('');
+  const [error, setError] = useState(null);
 
   const handleFileChange = (e) => {
     if (e.target.files) {
@@ -18,41 +19,47 @@ export default function CreatePost() {
     }
   };
 
-  /**
-   * const formContent = new FormData();
-  formContent.append('file', uploadedFile);
-   */
 
   function handleSubmit(event) {
     event.preventDefault();
+    if (postTitle.length < 16 || postTitle > 64) {
+      setError('The title must be between 16 and 64 symbols.')
+      return;
+    }
+    if (postDescription.length < 32 || postDescription.length > 8192) {
+      setError('The post content must be between 32 symbols and 8192 symbols.')
+      return;
+    }
+
+    const formContent = new FormData();
+    formContent.append('file', postFile);
+
 
   }
   /** 
-    const forumPost = {
-      headline: 'test',
-      text: 'test',
-      author: {
+   * const user = {
+          uuid: 55655666
           userName: 'John',
           memberSince: '05.12.2021',
           post: '72',
           rank: 'Rookie',
           likedPosts: [{}, {}],
-          postedPosts: [{}, {}]
-      },
-      comments: [
-          {
-              upvoted: '3',
-              author: {},
-              text: 'test',
-              date: '28.07.2023'
-          },
-          {
-              upvoted: '3',
-              author: {},
-              text: 'test',
-              date: '28.07.2023'
-          }
-      ]
+          postedPosts: [id, id]
+      }
+    const forumPost = { 
+      uuidPOst: 4566621
+      headline: 'test',
+      text: 'test',
+      upvoted: [uuid, uuid] (set, array?)
+      user/author: uuid of user,
+  }
+  const comment = {
+    uuid: 6546512
+    upvoted: '3',
+    author: uuid,
+    text: 'test',
+    date: '28.07.2023'
+    postId: 654665456
   }
   */
   return (
@@ -60,6 +67,7 @@ export default function CreatePost() {
       <div className="w-100" style={{ maxWidth: "60%" }}>
         <h2 className='text-center mb-4'>Create a post</h2>
         <Form>
+          {error && <Alert variant='danger'>{error}</Alert>}
           <Form.Group>
             <Row>
               <Col xs={7}>
