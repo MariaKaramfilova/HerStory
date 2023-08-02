@@ -22,6 +22,8 @@ export default function CreatePost() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    setError(null)
+    
     if (postTitle.length < 16 || postTitle > 64) {
       setError('The title must be between 16 and 64 symbols.')
       return;
@@ -33,8 +35,6 @@ export default function CreatePost() {
 
     const formContent = new FormData();
     formContent.append('file', postFile);
-
-
   }
   /** 
    * const user = {

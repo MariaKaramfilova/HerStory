@@ -2,6 +2,7 @@ import {Routes, Route} from 'react-router-dom';
 import Home from '../../views/Home/Home';
 import About from '../../views/About/About';
 import CreatePost from '../CreatePost/CreatePost.jsx';
+import RegistrationForm from '../SignUp/SignUp';
 import React from 'react';
 
 const RoutePage = () => {
@@ -11,6 +12,7 @@ const RoutePage = () => {
             <Route path="/" element={<Home />}/>
             <Route path="/home" element={<Home />} />
             <Route path="/about" element={<About />} />
+            <Route path="/sign-up" element={<RegistrationForm />} />
             <Route path="/create-post" element={<CreatePost />} />
         </Routes>
       </div>
