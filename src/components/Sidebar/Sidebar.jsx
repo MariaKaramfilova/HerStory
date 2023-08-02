@@ -1,27 +1,23 @@
-import { NavLink} from 'react-router-dom';
-import React, { useContext } from 'react';
-import { AuthContext } from '../../context/AuthContext';
+import React from 'react';
+import { Nav, NavItem } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom'; 
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 
-const Sidebar = () => {
-  const {user} = useContext(AuthContext)
+const NavBar = () => {
   return (
-    <nav className='side-bar'>
-    <ul>
-      <li>
-        <NavLink to="/home">Home</NavLink>
-    </li>
-    {user ? (
-    <li>
-        <NavLink to="/about">About</NavLink>
-    </li>
-    ): (
-      <li>
-      <NavLink to="/sign-up">About</NavLink>
-      </li>
-    )}
-    </ul>
-  </nav>
+    <Nav className='side-bar'>
+      <NavItem>
+        <NavLink to="/home" className="nav-link text-danger">
+          Home
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink to="/about" className="nav-link text-danger">
+          About
+        </NavLink>
+      </NavItem>
+    </Nav>
   );
 };
 
-export default Sidebar;
+export default NavBar;
