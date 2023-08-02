@@ -13,3 +13,8 @@ test('renders Create post page', () => {
   expect(screen.getByRole("combobox")).toHaveDisplayValue("Choose topic");
   expect(screen.getByRole("radio", { name: "Image/video post" })).not.toBeChecked();
 });
+
+test('runs custom form validations', () => {
+  render(<CreatePost />);
+  
+})
