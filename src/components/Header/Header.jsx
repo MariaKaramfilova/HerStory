@@ -1,5 +1,5 @@
 import SearchBar from "../SearchBar/SearchBar";
-import Sidebar from "../Sidebar/Sidebar";
+import NavBar from "../NavBar/NavBar";
 import ProfileDropdown from "../Profile-dropdown/Profile-dropdown";
 import { Button } from 'react-bootstrap';
 import "./Header.css";
@@ -17,7 +17,7 @@ const Header = () => {
             />
           </div>
           <div className="col-2">
-            <Sidebar />
+            <NavBar />
           </div>
           <div className="col-6">
             <SearchBar />

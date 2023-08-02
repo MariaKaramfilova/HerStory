@@ -1,23 +1,52 @@
-import React from 'react';
-import { Nav, NavItem } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom'; 
-import 'bootstrap/dist/css/bootstrap.min.css'; 
+import React from "react";
 
-const NavBar = () => {
+function SideBar(props) {
+  const femaleRightsTopics = [
+    "Gender Equality",
+    "Reproductive Rights",
+    "Violence Against Women",
+    "Equal Pay",
+    "Maternity Leave",
+    "Women's Education",
+  ];
+
+  let id = 1;
+  function randomID (){
+    return id++
+  }
+
   return (
-    <Nav className='side-bar'>
-      <NavItem>
-        <NavLink to="/home" className="nav-link text-danger">
-          Home
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink to="/about" className="nav-link text-danger">
-          About
-        </NavLink>
-      </NavItem>
-    </Nav>
-  );
-};
+    <div className="container-fluid" style ={styles.container}>
+      <div className="row align-items-center" >
+        <div className="col-auto min-vh-100 bg-light py-4 px-4 "  >
+          <ul>
+              <h6>5k Users</h6>
+              <h6>10k Comments</h6>
+          </ul>
+          <hr></hr>
 
-export default NavBar;
+          <ul>
+              <h3>Popular Topics</h3>
+            <ul>
+              {femaleRightsTopics.map((topic) => (
+                <div key={randomID()}>
+                    <h7>{topic}</h7>
+                </div>
+              ))}
+            </ul>
+          </ul>
+          <hr></hr>
+      
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const styles = {
+    container: {
+        lineHeight: '3em',
+    },
+  };
+
+export default SideBar;
