@@ -115,7 +115,7 @@ export default function CreatePost() {
           (<Form.Group controlId="formFile" className="mb-3 " >
             <Form.Control type="file" required onChange={handleFileChange} style={{ minHeight: '30vh' }} />
           </Form.Group>)}
-        <Button type="submit" onClick={handleSubmit}>Create post</Button>
+        <Button type="submit" data-testid="create-post-btn" onClick={handleSubmit}>Create post</Button>
       </Form>
     </Container>
   )
