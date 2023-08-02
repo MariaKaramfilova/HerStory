@@ -9,12 +9,11 @@ const firebaseConfig = {
   projectId: "herstory-forum-app-dev",
   storageBucket: "herstory-forum-app-dev.appspot.com",
   messagingSenderId: "127971481183",
-  appId: "1:127971481183:web:af06934f43056d51e0edea"
+  appId: "1:127971481183:web:af06934f43056d51e0edea",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 export const auth = getAuth(app);
 export const database = getDatabase(app);
 export default app;

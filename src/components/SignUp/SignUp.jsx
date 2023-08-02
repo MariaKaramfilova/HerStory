@@ -1,30 +1,52 @@
 import './SignUp.css'
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { Alert, Button, Form } from 'react-bootstrap';
+import { AuthContext } from '../../context/AuthContext';
+import { createUserByUsername, getUserByUsername } from '../../services/users.services';
+import { registerUser } from '../../services/auth.services';
 export default function RegistrationForm() {
     
-    const [firstName, setFirstName] = useState(null);
-    const [lastName, setLastName] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [userName, setUserName] = useState(null);
-    const [password,setPassword] = useState(null);
-    const [confirmPassword,setConfirmPassword] = useState(null);
-    const [error, setError] = useState(null);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [userName, setUserName] = useState('');
+    const [password,setPassword] = useState('');
+    const [confirmPassword,setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const { setUser } = useContext(AuthContext);
 
     const handleSubmit  = (event) => {
         event.preventDefault();
         setError(null)
         
-        if (firstName.length < 4 || firstName.length > 32) {
+        if (firstName.length < 4 || firstName.length > 32 || !firstName) {
             setError('First name should be between 4 and 32 symbols')
+            return;
         }
-        if (lastName.length < 4 || lastName.length > 32) {
+        if (lastName.length < 4 || lastName.length > 32 || !lastName) {
             setError('Last name should be between 4 and 32 symbols')
+            return;
         }
-        if (password !== confirmPassword) {
+        if (password !== confirmPassword || !password) {
             setError('Please check if your passwords match!')
+            return;
         }
-        // Todo: To valid
+        getUserByUsername(userName)
+          .then(snapshot => {
+            if (snapshot.exists()) {
+              return alert ('This Username already exist!')
+            }
+            return registerUser(email, password)
+          })
+          .then(credential => {
+            return createUserByUsername(firstName, lastName, credential.user.uid, credential.user.email, userName)
+            .then(() => {
+              setUser({
+                user: credential.user
+              })
+            })
+          })
     }
 
     return (
@@ -89,6 +111,7 @@ export default function RegistrationForm() {
           </div>
           <div className="footer">
             <Button onClick={handleSubmit}>Register</Button>
+            <p type="button" onClick={() => window.location.href = '/home'}>Already have registration?</p>
           </div>
         </div>
       );
