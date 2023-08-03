@@ -4,6 +4,7 @@ import { Form } from 'react-bootstrap'
 import { createPost } from '../../services/post.services.js';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
+import DropzoneComponent from '../Dropzone/Dropzone.jsx';
 
 export default function CreatePost() {
   // Need to import theme
@@ -17,11 +18,13 @@ export default function CreatePost() {
   const [error, setError] = useState(null);
   const [isCompleted, setIsCompleted] = useState(null);
 
-  const handleFileChange = (e) => {
-    if (e.target.files) {
-      setPostFile(e.target.files[0]);
-    }
-  };
+
+  // const handleFileChange = (e) => {
+  //   if (e.target.files) {
+  //     setPostFile(e.target.files[0]);
+  //   }
+  // };
+  // console.log(postFile);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -32,7 +35,7 @@ export default function CreatePost() {
       setError('The title must be between 16 and 64 symbols.')
       return;
     }
-    if (postDescription.length < 32 || postDescription.length > 8192) {
+    if ((postDescription.length < 32 || postDescription.length > 8192) && isTypeText) {
       setError('The post content must be between 32 symbols and 8192 symbols.')
       return;
     }
@@ -43,7 +46,6 @@ export default function CreatePost() {
     const userName = Object.values(userData).filter(el => el.uid === user.uid)[0].username;
 
     createPost(postTitle, postDescription, postTopic, postFile, userName)
-      .then(() => console.log('test'))
       .then(() => setIsCompleted(true))
       .catch(err => setError(err))
   }
@@ -111,13 +113,16 @@ export default function CreatePost() {
           <Form.Control type="text" placeholder="Add post title" onChange={(e) => setPostTitle(e.target.value)} required className='mb-3' />
         </Form.Group>
         {isTypeText ? (<Form.Group className='mb-3'>
-          <Form.Control as="textarea" placeholder="Write post description" onChange={(e) => setPostDescription(e.target.value)} style={{ minHeight: '30vh' }} required />
+          <Form.Control as="textarea" placeholder="Write post description" onChange={(e) => setPostDescription(e.target.value)} style={{ minHeight: '30vh' }} />
         </Form.Group>) :
-          (<Form.Group controlId="formFile" className="mb-3 " >
-            <Form.Control type="file" required onChange={handleFileChange} style={{ minHeight: '30vh' }} />
-          </Form.Group>)}
+          (<DropzoneComponent setFile={setPostFile}/>)}
         <Button type="submit" data-testid="create-post-btn" onClick={handleSubmit}>Create post</Button>
       </Form>
     </Container>
   )
 }
+
+
+// (<Form.Group controlId="formFile" className="mb-3 " >
+//             <Form.Control type="file" required onChange={handleFileChange} style={{ minHeight: '30vh' }} />
+//           </Form.Group>)
