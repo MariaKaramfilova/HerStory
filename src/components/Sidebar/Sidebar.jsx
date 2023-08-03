@@ -18,7 +18,7 @@ function SideBar(props) {
   return (
     <div className="container-fluid" style ={styles.container}>
       <div className="row align-items-center" >
-        <div className="col-auto min-vh-100 bg-light py-4 px-4 "  >
+        <div className="col-5 min-vh-100 bg-light py-4 px-4 "  >
           <ul>
               <h6>5k Users</h6>
               <h6>10k Comments</h6>
@@ -30,7 +30,7 @@ function SideBar(props) {
             <ul>
               {femaleRightsTopics.map((topic) => (
                 <div key={randomID()}>
-                    <h7>{topic}</h7>
+                    <h6>{topic}</h6>
                 </div>
               ))}
             </ul>
