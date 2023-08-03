@@ -44,7 +44,7 @@ const RoutePage = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/about" element={<AuthenticatedRoute><About /></AuthenticatedRoute>} />
             <Route path="/sign-up" element={<RegistrationForm />} />
-            <Route path="/log-in" element={<AuthenticatedRoute><Login /></AuthenticatedRoute>} />
+            <Route path="/log-in" element={<Login />} />
             <Route path="/create-post" element={<CreatePost />} />
         </Routes>
         </AuthContext.Provider>

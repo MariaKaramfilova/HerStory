@@ -3,7 +3,6 @@ import { Alert, Card, Button, Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../services/auth.services.js';
 import { AuthContext } from '../../context/AuthContext.js';
-import { getUserData } from '../../services/users.services.js';
 
 export default function Login() {
   const { user, setUser } = useContext(AuthContext);
@@ -21,19 +20,15 @@ export default function Login() {
       setError('');
       setLoading(true);
       const data = await loginUser(emailRef.current.value, passwordRef.current.value);
-      const snapshot = await getUserData(data.user.uid);
-      const userData = data.user.id.val(Object.keys(snapshot.val())[0]);
-      setUser({ user: data, userData });
+      setUser({ user: data });
       navigate('/');
     } catch (error) {
-      setError(`${error}`)
+      setError(`${error.message}`)
       return;
     }
 
     setLoading(false);
   }
-
-  console.log(user);
 
   return (
     <>
