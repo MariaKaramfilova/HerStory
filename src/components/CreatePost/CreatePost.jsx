@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Container, Col, Row, ToggleButtonGroup, ToggleButton, Alert, Card } from 'react-bootstrap'
 import { Form } from 'react-bootstrap'
 import { createPost } from '../../services/post.services.js';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext.js';
 
 export default function CreatePost() {
   // Need to import theme
-  // Need import user
-  // const { user } = useContext(Auth)
+  const { user, userData } = useContext(AuthContext);
 
   const [isTypeText, setIsTypeText] = useState(true);
   const [postTopic, setPostTopic] = useState('');
@@ -23,13 +23,12 @@ export default function CreatePost() {
     }
   };
 
-
   function handleSubmit(event) {
     event.preventDefault();
     setError(null)
     setIsCompleted(false)
 
-    if (postTitle.length < 16 || postTitle > 64) {
+    if (postTitle.length < 16 || postTitle.length > 64) {
       setError('The title must be between 16 and 64 symbols.')
       return;
     }
@@ -41,7 +40,9 @@ export default function CreatePost() {
     const formContent = new FormData();
     formContent.append('file', postFile);
 
-    createPost(postTitle, postDescription, postTopic, postFile, 'andy-test')
+    const userName = Object.values(userData).filter(el => el.uid === user.uid)[0].username;
+
+    createPost(postTitle, postDescription, postTopic, postFile, userName)
       .then(() => console.log('test'))
       .then(() => setIsCompleted(true))
       .catch(err => setError(err))

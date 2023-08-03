@@ -1,6 +1,5 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import the Bootstrap CSS
 
 const ProfileDropdown = () => {
   return (

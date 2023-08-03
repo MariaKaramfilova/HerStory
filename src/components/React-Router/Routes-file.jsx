@@ -9,6 +9,7 @@ import { auth } from '../../config/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getUserData } from '../../services/users.services';
 import AuthenticatedRoute from '../../hoc/AuthenticatedRoute';
+import Login from '../Login/Login.jsx';
 
 const RoutePage = () => {
   const [user] = useAuthState(auth);
@@ -43,7 +44,8 @@ const RoutePage = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/about" element={<AuthenticatedRoute><About /></AuthenticatedRoute>} />
             <Route path="/sign-up" element={<RegistrationForm />} />
-            <Route path="/create-post" element={<AuthenticatedRoute><CreatePost /></AuthenticatedRoute>} />
+            <Route path="/log-in" element={<AuthenticatedRoute><Login /></AuthenticatedRoute>} />
+            <Route path="/create-post" element={<CreatePost />} />
         </Routes>
         </AuthContext.Provider>
       </div>

@@ -2,6 +2,7 @@ import SearchBar from "../SearchBar/SearchBar";
 import NavBar from "../NavBar/NavBar";
 import ProfileDropdown from "../Profile-dropdown/Profile-dropdown";
 import { Button } from 'react-bootstrap';
+import React from "react";
 import "./Header.css";
 
 const Header = () => {

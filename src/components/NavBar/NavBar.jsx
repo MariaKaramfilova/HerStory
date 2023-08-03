@@ -1,7 +1,6 @@
 import React from 'react';
 import { Nav, NavItem } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom'; 
-import 'bootstrap/dist/css/bootstrap.min.css'; 
+import { NavLink } from 'react-router-dom';
 
 const NavBar = () => {
   return (

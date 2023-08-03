@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button, FormControl, Form } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import the Bootstrap CSS
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
