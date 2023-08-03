@@ -1,4 +1,4 @@
-import { database } from "../../config/firebase.js";
+import { database } from "../config/firebase.js";
 import { get, set, ref, query, orderByChild, equalTo, push, update } from "firebase/database";
 
 const fromPostsDocument = snapshot => {
