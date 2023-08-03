@@ -3,12 +3,12 @@ import React, {useState} from 'react';
 import { Alert, Button, Form } from 'react-bootstrap';
 export default function RegistrationForm() {
     
-    const [firstName, setFirstName] = useState(null);
-    const [lastName, setLastName] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [userName, setUserName] = useState(null);
-    const [password,setPassword] = useState(null);
-    const [confirmPassword,setConfirmPassword] = useState(null);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [userName, setUserName] = useState('');
+    const [password,setPassword] = useState('');
+    const [confirmPassword,setConfirmPassword] = useState('');
     const [error, setError] = useState(null);
 
     const handleSubmit  = (event) => {
