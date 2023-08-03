@@ -13,14 +13,14 @@ test('renders the registration form', () => {
   expect(screen.getByLabelText(/Last Name/)).toBeInTheDocument();
   expect(screen.getByLabelText(/Email/)).toBeInTheDocument();
   expect(screen.getByLabelText(/Username/)).toBeInTheDocument();
-  expect(screen.getByLabelText(/Password/)).toBeInTheDocument();
+  expect(screen.getAllByLabelText(/Password/)[0]).toBeInTheDocument();
   expect(screen.getByLabelText(/Confirm Password/)).toBeInTheDocument();
   expect(screen.getByRole('button', { name: /Register/ })).toBeInTheDocument();
 });
 
 test('runs custom form validations', () => {
   render(<RegistrationForm />);
-  
+
   // Invalid first name
   fireEvent.change(screen.getByLabelText(/First Name/), { target: { value: 'Ab' } });
   fireEvent.click(screen.getByRole('button', { name: /Register/ }));
