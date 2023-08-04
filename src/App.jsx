@@ -16,8 +16,15 @@ function App() {
         <div className="container-fluid">
 
         <div className="row">
+
+        <div className="col-3">
         <SideBar />
+        </div>
+        
+        <div className="col">
         <RouteElement></RouteElement>
+        </div>
+
         </div>
 
         </div>
