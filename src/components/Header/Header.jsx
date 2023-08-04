@@ -7,6 +7,7 @@ import "./Header.css";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../config/firebase";
 import { useNavigate } from "react-router-dom";
+
 const Header = () => {
   const navigate = useNavigate();
   const [user] = useAuthState(auth);

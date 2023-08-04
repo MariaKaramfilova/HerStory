@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { auth } from '../../config/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getUserData } from '../../services/users.services';
+import PropTypes from "prop-types";
+
 
 const RoutePage = ({children}) => {
   const [user] = useAuthState(auth);
@@ -35,3 +37,7 @@ const RoutePage = ({children}) => {
 };
 
 export default RoutePage
+
+RoutePage.propTypes = {
+  children: PropTypes.node.isRequired,
+};

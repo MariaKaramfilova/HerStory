@@ -6,7 +6,6 @@ import RouteElement from './components/Route-Elements/RouteElement';
 import Header from './components/Header/Header';
 import SideBar from './components/Sidebar/Sidebar';
 
-
 function App() {
   return (
     

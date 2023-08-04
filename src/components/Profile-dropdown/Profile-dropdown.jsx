@@ -2,6 +2,7 @@ import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { logoutUser } from '../../services/auth.services';
+
 const ProfileDropdown = () => {
   return (
     <div>

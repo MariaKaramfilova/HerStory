@@ -1,9 +1,13 @@
 import React from 'react'
 import { Modal } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import PropTypes from "prop-types";
 
-export default function AuthModal(children) {
+
+export default function AuthModal({ children }) {
+  const navigate = useNavigate();
   return (
-    <Modal
+    <Modal show={true} onHide={() => navigate(-1)}
       aria-labelledby="contained-modal-title-vcenter"
       centered>
       <Modal.Header closeButton></Modal.Header>
@@ -13,3 +17,7 @@ export default function AuthModal(children) {
     </Modal>
   )
 }
+
+AuthModal.propTypes = {
+  children: PropTypes.node.isRequired,
+};

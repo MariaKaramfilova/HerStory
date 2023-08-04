@@ -4,6 +4,7 @@ import React, { useCallback, useState } from 'react';
 import { Alert, Container, Figure, Image } from 'react-bootstrap';
 import { useDropzone } from 'react-dropzone';
 import './Dropzone.css'
+import PropTypes from "prop-types";
 
 export default function DropzoneComponent({ setFile }) {
   const [error, setError] = useState(null);
@@ -67,3 +68,7 @@ export default function DropzoneComponent({ setFile }) {
     </div>
   )
 }
+
+DropzoneComponent.propTypes = {
+  setFile: PropTypes.func.isRequired,
+};
