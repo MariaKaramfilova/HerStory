@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, Container, Col, Row, ToggleButtonGroup, ToggleButton, Alert, Card } from 'react-bootstrap'
 import { Form } from 'react-bootstrap'
 import { createPost } from '../../services/post.services.js';
@@ -19,36 +19,30 @@ export default function CreatePost() {
   const [isCompleted, setIsCompleted] = useState(null);
 
 
-  // const handleFileChange = (e) => {
-  //   if (e.target.files) {
-  //     setPostFile(e.target.files[0]);
-  //   }
-  // };
-  // console.log(postFile);
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    setError(null)
-    setIsCompleted(false)
+function handleSubmit(event) {
+  event.preventDefault();
+  setError(null)
+  setIsCompleted(false)
 
-    if (postTitle.length < 16 || postTitle.length > 64) {
-      setError('The title must be between 16 and 64 symbols.')
-      return;
-    }
-    if ((postDescription.length < 32 || postDescription.length > 8192) && isTypeText) {
-      setError('The post content must be between 32 symbols and 8192 symbols.')
-      return;
-    }
-
-    const formContent = new FormData();
-    formContent.append('file', postFile);
-
-    const userName = Object.values(userData).filter(el => el.uid === user.uid)[0].username;
-
-    createPost(postTitle, postDescription, postTopic, postFile, userName)
-      .then(() => setIsCompleted(true))
-      .catch(err => setError(err))
+  if (postTitle.length < 16 || postTitle.length > 64) {
+    setError('The title must be between 16 and 64 symbols.')
+    return;
   }
+  if ((postDescription.length < 32 || postDescription.length > 8192) && isTypeText) {
+    setError('The post content must be between 32 symbols and 8192 symbols.')
+    return;
+  }
+
+  const formContent = new FormData();
+  formContent.append('file', postFile);
+
+  const userName = Object.values(userData).filter(el => el.uid === user.uid)[0].username;
+
+  createPost(postTitle, postDescription, postTopic, postFile, userName)
+    .then(() => setIsCompleted(true))
+    .catch(err => setError(err))
+}
 
   if (isCompleted) {
     return (

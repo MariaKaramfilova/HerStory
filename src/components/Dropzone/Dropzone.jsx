@@ -43,9 +43,10 @@ export default function DropzoneComponent({ setFile }) {
   });
 
   const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
     accept: 'image/png, image/jpeg, image/gif, video/mp4, video/mov',
     maxSize: 10485760,
-    onDrop
+    maxFiles: 1
   });
 
   return (
