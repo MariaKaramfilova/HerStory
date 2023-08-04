@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
-
+import { Button } from 'react-bootstrap';
+import { logoutUser } from '../../services/auth.services';
 const ProfileDropdown = () => {
   return (
     <div>
@@ -14,11 +15,18 @@ const ProfileDropdown = () => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu  className="ml-auto">
-        <Dropdown.Item href="#action/1">My Account</Dropdown.Item>
+        <Dropdown.Item href="'/log-in'">My Account</Dropdown.Item>
 
-        <Dropdown.Item href="#action/2">Account</Dropdown.Item>
+        <Dropdown.Item href="#">Account</Dropdown.Item>
         
-        <Dropdown.Item href="#action/3">Logout</Dropdown.Item>
+        <Button
+            type="button"
+            variant="danger"
+            onClick={logoutUser}
+          >
+            Log Out
+          </Button>
+
       </Dropdown.Menu>
     </Dropdown>
     </div>

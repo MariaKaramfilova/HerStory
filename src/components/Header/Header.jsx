@@ -4,8 +4,13 @@ import ProfileDropdown from "../Profile-dropdown/Profile-dropdown";
 import { Button } from 'react-bootstrap';
 import React from "react";
 import "./Header.css";
-
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../config/firebase";
+import { useNavigate } from "react-router-dom";
 const Header = () => {
+  const navigate = useNavigate();
+  const [user] = useAuthState(auth);
+
     return (
       <div className="container-fluid">
         <div className="row align-items-center bg-light">
@@ -26,19 +31,28 @@ const Header = () => {
           <div className="col-1"></div> 
           {/* this is just some empty space */}
           <div className="col-2">
-            <Button
-              type="button"
-              style={styles.button1}
-              variant="danger"
-              onClick={() => (window.location.href = '/log-in')}
-            > Log in </Button>
-            <Button
-              type="button"
-              style={styles.button2}
-              variant="dark"
-              onClick={() => (window.location.href = '/sign-up')}
-            > Sign up</Button>
-            {/* <ProfileDropdown /> */}
+          {user ? (
+        <ProfileDropdown />
+      ) : (
+        <>
+          <Button
+            type="button"
+            style={styles.button1}
+            variant="danger"
+             onClick={() => navigate('/log-in')}
+          >
+            Log in
+          </Button>
+          <Button
+            type="button"
+            style={styles.button2}
+            variant="dark"
+            onClick={() => navigate('/sign-up')}
+          >
+            Sign up
+          </Button>
+          </>
+      )}
           </div>
         </div>
       </div>

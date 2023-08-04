@@ -1,27 +1,27 @@
 import React from 'react';
 import { BrowserRouter as Router } from "react-router-dom";
-import RoutePage from './components/React-Router/Routes-file';
+import RoutePage from './components/Auth-Context-Provider/Auth-Countext-Provider';
 import './App.css'
-import Header from "./components/Header/Header";
-import SideBar from "./components/SideBar/SideBar";
+import RouteElement from './components/Route-Elements/RouteElement';
+import Header from './components/Header/Header';
+import SideBar from './components/Sidebar/Sidebar';
 
 
 function App() {
   return (
     
     <Router>
-        <Header/>
+      <RoutePage>
+      <Header />
         <div className="container-fluid">
-    
+
         <div className="row">
-
-        <div className="col"><SideBar/></div>
-
-        <div className="col"><RoutePage /></div>
+        <SideBar />
+        <RouteElement></RouteElement>
         </div>
 
         </div>
-      
+        </RoutePage>
     </Router>
   )
 }

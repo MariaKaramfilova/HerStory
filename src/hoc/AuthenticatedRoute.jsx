@@ -7,7 +7,7 @@ export default function AuthenticatedRoute({ children }){
     let location = useLocation();
 
     if (user === null) {
-        return <Navigate to="/sign-up" state={{ from: location.pathname}}/>
+        return <Navigate to="/log-in" state={{ from: location.pathname}}/>
     }
     return children;
 }
