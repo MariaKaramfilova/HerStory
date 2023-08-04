@@ -1,6 +1,5 @@
 import { get, set, ref, query, orderByChild, equalTo } from "firebase/database";
 import { auth, database } from "../config/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 
 export const getUserByUsername = (username) => {
     return get(ref(database, `users/${username}`));

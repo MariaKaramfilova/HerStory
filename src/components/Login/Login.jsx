@@ -20,7 +20,7 @@ export default function Login() {
       setError('');
       setLoading(true);
       const data = await loginUser(emailRef.current.value, passwordRef.current.value);
-      setUser({ user: data });
+      setUser((prev) => ({ ...prev, user: data.user }));
       navigate('/');
     } catch (error) {
       setError(`${error.message}`)

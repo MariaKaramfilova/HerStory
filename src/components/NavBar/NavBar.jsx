@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Nav, NavItem } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-import { auth } from '../../config/firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { AuthContext } from '../../context/AuthContext.js';
 
 const NavBar = () => {
-  const [user] = useAuthState(auth);
+  const { user } = useContext(AuthContext);
 
   return (
     <Nav className='side-bar'>
@@ -20,10 +19,10 @@ const NavBar = () => {
         </NavLink>
       </NavItem>
       <NavItem>
-        {user && 
-        <NavLink to="/create-post" className="nav-link text-danger">
-          Create post
-        </NavLink>
+        {user &&
+          <NavLink to="/create-post" className="nav-link text-danger">
+            Create post
+          </NavLink>
         }
       </NavItem>
     </Nav>
