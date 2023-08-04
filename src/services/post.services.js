@@ -1,5 +1,6 @@
 import { database } from "../config/firebase.js";
-import { get, set, ref, query, orderByChild, equalTo, push, update } from "firebase/database";
+import { get, ref, query, orderByChild, equalTo, push, update } from "firebase/database";
+import { setFileToStorage } from "./storage.services.js";
 
 const fromPostsDocument = snapshot => {
   const postsDocument = snapshot.val();
@@ -16,14 +17,14 @@ const fromPostsDocument = snapshot => {
   });
 }
 
-export function createPost(title, content = null, topic, file = null, handle) {
+export const createPost = async (title, content = null, topic, file = null, handle) => {
   return push(
     ref(database, 'posts'),
     {
       title,
       content,
       topic,
-      file,
+      file: await setFileToStorage(file),
       author: handle,
       createdOn: Date.now(),
     },
