@@ -20,13 +20,11 @@ const NavBar = () => {
         </NavLink>
       </NavItem>
       <NavItem>
-        {user ? (
+        {user && 
         <NavLink to="/create-post" className="nav-link text-danger">
           Create post
         </NavLink>
-        ): (<NavLink to="/log-in" className="nav-link text-danger">
-        Create post
-      </NavLink>)}
+        }
       </NavItem>
     </Nav>
   );
