@@ -4,6 +4,7 @@ import { Alert, Button, Form } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext';
 import { createUserByUsername, getUserByUsername } from '../../services/users.services';
 import { registerUser } from '../../services/auth.services';
+import { Link } from 'react-router-dom/dist';
 export default function RegistrationForm() {
 
   const [firstName, setFirstName] = useState('');
@@ -111,8 +112,8 @@ export default function RegistrationForm() {
         </Form.Group>
       </div>
       <div className="footer">
-        <Button onClick={handleSubmit}>Register</Button>
-        <p type="button" onClick={() => window.location.href = '/home'}>Already have registration?</p>
+        <Button onClick={handleSubmit} className='w-100 mt-3' type='submit' variant="dark">Register</Button>
+        <p>Already have registration? <Link to="/log-in">Log in</Link></p>
       </div>
     </div>
   );
