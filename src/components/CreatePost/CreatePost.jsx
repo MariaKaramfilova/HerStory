@@ -7,10 +7,11 @@ import { AuthContext } from '../../context/AuthContext.js';
 import DropzoneComponent from '../Dropzone/Dropzone.jsx';
 import { TOPIC_EDUCATION, TOPIC_EQUALITY, TOPIC_MATERNITY, TOPIC_PAY, TOPIC_REPRO, TOPIC_VIOLENCE } from '../../common/common.js';
 import Loading from '../Loading/Loading.jsx';
+import { getUserData } from '../../services/users.services.js';
 
 export default function CreatePost() {
   // Need to import theme
-  const { user, userData } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   const [isTypeText, setIsTypeText] = useState(true);
   const [postTopic, setPostTopic] = useState('');
@@ -23,7 +24,7 @@ export default function CreatePost() {
   const navigate = useNavigate();
 
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setError(null)
     setIsCompleted(false)
@@ -46,8 +47,16 @@ export default function CreatePost() {
       return;
     }
 
+    if (postTopic === 'Choose topic') {
+      setError('You need to select post topic');
+      setLoading(false);
+      return;
+    }
+
     const formContent = new FormData();
     formContent.append('file', postFile);
+    const snapshot = await getUserData(user.uid);
+    const userData = snapshot.val(Object.keys(snapshot.val())[0]);
 
     const userName = Object.values(userData).filter(el => el.uid === user.uid)[0].username;
 
@@ -98,7 +107,7 @@ export default function CreatePost() {
     <Container className='w-100 mt-3 mb-3' style={{ minHeight: "100vh", maxWidth: "60%", marginLeft: "0" }}>
       <h2 className='mb-4'>Create a post</h2>
       <Form>
-        {error && <Alert variant='danger'>{error}</Alert>}
+        {error && <Alert variant='danger'>{error.message}</Alert>}
         <Form.Group>
           <Row className='mb-3'>
             <Col>

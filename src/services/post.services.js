@@ -25,7 +25,7 @@ export const createPost = async (title, content = null, topic, file = null, hand
       content,
       topic,
       file: await setFileToStorage(file),
-      fileType: file.type.split('/')[0] || null,
+      fileType: file ? file.type.split('/')[0] : null,
       author: handle,
       createdOn: Date.now(),
     },
