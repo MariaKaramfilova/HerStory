@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Container, Col, Row, ToggleButtonGroup, ToggleButton, Alert, Card } from 'react-bootstrap'
 import { Form } from 'react-bootstrap'
 import { createPost } from '../../services/post.services.js';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
 import DropzoneComponent from '../Dropzone/Dropzone.jsx';
 import { TOPIC_EDUCATION, TOPIC_EQUALITY, TOPIC_MATERNITY, TOPIC_PAY, TOPIC_REPRO, TOPIC_VIOLENCE } from '../../common/common.js';
 import Loading from '../Loading/Loading.jsx';
-import SuccessPosting from '../../views/Success-posting/SuccessPosting.jsx';
 
 export default function CreatePost() {
   // Need to import theme
@@ -21,6 +20,7 @@ export default function CreatePost() {
   const [error, setError] = useState(null);
   const [isCompleted, setIsCompleted] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
 
   function handleSubmit(event) {
@@ -40,6 +40,12 @@ export default function CreatePost() {
       return;
     }
 
+    if (!postFile && !isTypeText) {
+      setError('The post must have a valid image or/video');
+      setLoading(false);
+      return;
+    }
+
     const formContent = new FormData();
     formContent.append('file', postFile);
 
@@ -54,7 +60,7 @@ export default function CreatePost() {
   }
 
   if (isCompleted) {
-    return <SuccessPosting/>
+    navigate('/success-posting')
   }
 
   if (loading) {
@@ -75,7 +81,7 @@ export default function CreatePost() {
       uuidPOst: 4566621
       headline: 'test',
       text: 'test',
-      upvoted: [uuid, uuid] (set, array?)
+      upvotedBy: {uuid: true, uuid: true} (set, array?)
       user/author: uuid of user,
       topic: ekjnskdfj,
   }
@@ -89,7 +95,7 @@ export default function CreatePost() {
   }
   */
   return (
-    <Container className='align-items-left w-100' style={{ minHeight: "100vh", maxWidth: "60%" }}>
+    <Container className='w-100 mt-3 mb-3' style={{ minHeight: "100vh", maxWidth: "60%", marginLeft: "0" }}>
       <h2 className='mb-4'>Create a post</h2>
       <Form>
         {error && <Alert variant='danger'>{error}</Alert>}
@@ -124,8 +130,3 @@ export default function CreatePost() {
     </Container>
   )
 }
-
-
-// (<Form.Group controlId="formFile" className="mb-3 " >
-//             <Form.Control type="file" required onChange={handleFileChange} style={{ minHeight: '30vh' }} />
-//           </Form.Group>)

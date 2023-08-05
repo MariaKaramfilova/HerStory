@@ -12,7 +12,7 @@ export default function AuthModal({ children }) {
     <Modal show={true} onHide={() => location.pathname === '/log-in' ? navigate('/home') : navigate(-1)}
       aria-labelledby="contained-modal-title-vcenter"
       centered>
-      <Modal.Header closeButton></Modal.Header>
+      <Modal.Header closeButton className='border border-primary border-0'></Modal.Header>
       <Modal.Body>
         {children}
       </Modal.Body>

@@ -62,9 +62,9 @@ export default function DropzoneComponent({ setFile }) {
         {preview && (
           <Figure>
             {preview.type === 'image' ? (
-              <Image src={preview.caption} style={{ width: "100%" }} />)
+              <Image src={preview.caption} style={{ width: "90%" }} />)
               : (
-                <video>
+                <video style={{ width: "90%" }} >
                   <source src={preview.caption} />
                 </video>
               )}

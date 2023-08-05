@@ -6,6 +6,7 @@ import CreatePost from "../CreatePost/CreatePost"
 import { Routes, Route } from 'react-router-dom';
 import AuthModal from "../Modal/AuthModal.jsx"
 import AuthenticatedRoute from "../../hoc/AuthenticatedRoute.jsx"
+import SuccessPosting from "../../views/Success-posting/SuccessPosting.jsx"
 
 export default function RouteElement() {
 
@@ -18,6 +19,7 @@ export default function RouteElement() {
         <Route path="/sign-up" element={<AuthModal><RegistrationForm /></AuthModal>} />
         <Route path="/log-in" element={<AuthModal><Login /></AuthModal>} />
         <Route path="/create-post" element={<AuthenticatedRoute><CreatePost /></AuthenticatedRoute>} />
+        <Route path="/success-posting" element={<AuthenticatedRoute><SuccessPosting /></AuthenticatedRoute>} />
       </Routes>
     </>
   )
