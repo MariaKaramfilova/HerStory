@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Button, FormControl, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
-  function handleSearch(event) {
-    event.preventDefault();
-    //To be implemented
-    console.log('Searching for:', searchTerm);
+  const handleSearchClick = (e) => {
+    e.preventDefault();
+    navigate(`/search/${searchTerm}`);
+    setSearchTerm('');
   }
 
   return (
-    <Form onSubmit={handleSearch} style={styles.form}>
+    <Form style={styles.form}>
       <FormControl
         className="search-bar"
         type="text"
@@ -20,7 +22,7 @@ const SearchBar = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="Enter a topic"
       />
-      <Button type="submit" variant="dark" style={styles.button}>Search</Button>
+      <Button type="submit" variant="dark" onClick={handleSearchClick} style={styles.button}>Search</Button>
     </Form>
   );
 };

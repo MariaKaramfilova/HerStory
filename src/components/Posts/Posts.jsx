@@ -4,12 +4,14 @@ import Loading from '../Loading/Loading.jsx';
 import { getAllPosts } from '../../services/post.services.js';
 import { useNavigate } from 'react-router-dom';
 import PostsDetails from './PostsDetails.jsx';
+import PropTypes from "prop-types";
 
-export default function Posts() {
-  const [filter, setFilter] = useState('');
+export default function Posts({ searchTerm }) {
+  const [filter, setFilter] = useState('new');
   const [renderedPosts, setRenderedPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedButton, setSelectedButton] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,16 +19,19 @@ export default function Posts() {
 
     getAllPosts()
       .then(snapshot => {
-        if (filter === 'new') {
-          snapshot.sort((a, b) => a.createdOn - b.createdOn);
+        if (searchTerm) {
+          setRenderedPosts(snapshot.filter(el => {
+            return el.title.split(' ').filter(el => el.toLowerCase().startsWith(searchTerm.toLowerCase())).length > 0;
+          }));
+        } else if (filter === 'new') {
+          setRenderedPosts(snapshot.sort((a, b) => b.createdOn - a.createdOn));
         } else {
-          snapshot.sort((a, b) => Object.keys(b.likedBy).length - Object.keys(a.likedBy).length);
+          setRenderedPosts(snapshot.sort((a, b) => Object.keys(b.likedBy).length - Object.keys(a.likedBy).length));
         }
-        setRenderedPosts(snapshot);
       })
       .catch(err => setError(err))
       .finally(() => setLoading(false))
-  }, [filter]);
+  }, [filter, searchTerm]);
 
   if (loading) {
     return <Loading />
@@ -34,7 +39,7 @@ export default function Posts() {
 
   // Need to fix this with error pages - check for lib
   if (error) {
-    return <h1>Error!!!</h1>
+    return <h1>Error!!! {error.message}</h1>
   }
 
   const postsToShow = renderedPosts.length ? (
@@ -53,22 +58,26 @@ export default function Posts() {
 
   return (
     <>
-      <Container className='mb-3 mt-5'>
+      {searchTerm == undefined && (<Container className='mb-3 mt-5'>
         <Row style={{ maxWidth: "fit-content" }}>
           <Col style={{ maxWidth: "fit-content" }}>
             <h5>Filter by:</h5>
           </Col>
           <Col>
-            <ToggleButtonGroup type="radio" name="options" defaultValue={1} className='w-100'>
-              <ToggleButton id="tbg-radio-1" value={1} onClick={() => setFilter('new')} variant="danger">New posts</ToggleButton>
-              <ToggleButton id="tbg-radio-2" value={2} onClick={() => setFilter('upvoted')} variant="danger">Upvoted posts</ToggleButton>
+            <ToggleButtonGroup type="radio" name="options" value={selectedButton} className='w-100'>
+              <ToggleButton id="tbg-radio-1" value={1} onClick={() => {setFilter('new'); setSelectedButton(1)}} variant="danger">New posts</ToggleButton>
+              <ToggleButton id="tbg-radio-2" value={2} onClick={() => {setFilter('upvoted'); setSelectedButton(2)}} variant="danger">Upvoted posts</ToggleButton>
             </ToggleButtonGroup>
           </Col>
         </Row>
-      </Container>
+      </Container>)}
       <Container>
         {postsToShow}
       </Container>
     </>
   )
 }
+
+Posts.propTypes = {
+  searchTerm: PropTypes.string,
+};

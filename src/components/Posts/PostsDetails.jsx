@@ -1,7 +1,12 @@
+import moment from 'moment'
 import React from 'react'
 
-export default function PostsDetails() {
+export default function PostsDetails({ goToDetails, ...post }) {
+
   return (
-    <div>PostsDetails</div>
+    <div>
+      {post.title}
+      {moment(post.createdOn).toString()}
+    </div>
   )
 }
