@@ -18,7 +18,7 @@ const ProfileDropdown = () => {
       <Dropdown.Menu  className="ml-auto">
         <Dropdown.Item href="'/log-in'">My Account</Dropdown.Item>
 
-        <Dropdown.Item href="#">Account</Dropdown.Item>
+        <Dropdown.Item href="#">Account Settings</Dropdown.Item>
         
         <Button
             type="button"
