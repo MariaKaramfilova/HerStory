@@ -24,7 +24,6 @@ export default function Login() {
       navigate('/');
     } catch (error) {
       setError(`${error.message}`)
-      return;
     }
 
     setLoading(false);

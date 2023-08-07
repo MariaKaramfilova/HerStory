@@ -6,15 +6,34 @@ import React, { useContext } from "react";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext.js";
-import Loading from "../Loading/Loading.jsx";
+import Skeleton from "react-loading-skeleton";
 
 const Header = () => {
   const navigate = useNavigate();
   const { user, loading } = useContext(AuthContext);
 
-  if (loading) {
-    return <Loading/>
-  }
+  const renderAuthView = user ? (
+    <ProfileDropdown />
+  ) : (
+    <>
+      <Button
+        type="button"
+        style={styles.button1}
+        variant="danger"
+        onClick={() => navigate('/log-in')}
+      >
+        Log in
+      </Button>
+      <Button
+        type="button"
+        style={styles.button2}
+        variant="dark"
+        onClick={() => navigate('/sign-up')}
+      >
+        Sign up
+      </Button>
+    </>
+  );
 
   return (
     <div className="container-fluid">
@@ -36,28 +55,7 @@ const Header = () => {
         <div className="col-1"></div>
         {/* this is just some empty space */}
         <div className="col-2">
-          {user ? (
-            <ProfileDropdown />
-          ) : (
-            <>
-              <Button
-                type="button"
-                style={styles.button1}
-                variant="danger"
-                onClick={() => navigate('/log-in')}
-              >
-                Log in
-              </Button>
-              <Button
-                type="button"
-                style={styles.button2}
-                variant="dark"
-                onClick={() => navigate('/sign-up')}
-              >
-                Sign up
-              </Button>
-            </>
-          )}
+          {loading ? <Skeleton width={50} height={50} /> : renderAuthView}
         </div>
       </div>
     </div>
