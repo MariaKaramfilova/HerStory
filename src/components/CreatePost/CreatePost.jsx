@@ -6,8 +6,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
 import DropzoneComponent from '../Dropzone/Dropzone.jsx';
 import { TOPIC_EDUCATION, TOPIC_EQUALITY, TOPIC_MATERNITY, TOPIC_PAY, TOPIC_REPRO, TOPIC_VIOLENCE } from '../../common/common.js';
-import Loading from '../Loading/Loading.jsx';
 import { getUserData } from '../../services/users.services.js';
+import Loading from '../Loading/Loading.jsx';
 
 export default function CreatePost() {
   // Need to import theme

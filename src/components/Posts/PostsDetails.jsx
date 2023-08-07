@@ -6,6 +6,7 @@ export default function PostsDetails({ goToDetails, ...post }) {
   return (
     <div>
       {post.title}
+      <br />
       {moment(post.createdOn).toString()}
     </div>
   )

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Col, Container, Row, ToggleButton, ToggleButtonGroup } from 'react-bootstrap'
-import Loading from '../Loading/Loading.jsx';
 import { getAllPosts } from '../../services/post.services.js';
 import { useNavigate } from 'react-router-dom';
 import PostsDetails from './PostsDetails.jsx';
 import PropTypes from "prop-types";
+import { AuthContext } from '../../context/AuthContext.js';
+import Skeleton from 'react-loading-skeleton';
 
 export default function Posts({ searchTerm }) {
   const [filter, setFilter] = useState('new');
@@ -13,6 +14,7 @@ export default function Posts({ searchTerm }) {
   const [error, setError] = useState(null);
   const [selectedButton, setSelectedButton] = useState(1);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     setLoading(true);
@@ -32,10 +34,6 @@ export default function Posts({ searchTerm }) {
       .catch(err => setError(err))
       .finally(() => setLoading(false))
   }, [filter, searchTerm]);
-
-  if (loading) {
-    return <Loading />
-  }
 
   // Need to fix this with error pages - check for lib
   if (error) {
@@ -72,7 +70,7 @@ export default function Posts({ searchTerm }) {
         </Row>
       </Container>)}
       <Container>
-        {postsToShow}
+        {loading ? <Skeleton height={300} count={5} style={{marginBottom: "20px"}}/> : postsToShow}
       </Container>
     </>
   )

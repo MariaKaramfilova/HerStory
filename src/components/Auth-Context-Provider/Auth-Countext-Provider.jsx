@@ -42,7 +42,7 @@ const RoutePage = ({ children }) => {
   return (
     <div className='main-content'>
       <AuthContext.Provider value={{ ...appState, setUser: setAppState, loading }}>
-      {!loading && children}
+      {children}
       </AuthContext.Provider>
     </div>
   );
