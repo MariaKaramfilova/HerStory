@@ -4,9 +4,10 @@ import { Alert, Button, Form } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext';
 import { createUserByUsername, getUserByUsername } from '../../services/users.services';
 import { registerUser } from '../../services/auth.services';
-import { Link } from 'react-router-dom/dist';
+import { Link, useNavigate } from 'react-router-dom/dist';
 export default function RegistrationForm() {
 
+  const profilePictureURL = "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png"
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ export default function RegistrationForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate()
 
   const { setUser } = useContext(AuthContext);
 
@@ -41,12 +43,12 @@ export default function RegistrationForm() {
         return registerUser(email, password)
       })
       .then(credential => {
-        return createUserByUsername(firstName, lastName, credential.user.uid, credential.user.email, userName)
+        return createUserByUsername(firstName, lastName, credential.user.uid, credential.user.email, userName, profilePictureURL)
           .then(() => {
             setUser({
               user: credential.user
             })
-
+              navigate('/success-register')
           })
       })
   }

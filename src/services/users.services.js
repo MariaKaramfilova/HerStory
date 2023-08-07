@@ -5,12 +5,13 @@ export const getUserByUsername = (username) => {
     return get(ref(database, `users/${username}`));
 }
 
-export const createUserByUsername = (firstName, lastName, uid, email, username) => {
+export const createUserByUsername = (firstName, lastName, uid, email, username, profilePictureURL) => {
     return set(ref(database, `users/${username}`), {
         firstName,
         lastName,
         uid,
         username,
+        profilePictureURL,
         email,
         createdOn: Date.now(),
     })
