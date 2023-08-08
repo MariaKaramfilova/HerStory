@@ -16,8 +16,6 @@ export default function Posts({ searchTerm, userName }) {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
-  console.log(userName + 'posts');
-
   useEffect(() => {
     setLoading(true);
     let result;
@@ -27,15 +25,14 @@ export default function Posts({ searchTerm, userName }) {
         if (searchTerm) {
           result = snapshot.filter(el => {
             return el.title.split(' ').filter(el => el.toLowerCase().startsWith(searchTerm.toLowerCase())).length > 0;
-          })
+          });
         } else if (filter === 'new') {
-          result = snapshot.sort((a, b) => b.createdOn - a.createdOn)
+          result = snapshot.sort((a, b) => b.createdOn - a.createdOn);
         } else {
-          result = snapshot.sort((a, b) => Object.keys(b.likedBy).length - Object.keys(a.likedBy).length);
+          result = snapshot.sort((a, b) => Object.keys(b.upvotedBy).length - Object.keys(a.upvotedBy).length);
         }
         let data = user ? result : result.slice(0, result.length <= 10 ? result.length : 10);
-        setRenderedPosts(userName === 'logged' && user ? data.filter(el => el.uid === user.uid) : data);
-
+        setRenderedPosts(userName ? data.filter(el => el.author === userName) : data);
       })
       .catch(err => setError(err))
       .finally(() => setLoading(false))
@@ -76,7 +73,7 @@ export default function Posts({ searchTerm, userName }) {
         </Row>
       </Container>)}
       <Container>
-        {loading ? <Skeleton height={300} count={5} style={{ marginBottom: "20px" }} /> : postsToShow}
+        {loading && !renderedPosts.length ? <Skeleton height={300} count={5} style={{ marginBottom: "20px" }} /> : postsToShow}
       </Container>
     </>
   )

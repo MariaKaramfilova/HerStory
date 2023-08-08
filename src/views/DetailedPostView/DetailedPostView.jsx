@@ -1,5 +1,5 @@
-import { createComment, getCommentsByPostHandle, deleteCommentID, likePost, dislikePost } from "../../services/post.services"
-import { Button, Container, Col, Row, ToggleButtonGroup, ToggleButton, Alert, Card, Form } from 'react-bootstrap'
+import { createComment, getCommentsByPostHandle, deleteCommentID, upvotePost } from "../../services/post.services"
+import { Button, Form } from 'react-bootstrap'
 import { AuthContext } from '../../context/AuthContext.js';
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -27,10 +27,10 @@ export default function DetailedPostView () {
         setComment('')
     }
 
-    async function addLike(handle, postId) {
+    async function upvote(handle, postId) {
 
         try{
-            likePost(handle, postId)
+            upvotePost(handle, postId)
             console.log('post has been liked');
         }catch(error){
             alert(error)
@@ -38,7 +38,7 @@ export default function DetailedPostView () {
         
     }
 
-    async function removeLike (){
+    async function removeUpvote (){
         
     }
 
@@ -85,7 +85,7 @@ export default function DetailedPostView () {
 
             <div className="row">
             <div className="col-2">
-            <Button type="submit" className='mt-3' variant="danger"  onClick={()=> addLike(demoPost.author, demoPost.postId)}>Upvote Post</Button>
+            <Button type="submit" className='mt-3' variant="danger"  onClick={()=> upvote(demoPost.author, demoPost.postId)}>Upvote Post</Button>
             </div>
             
             <div className="col-8">
