@@ -43,8 +43,6 @@ const ProfileDropdown = () => {
 
       <Dropdown.Menu  className="ml-auto">
         <Dropdown.Item href="/my-account">My Account</Dropdown.Item>
-
-        <Dropdown.Item href="#">Account</Dropdown.Item>
         <Dropdown.Item href="account-settings">Account Settings</Dropdown.Item>
         <Button
             type="button"
