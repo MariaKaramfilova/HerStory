@@ -5,7 +5,7 @@ import { loginUser } from '../../services/auth.services.js';
 import { AuthContext } from '../../context/AuthContext.js';
 
 export default function Login() {
-  const { user, setUser } = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -31,8 +31,8 @@ export default function Login() {
 
   return (
     <>
-      <Card>
-        <Card.Body>
+      <Card className='border-0'>
+        <Card.Body style={{marginTop: "-20px"}}>
           <h2 className='text-center mb-4'>Log in</h2>
           {error && <Alert variant='danger'>{error}</Alert>}
           <Form onSubmit={handleSubmit}>

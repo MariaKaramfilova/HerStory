@@ -18,22 +18,28 @@ export default function Posts({ searchTerm }) {
 
   useEffect(() => {
     setLoading(true);
+    let result;
+
+    const slicePosts = (user, result) => user ? result : result.slice(0, result.length <= 10 ? result.length : 10)
 
     getAllPosts()
       .then(snapshot => {
         if (searchTerm) {
-          setRenderedPosts(snapshot.filter(el => {
+          result = snapshot.filter(el => {
             return el.title.split(' ').filter(el => el.toLowerCase().startsWith(searchTerm.toLowerCase())).length > 0;
-          }));
+          })
+          setRenderedPosts(slicePosts(user, result));
         } else if (filter === 'new') {
-          setRenderedPosts(snapshot.sort((a, b) => b.createdOn - a.createdOn));
+          result = snapshot.sort((a, b) => b.createdOn - a.createdOn)
+          setRenderedPosts(slicePosts(user, result));
         } else {
-          setRenderedPosts(snapshot.sort((a, b) => Object.keys(b.likedBy).length - Object.keys(a.likedBy).length));
+          result = snapshot.sort((a, b) => Object.keys(b.likedBy).length - Object.keys(a.likedBy).length);
+          setRenderedPosts(slicePosts(user, result));
         }
       })
       .catch(err => setError(err))
       .finally(() => setLoading(false))
-  }, [filter, searchTerm]);
+  }, [filter, searchTerm, user]);
 
   // Need to fix this with error pages - check for lib
   if (error) {
@@ -63,14 +69,14 @@ export default function Posts({ searchTerm }) {
           </Col>
           <Col>
             <ToggleButtonGroup type="radio" name="options" value={selectedButton} className='w-100'>
-              <ToggleButton id="tbg-radio-1" value={1} onClick={() => {setFilter('new'); setSelectedButton(1)}} variant="danger">New posts</ToggleButton>
-              <ToggleButton id="tbg-radio-2" value={2} onClick={() => {setFilter('upvoted'); setSelectedButton(2)}} variant="danger">Upvoted posts</ToggleButton>
+              <ToggleButton id="tbg-radio-1" value={1} onClick={() => { setFilter('new'); setSelectedButton(1) }} variant="danger">New posts</ToggleButton>
+              <ToggleButton id="tbg-radio-2" value={2} onClick={() => { setFilter('upvoted'); setSelectedButton(2) }} variant="danger">Upvoted posts</ToggleButton>
             </ToggleButtonGroup>
           </Col>
         </Row>
       </Container>)}
       <Container>
-        {loading ? <Skeleton height={300} count={5} style={{marginBottom: "20px"}}/> : postsToShow}
+        {loading ? <Skeleton height={300} count={5} style={{ marginBottom: "20px" }} /> : postsToShow}
       </Container>
     </>
   )

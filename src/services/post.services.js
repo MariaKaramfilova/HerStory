@@ -5,6 +5,7 @@ import { setFileToStorage } from "./storage.services.js";
 const fromPostsDocument = snapshot => {
   const postsDocument = snapshot.val();
 
+
   return Object.keys(postsDocument).map(key => {
     const post = postsDocument[key];
 
@@ -17,16 +18,17 @@ const fromPostsDocument = snapshot => {
   });
 }
 
-export const createPost = async (title, content = null, topic, file = null, handle) => {
+export const createPost = async (title, content = null, topic, file = null, handle, email) => {
   return push(
     ref(database, 'posts'),
     {
       title,
       content,
       topic,
-      file: await setFileToStorage(file),
+      file: file ? await setFileToStorage(file) : null,
       fileType: file ? file.type.split('/')[0] : null,
       author: handle,
+      email: email,
       createdOn: Date.now(),
     },
   )
@@ -73,15 +75,28 @@ export const getAllPosts = () => {
     });
 };
 
-export const getPostsByAuthor = (handle) => {
+export  const getPostsByAuthor = (handle) => {
 
-  return get(query(ref(database, 'Posts'), orderByChild('author'), equalTo(handle)))
+  return get(query(ref(database, 'posts'), orderByChild('author'), equalTo(handle)))
     .then(snapshot => {
+
       if (!snapshot.exists()) return [];
 
       return fromPostsDocument(snapshot);
     });
 };
+
+// export const getPostsByEmail = (email) => {
+
+//   return get(query(ref(database, 'Posts'), orderByChild('email'), equalTo(email)))
+//     .then(snapshot => {
+
+//       console.log(snapshot);
+//       if (!snapshot.exists()) return [];
+
+//       return fromPostsDocument(snapshot);
+//     });
+// };
 
 export const likePost = (handle, postId) => {
   const updateLikes = {};

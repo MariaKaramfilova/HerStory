@@ -24,6 +24,7 @@ export default function CreatePost() {
   const navigate = useNavigate();
 
 
+  console.log(postFile);
   async function handleSubmit(event) {
     event.preventDefault();
     setError(null)
@@ -59,8 +60,9 @@ export default function CreatePost() {
     const userData = snapshot.val(Object.keys(snapshot.val())[0]);
 
     const userName = Object.values(userData).filter(el => el.uid === user.uid)[0].username;
+    const userEmail = Object.values(userData).filter(el => el.uid === user.uid)[0].email;
 
-    createPost(postTitle, postDescription, postTopic, postFile, userName)
+    createPost(postTitle, postDescription, postTopic, postFile, userName, userEmail)
       .then(() => {
         setIsCompleted(true);
       })

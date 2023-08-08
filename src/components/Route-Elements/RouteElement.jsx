@@ -11,6 +11,7 @@ import Search from "../../views/Search/Search.jsx"
 import ForgottenPassword from "../ResetPassword/ResetPassword"
 import AccountSettings from "../Account-Settings/Account-Settings"
 import SuccessRegister from "../../views/Success-registrer/SuccessRegister"
+import MyAccount from "../../views/Account/Account"
 
 export default function RouteElement() {
 
@@ -26,6 +27,7 @@ export default function RouteElement() {
         <Route path="/forgot-password" element={<AuthModal><ForgottenPassword /></AuthModal>} />
         <Route path="/create-post" element={<AuthenticatedRoute><CreatePost /></AuthenticatedRoute>} />
         <Route path="/account-settings" element={<AuthenticatedRoute><AccountSettings /></AuthenticatedRoute>} />
+        <Route path="/my-account" element={<AuthenticatedRoute><MyAccount /></AuthenticatedRoute>} />
         <Route path="/success-posting" element={<AuthenticatedRoute><SuccessPosting /></AuthenticatedRoute>} />
         <Route path="/success-register" element={<AuthenticatedRoute><SuccessRegister /></AuthenticatedRoute>} />
 
