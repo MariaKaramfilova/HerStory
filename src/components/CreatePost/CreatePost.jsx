@@ -24,6 +24,7 @@ export default function CreatePost() {
   const navigate = useNavigate();
 
 
+  console.log(postFile);
   async function handleSubmit(event) {
     event.preventDefault();
     setError(null)
