@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { AuthContext } from '../../context/AuthContext.js';
 import Skeleton from 'react-loading-skeleton';
 
-export default function Posts({ searchTerm }) {
+export default function Posts({ searchTerm, userName }) {
   const [filter, setFilter] = useState('new');
   const [renderedPosts, setRenderedPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -16,11 +16,11 @@ export default function Posts({ searchTerm }) {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
+  console.log(userName + 'posts');
+
   useEffect(() => {
     setLoading(true);
     let result;
-
-    const slicePosts = (user, result) => user ? result : result.slice(0, result.length <= 10 ? result.length : 10)
 
     getAllPosts()
       .then(snapshot => {
@@ -28,18 +28,18 @@ export default function Posts({ searchTerm }) {
           result = snapshot.filter(el => {
             return el.title.split(' ').filter(el => el.toLowerCase().startsWith(searchTerm.toLowerCase())).length > 0;
           })
-          setRenderedPosts(slicePosts(user, result));
         } else if (filter === 'new') {
           result = snapshot.sort((a, b) => b.createdOn - a.createdOn)
-          setRenderedPosts(slicePosts(user, result));
         } else {
           result = snapshot.sort((a, b) => Object.keys(b.likedBy).length - Object.keys(a.likedBy).length);
-          setRenderedPosts(slicePosts(user, result));
         }
+        let data = user ? result : result.slice(0, result.length <= 10 ? result.length : 10);
+        setRenderedPosts(userName === 'logged' && user ? data.filter(el => el.uid === user.uid) : data);
+
       })
       .catch(err => setError(err))
       .finally(() => setLoading(false))
-  }, [filter, searchTerm, user]);
+  }, [filter, searchTerm, user, userName]);
 
   // Need to fix this with error pages - check for lib
   if (error) {
@@ -52,7 +52,7 @@ export default function Posts({ searchTerm }) {
         goToDetails: () => navigate(`/posts/${post.uid}`),
         ...post
       };
-      return <PostsDetails key={post.uid} {...postDetailsProp} />;
+      return <PostsDetails key={crypto.randomUUID()} {...postDetailsProp} />;
     })
   ) : (
     <div>

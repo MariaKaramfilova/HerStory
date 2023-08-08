@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react'
-import { Button, Container, Col, Row, ToggleButtonGroup, ToggleButton, Alert, Card } from 'react-bootstrap'
+import { Button, Container, Col, Row, ToggleButtonGroup, ToggleButton, Alert } from 'react-bootstrap'
 import { Form } from 'react-bootstrap'
 import { createPost } from '../../services/post.services.js';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
 import DropzoneComponent from '../Dropzone/Dropzone.jsx';
 import { TOPIC_EDUCATION, TOPIC_EQUALITY, TOPIC_MATERNITY, TOPIC_PAY, TOPIC_REPRO, TOPIC_VIOLENCE } from '../../common/common.js';
@@ -14,7 +14,7 @@ export default function CreatePost() {
   const { user } = useContext(AuthContext);
 
   const [isTypeText, setIsTypeText] = useState(true);
-  const [postTopic, setPostTopic] = useState('');
+  const [postTopic, setPostTopic] = useState('Choose topic');
   const [postTitle, setPostTitle] = useState('');
   const [postDescription, setPostDescription] = useState('');
   const [postFile, setPostFile] = useState('');
@@ -23,14 +23,17 @@ export default function CreatePost() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-
-  console.log(postFile);
   async function handleSubmit(event) {
     event.preventDefault();
     setError(null)
     setIsCompleted(false)
     setLoading(true);
 
+    if (postTopic === 'Choose topic') {
+      setError('You need to select post topic');
+      setLoading(false);
+      return;
+    }
     if (postTitle.length < 16 || postTitle.length > 64) {
       setError('The title must be between 16 and 64 symbols.');
       setLoading(false);
@@ -48,11 +51,6 @@ export default function CreatePost() {
       return;
     }
 
-    if (postTopic === 'Choose topic') {
-      setError('You need to select post topic');
-      setLoading(false);
-      return;
-    }
 
     const formContent = new FormData();
     formContent.append('file', postFile);
@@ -66,7 +64,7 @@ export default function CreatePost() {
       .then(() => {
         setIsCompleted(true);
       })
-      .catch(err => setError(err))
+      .catch(err => setError(err.message))
       .finally(() => setLoading(false));
   }
 
@@ -110,7 +108,7 @@ export default function CreatePost() {
     <Container className='w-100 mt-3 mb-3' style={{ minHeight: "100vh", maxWidth: "60%", marginLeft: "0" }}>
       <h2 className='mb-4'>Create a post</h2>
       <Form>
-        {error && <Alert variant='danger'>{error.message}</Alert>}
+        {error && <Alert variant='danger'>{error}</Alert>}
         <Form.Group>
           <Row className='mb-3'>
             <Col>

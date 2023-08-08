@@ -20,7 +20,7 @@ export default function RouteElement() {
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" element={ <Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/search/:id" element={<Search />} />
         <Route path="/sign-up" element={<AuthModal><RegistrationForm /></AuthModal>} />

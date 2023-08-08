@@ -13,7 +13,7 @@ const fromPostsDocument = snapshot => {
       ...post,
       id: key,
       createdOn: new Date(post.createdOn),
-      likedBy: post.likedBy ? Object.keys(post.likedBy) : [],
+      upvotedBy: post.upvotedBy ? Object.keys(post.upvotedBy) : [],
     };
   });
 }
@@ -110,7 +110,7 @@ export const getPostById = (id) => {
       const post = result.val();
       post.id = id;
       post.createdOn = new Date(post.createdOn);
-      if (!post.likedBy) post.likedBy = [];
+      if (!post.upvotedBy) post.upvotedBy = [];
 
       return post;
     });
@@ -151,23 +151,23 @@ export  const getPostsByAuthor = (handle) => {
 //     });
 // };
 
-export const likePost = (handle, postId) => {
-  const updateLikes = {};
-  updateLikes[`/posts/${postId}/likedBy/${handle}`] = true;
-  updateLikes[`/users/${handle}/likedPosts/${postId}`] = true;
+export const upvotePost = (handle, postId) => {
+  const updateUpvotes = {};
+  updateUpvotes[`/posts/${postId}/upvotedBy/${handle}`] = true;
+  updateUpvotes[`/users/${handle}/upvotedPosts/${postId}`] = true;
 
-  return update(ref(database), updateLikes);
+  return update(ref(database), updateUpvotes);
 };
 
-export const dislikePost = (handle, postId) => {
-  const updateLikes = {};
-  updateLikes[`/posts/${postId}/likedBy/${handle}`] = null;
-  updateLikes[`/users/${handle}/likedPosts/${postId}`] = null;
+export const downvotePost = (handle, postId) => {
+  const updateUpvotes = {};
+  updateUpvotes[`/posts/${postId}/upvotedBy/${handle}`] = null;
+  updateUpvotes[`/users/${handle}/upvotedPosts/${postId}`] = null;
 
-  return update(ref(database), updateLikes);
+  return update(ref(database), updateUpvotes);
 };
 
-export const getLikedPosts = (handle) => {
+export const getUpvotedPosts = (handle) => {
 
   return get(ref(database, `users/${handle}`))
     .then(snapshot => {
@@ -176,9 +176,9 @@ export const getLikedPosts = (handle) => {
       }
 
       const user = snapshot.val();
-      if (!user.likedPosts) return [];
+      if (!user.upvotedPosts) return [];
 
-      return Promise.all(Object.keys(user.likedPosts).map(key => {
+      return Promise.all(Object.keys(user.upvotedPosts).map(key => {
 
         return get(ref(database, `posts/${key}`))
           .then(snapshot => {
@@ -188,7 +188,7 @@ export const getLikedPosts = (handle) => {
               ...post,
               createdOn: new Date(post.createdOn),
               id: key,
-              likedBy: post.likedBy ? Object.keys(post.likedBy) : [],
+              upvotedBy: post.upvotedBy ? Object.keys(post.upvotedBy) : [],
             };
           });
       }));
