@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../context/AuthContext.js';
-import { Col, Container, Row, ToggleButton, ToggleButtonGroup, Card, ListGroup } from 'react-bootstrap'
+import { Card, ListGroup } from 'react-bootstrap'
 import { getPostsByAuthor } from '../../services/post.services.js';
 import { getUserData } from '../../services/users.services.js';
 import PostsDetails from '../../components/Posts/PostsDetails.jsx';

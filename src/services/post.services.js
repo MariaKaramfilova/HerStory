@@ -30,20 +30,52 @@ export const createPost = async (title, content = null, topic, file = null, hand
       author: handle,
       email: email,
       createdOn: Date.now(),
+      postId: 'null',
     },
   )
     .then(result => {
+      const updatePostIDequalToHandle = {};
+      updatePostIDequalToHandle[`/posts/${result.key}/postId`] = result.key;
 
+      update(ref(database), updatePostIDequalToHandle)
       return getPostById(result.key);
     });
 }
+
+export const creatеComment = async (content = null, author, postHandle) => {
+  return push(
+    ref(database, 'comments'),
+    {
+      author,
+      content,
+      createdOn: Date.now(),
+      postHandle,
+    },
+  )
+  .then(result => {
+    return getCommentsByPostHandle(result.key);
+  });
+}
+
+export const getCommentsByPostHandle = (postHandle) => {
+
+  return get(query(ref(database, 'comments'), orderByChild('postUID'), equalTo(postHandle)))
+    .then(snapshot => {
+
+      if (!snapshot.exists()) return [];
+
+      return fromPostsDocument(snapshot);
+    });
+};
+
+
 
 export function editPost(uid) {
   
 }
 
 export function deletePost(uid) {
-
+  
 }
 
 export const getPostById = (id) => {
