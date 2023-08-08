@@ -1,5 +1,5 @@
 import { database } from "../config/firebase.js";
-import { get, ref, query, orderByChild, equalTo, push, update } from "firebase/database";
+import { get, ref, query, orderByChild, equalTo, push, update, remove } from "firebase/database";
 import { setFileToStorage } from "./storage.services.js";
 
 const fromPostsDocument = snapshot => {
@@ -36,30 +36,36 @@ export const createPost = async (title, content = null, topic, file = null, hand
     .then(result => {
       const updatePostIDequalToHandle = {};
       updatePostIDequalToHandle[`/posts/${result.key}/postId`] = result.key;
-
       update(ref(database), updatePostIDequalToHandle)
+
       return getPostById(result.key);
     });
 }
 
-export const creatеComment = async (content = null, author, postHandle) => {
+export const createComment = async (content = null, author, postId, userUid) => {
   return push(
     ref(database, 'comments'),
     {
       author,
       content,
       createdOn: Date.now(),
-      postHandle,
+      postId,
+      commentId: 'null',
+      userUid,
     },
   )
   .then(result => {
+    const updateCommentIDequalToHandle = {};
+    updateCommentIDequalToHandle[`/comments/${result.key}/commentId`] = result.key;
+    update(ref(database), updateCommentIDequalToHandle)
+
     return getCommentsByPostHandle(result.key);
   });
 }
 
-export const getCommentsByPostHandle = (postHandle) => {
+export const getCommentsByPostHandle = async (postId) => {
 
-  return get(query(ref(database, 'comments'), orderByChild('postUID'), equalTo(postHandle)))
+  return get(query(ref(database, 'comments'), orderByChild('postId'), equalTo(postId)))
     .then(snapshot => {
 
       if (!snapshot.exists()) return [];
@@ -68,6 +74,21 @@ export const getCommentsByPostHandle = (postHandle) => {
     });
 };
 
+export const deleteCommentID = async (commentID) => {
+
+  const commentLocation = commentID;
+
+  try {
+
+    await remove(ref(database, `comments/${commentLocation}`));
+    console.log('Comment deleted successfully!');
+
+  } catch (error) {
+    throw new Error('Error deleting comment:', error);
+  }
+
+}
+
 
 
 export function editPost(uid) {
@@ -75,7 +96,7 @@ export function editPost(uid) {
 }
 
 export function deletePost(uid) {
-  
+
 }
 
 export const getPostById = (id) => {

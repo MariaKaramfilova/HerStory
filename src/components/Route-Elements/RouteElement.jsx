@@ -12,6 +12,7 @@ import ForgottenPassword from "../ResetPassword/ResetPassword"
 import AccountSettings from "../Account-Settings/Account-Settings"
 import SuccessRegister from "../../views/Success-registrer/SuccessRegister"
 import MyAccount from "../../views/Account/Account"
+import DetailedPostView from "../../views/DetailedPostView/DetailedPostView"
 
 export default function RouteElement() {
 
@@ -30,6 +31,7 @@ export default function RouteElement() {
         <Route path="/my-account" element={<AuthenticatedRoute><MyAccount /></AuthenticatedRoute>} />
         <Route path="/success-posting" element={<AuthenticatedRoute><SuccessPosting /></AuthenticatedRoute>} />
         <Route path="/success-register" element={<AuthenticatedRoute><SuccessRegister /></AuthenticatedRoute>} />
+        <Route path="/detailed-post-view" element={<DetailedPostView />}/>
 
       </Routes>
     </>
