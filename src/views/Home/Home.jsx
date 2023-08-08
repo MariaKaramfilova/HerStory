@@ -1,5 +1,6 @@
 import React from "react"
 import Posts from "../../components/Posts/Posts.jsx"
+import MyAccount from "../Account/Account.jsx"
 
 export default function Home() {
     return (
