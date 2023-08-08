@@ -5,9 +5,10 @@ import { AuthContext } from '../../context/AuthContext';
 import { createUserByUsername, getUserByUsername } from '../../services/users.services';
 import { registerUser } from '../../services/auth.services';
 import { Link, useNavigate } from 'react-router-dom/dist';
+import { fetchSignInMethodsForEmail, getAuth } from 'firebase/auth';
 export default function RegistrationForm() {
 
-  const profilePictureURL = "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png"
+  const [profilePictureURL, setProfilePictureURL] = useState('https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -19,6 +20,22 @@ export default function RegistrationForm() {
 
   const { setUser } = useContext(AuthContext);
 
+  const checkEmailExistence = async (email) => {
+    const auth = getAuth();
+    
+    try {
+      const methods = await fetchSignInMethodsForEmail(auth, email);
+      
+      if (methods.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error('Error checking email existence:', error);
+      throw error;
+    }
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     setError(null)
@@ -35,12 +52,22 @@ export default function RegistrationForm() {
       setError('Please check if your passwords match!')
       return;
     }
+    if (password.length < 6) {
+      setError('Password should be more 6 characters!')
+      return;
+    }
     getUserByUsername(userName)
       .then(snapshot => {
         if (snapshot.exists()) {
           return alert('This Username already exist!')
         }
-        return registerUser(email, password)
+        return checkEmailExistence(email);
+      })
+      .then((emailExists) => {
+        if (emailExists) {
+          setError('This Email is already in use!');
+        }
+        return registerUser(email, password);
       })
       .then(credential => {
         return createUserByUsername(firstName, lastName, credential.user.uid, credential.user.email, userName, profilePictureURL)
