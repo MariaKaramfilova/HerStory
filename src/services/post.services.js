@@ -42,6 +42,23 @@ export const createPost = async (title, content = null, topic, file = null, hand
     });
 }
 
+export const editPost = async (postId, title, topic, content = null) => {
+  const updates = {
+    title,
+    content,
+    topic,
+  };
+
+  try {
+    await update(ref(database, `posts/${postId}`), updates);
+    console.log('Post updated successfully!');
+    return getPostById(postId);
+  } catch (error) {
+    console.error('Error updating post:', error);
+    throw error;
+  }
+};
+
 export const createComment = async (content = null, author, postId, userUid) => {
   return push(
     ref(database, 'comments'),
@@ -77,7 +94,6 @@ export const getCommentsByPostHandle = async (postId) => {
 export const deleteCommentID = async (commentID) => {
 
   const commentLocation = commentID;
-
   try {
 
     await remove(ref(database, `comments/${commentLocation}`));
@@ -90,12 +106,19 @@ export const deleteCommentID = async (commentID) => {
 }
 
 
+export async function deletePost(postId) {
+ 
+  await remove(ref(database, `posts/${postId}`));
 
-export function editPost(uid) {
-  
-}
+  const comments = await getCommentsByPostHandle(postId);
+  const commentIds = Object.keys(comments);
+  const removeCommentsPromises = commentIds.map(commentId =>
+    remove(ref(database, `comments/${commentId}`))
+  );
 
-export function deletePost(uid) {
+  await Promise.all(removeCommentsPromises);
+
+  console.log('Post and associated comments deleted successfully');
 
 }
 
