@@ -1,4 +1,4 @@
-import { get, set, ref, query, orderByChild, equalTo } from "firebase/database";
+import { get, set, ref, query, orderByChild, equalTo, update } from "firebase/database";
 import { auth, database } from "../config/firebase";
 
 const fromUsersDocument = snapshot => {
@@ -44,4 +44,16 @@ export const getAllUsers = () => {
 
       return fromUsersDocument(snapshot);
     });
+}
+export const updateProfilePic = async(url, currentUser) => {
+  const updateProfilePic = {};
+  updateProfilePic[`/users/${currentUser}/profilePictureURL`] = url;
+
+  return update(ref(database), updateProfilePic);
+}
+export const updateProfileEmail = async(email, currentUser) => {
+  const updateEmail = {};
+  updateEmail[`/users/${currentUser}/email`] = email;
+
+  return update(ref(database), updateEmail);
 }

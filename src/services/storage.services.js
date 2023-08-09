@@ -1,15 +1,17 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../config/firebase.js";
-import { updateProfile } from "firebase/auth";
+import { updateProfilePic } from "./users.services.js";
 
-export async function uploadProfilePicture(file, currentUser, setLoading){
-  const fileRef = ref(storage, currentUser.uid + '.png');
-  setLoading(true);
-  const snapshot = await uploadBytes(fileRef, file);
-  const photoURL = await getDownloadURL(fileRef);
-  updateProfile(currentUser, {photoURL})
-  setLoading(false);
-  alert('You have successfully changed your profile picture! Please refresh the page to see your new profile picture!');
+export async function uploadProfilePicture(file, currentUser){
+  try {
+    const fileRef = ref(storage, currentUser.uid + '.png');
+    const snapshot = await uploadBytes(fileRef, file);
+    const photoURL = await getDownloadURL(fileRef);
+    await updateProfilePic(photoURL, currentUser)
+  } catch (error) {
+    console.error("Error uploading profile picture:", error);
+    return null;
+  }
 }
 
 export const setFileToStorage = async (file) => {

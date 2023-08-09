@@ -17,7 +17,7 @@ const ProfileDropdown = () => {
         const userData = snapshot.val();
         const profileData = Object.values(userData).find((el) => el.uid === user.uid);
         if (profileData) {
-          setProfilePictureURL(user.photoURL);
+          setProfilePictureURL(profileData.profilePictureURL);
         }
       } catch (error) {
         console.error('Error fetching profile picture URL:', error);

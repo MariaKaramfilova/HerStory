@@ -5,6 +5,8 @@ import { getUserData } from "../../services/users.services";
 import { uploadProfilePicture } from "../../services/storage.services";
 import { updateEmail, updatePassword, deleteUser, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { Link } from "react-router-dom/dist";
+import { updateProfileEmail } from "../../services/users.services";
+
 
 const AccountSettings = () => {
   const { user } = useContext(AuthContext);
@@ -23,6 +25,7 @@ const AccountSettings = () => {
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [error, setError] = useState("");
+
 
   function handleChange(e) {
     const selectedFile = e.target.files[0];
@@ -43,9 +46,22 @@ const AccountSettings = () => {
     }
   }
 
-  function handleClick() {
-    uploadProfilePicture(photo, user, setLoading);
+  async function handleClick() {
+    if (photo && username) {
+      try {
+        const data = await uploadProfilePicture(photo, username);
+        setProfilePictureURL(data);
+
+        setLoading(false);
+        alert('You have successfully changed your profile picture! Please refresh the page to see your new profile picture!');
+      } catch (error) {
+        console.error("Error uploading profile picture:", error);
+      }
+    } else {
+      console.error("No file selected.");
+    }
   }
+
 
   useEffect(() => {
     const getProfileData = async () => {
@@ -53,8 +69,9 @@ const AccountSettings = () => {
         const snapshot = await getUserData(user.uid);
         const userData = snapshot.val();
         const profileData = Object.values(userData).find((el) => el.uid === user.uid);
-        if (profileData) {
-          setProfilePictureURL(user.photoURL);
+  
+        if (profileData) {          
+          setProfilePictureURL(profileData.profilePictureURL);
           setFirstName(profileData.firstName);
           setSurname(profileData.lastName);
           setUsername(profileData.username);
@@ -64,15 +81,15 @@ const AccountSettings = () => {
         console.error("Error fetching profile picture URL:", error);
       }
     };
-
+  
     if (user) {
-      setProfilePictureURL(user.photoURL);
       getProfileData();
     }
     return () => {
       setIsPhotoSelected(false);
     };
-  }, [user]);
+  }, [user, profilePictureURL]);
+
 
   const changePassword = async () => {
     try {
@@ -122,6 +139,7 @@ const AccountSettings = () => {
         if (email) {
           await updateEmail(user, email);
           alert("Congratulations! You successfully changed your email!");
+          await updateProfileEmail(email, username);
           setEmail("");
           setEmailError("");
         }
@@ -173,8 +191,9 @@ const AccountSettings = () => {
 </div>
 <hr />
       <div style={{ display: "flex", alignItems: "center" }}>
+        {profilePictureURL &&
         <img
-          src={profilePictureURL ? (profilePictureURL):("https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png")}
+          src={profilePictureURL}
           alt="Profile picture"
           style={{
             width: "90px",
@@ -183,6 +202,7 @@ const AccountSettings = () => {
             marginRight: "10px",
           }}
         />
+        }
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: "20px", fontWeight: "bold", color: "pink" }}>
             {firstName} {surname}
