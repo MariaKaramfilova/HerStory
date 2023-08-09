@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, FormControl, Form, DropdownButton, Dropdown } from 'react-bootstrap';
-import React, { useState } from 'react';
-import { Button, FormControl, Form,  } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
 import { getUserData } from '../../services/users.services.js';
