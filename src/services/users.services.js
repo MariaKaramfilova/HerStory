@@ -1,5 +1,5 @@
-import { get, set, ref, query, orderByChild, equalTo } from "firebase/database";
-import { auth, database } from "../config/firebase";
+import { get, set, ref, orderByChild, equalTo, update } from "firebase/database";
+import { database } from "../config/firebase";
 
 const fromUsersDocument = snapshot => {
     const usersDocument = snapshot.val();
@@ -27,6 +27,7 @@ export const createUserByUsername = (firstName, lastName, uid, email, username, 
         username,
         profilePictureURL,
         email,
+        role: 'user',
         createdOn: Date.now(),
     })
 }
@@ -44,4 +45,20 @@ export const getAllUsers = () => {
 
       return fromUsersDocument(snapshot);
     });
+}
+
+export const blockUser = (handle) => {
+  const updateBlockedStatus = {};
+
+  updateBlockedStatus[`/users/${handle}/blockedStatus`] = true;
+
+  return update(ref(database), updateBlockedStatus);
+}
+
+export const unblockUser = (handle) => {
+  const updateBlockedStatus = {};
+
+  updateBlockedStatus[`/users/${handle}/blockedStatus`] = false;
+
+  return update(ref(database), updateBlockedStatus);
 }

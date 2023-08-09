@@ -7,7 +7,6 @@ import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext.js";
 import Skeleton from "react-loading-skeleton";
-import '../../../src/theme-variable.scss';
 
 const Header = () => {
   const navigate = useNavigate();
