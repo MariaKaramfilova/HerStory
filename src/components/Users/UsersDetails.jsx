@@ -6,11 +6,13 @@ import { faCircleUser, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import { Button } from 'react-bootstrap';
 import { blockUser, getUserByUsername, unblockUser } from '../../services/users.services.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function UsersDetails(user, goToDetails) {
   const [blockedStatus, setBlockedStatus] = useState(user.blockedStatus);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   setLoading(true);
@@ -42,6 +44,10 @@ export default function UsersDetails(user, goToDetails) {
     } catch (error) {
       setError(error)
     }
+  }
+
+  const handleGoToDetails = () => {
+    navigate(`/account/${user.uid}`);
   }
 
   // Need to fix this with error pages - check for lib
@@ -81,7 +87,7 @@ export default function UsersDetails(user, goToDetails) {
           ) : (
             <Button variant="dark" style={{ marginRight: '0.5em' }} onClick={handleBlock}>Block user</Button>)
           }
-          <Button variant="danger">View details</Button>{' '}
+          <Button variant="danger" onClick={handleGoToDetails}>View details</Button>{' '}
         </div>
       </Container>
     </div>

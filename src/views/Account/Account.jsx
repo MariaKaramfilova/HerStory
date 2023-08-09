@@ -3,27 +3,35 @@ import { AuthContext } from '../../context/AuthContext.js';
 import { Card, ListGroup } from 'react-bootstrap'
 import Posts from '../../components/Posts/Posts.jsx';
 import { getUserByUsername, getUserData } from '../../services/users.services.js';
-import { useLocation } from 'react-router-dom';
-
+import { useLocation, useParams } from 'react-router-dom';
+import PropTypes from "prop-types";
 
 export default function MyAccount({ userName }) {
 
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState('');
   const location = useLocation();
+  const params = useParams();
+  const userId = params.id;
 
+  /**
+   * Entry points:
+   * admin view another user with /account/uid (navigate) - get Uid from url
+   * menu dropdown - my-account (navigate) - get uid from current user context
+   * Post-details - view another person or own account (by component) - get username with props
+   */
   useEffect(() => {
     if (!user) {
       return;
     }
 
-    if (location.pathname === '/my-account') {
-      getUserData(user.uid)
-      .then(snapshot => {
-        const userData = snapshot.val(Object.keys(snapshot.val())[0]);
-        const userInfo = Object.values(userData).filter(el => el.uid === user.uid)[0];
-        setUserInfo(userInfo);
-      });
+    if (location.pathname === '/my-account' || userId) {
+      getUserData(location.pathname === '/my-account' ? user.uid : userId)
+        .then(snapshot => {
+          const userData = snapshot.val(Object.keys(snapshot.val())[0]);
+          const userInfo = Object.values(userData).filter(el => el.uid === (location.pathname === '/my-account' ? user.uid : userId))[0];
+          setUserInfo(userInfo);
+        });
       return;
     }
 
@@ -34,7 +42,7 @@ export default function MyAccount({ userName }) {
         const userInfo = Object.values(userData).filter(el => el.uid === user.uid)[0];
         setUserInfo(userInfo);
       });
-  }, [user, location.pathname, userName]);
+  }, [user, location.pathname, userName, userId]);
 
   return (
     <>
@@ -72,6 +80,6 @@ export default function MyAccount({ userName }) {
 
 }
 
-// MyAccount.propTypes = {
-//     uid: PropTypes.string,
-//   };
+MyAccount.propTypes = {
+  userName: PropTypes.string,
+};

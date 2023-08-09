@@ -59,6 +59,13 @@ export default function CreatePost() {
 
     const userName = Object.values(userData).filter(el => el.uid === user.uid)[0].username;
     const userEmail = Object.values(userData).filter(el => el.uid === user.uid)[0].email;
+    const isBlocked = Object.values(userData).filter(el => el.uid === user.uid)[0].blockedStatus;
+
+    if(isBlocked) {
+      setError('You cannot create post because you are a blocked user!');
+      setLoading(false);
+      return;
+    }
 
     createPost(postTitle, postDescription, postTopic, postFile, userName, userEmail)
       .then(() => {

@@ -31,6 +31,7 @@ export default function RouteElement() {
         <Route path="/create-post" element={<AuthenticatedRoute><CreatePost /></AuthenticatedRoute>} />
         <Route path="/account-settings" element={<AuthenticatedRoute><AccountSettings /></AuthenticatedRoute>} />
         <Route path="/my-account" element={<AuthenticatedRoute><MyAccount /></AuthenticatedRoute>} />
+        <Route path="/account/:id" element={<AuthenticatedRoute><MyAccount /></AuthenticatedRoute>} />
         <Route path="/success-posting" element={<AuthenticatedRoute><SuccessPosting /></AuthenticatedRoute>} />
         <Route path="/success-register" element={<AuthenticatedRoute><SuccessRegister /></AuthenticatedRoute>} />
         <Route path="/detailed-post-view" element={<DetailedPostView />} />

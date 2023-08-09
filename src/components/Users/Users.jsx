@@ -43,7 +43,7 @@ export default function Users({ searchTerm }) {
     const usersToShow = users.length ? (
       users.map(user => {
         const userDetailsProp = {
-          goToDetails: () => navigate(`/users/${user.uid}`),
+          goToDetails: () => navigate(`/account/${user.uid}`),
           ...user
         };
         return <UsersDetails key={crypto.randomUUID()} {...userDetailsProp} />;
