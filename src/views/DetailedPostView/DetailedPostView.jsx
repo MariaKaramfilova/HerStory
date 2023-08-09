@@ -13,7 +13,7 @@ const demoPost = {
     topic: 'Gender Equality',
 }
 
-export default function DetailedPostView () {
+export default function DetailedPostView (props) {
     const { user } = useContext(AuthContext);
 
     const [ comment, setComment ] = useState('');
@@ -43,7 +43,11 @@ export default function DetailedPostView () {
     }
 
     async function deleteComment (commentId) {
-        await deleteCommentID(commentId);
+        const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
+
+        if (confirmDelete) {
+            await deleteCommentID(commentId);
+        }
     }
 
     useEffect (() => {
