@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, FormControl, Form } from 'react-bootstrap';
+import { Button, FormControl, Form, DropdownButton, Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
 import { getUserData } from '../../services/users.services.js';
+import { InputGroup } from 'react-bootstrap';
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,24 +41,31 @@ const SearchBar = () => {
   return (
     <>
       <Form style={styles.form}>
-        {userRole === 'admin' && (
-          <Form.Select style={{ width: '10em' }} onChange={(e) => setSearchType(e.target.value)}>
-            <option value='posts'>Posts query</option>
-            <option value='users-username'>Users by username</option>
-            <option value='users-email'>Users by email</option>
-            <option value='users-name'>Users by name</option>
-          </Form.Select>
-        )}
-        <FormControl
-          className="search-bar"
-          type="text"
-          value={searchTerm}
-          name="topic"
-          onChange={(e) => { setSearchTerm(e.target.value); setShowError(false) }}
-          placeholder={showError ? "Please enter a search term" : searchType === 'posts' ? "Enter a topic" : "Enter username, email, or display name"}
-        />
+        <InputGroup>
+          {userRole === 'admin' && (
+            <DropdownButton
+              variant="outline-secondary"
+              title={`Search in ${searchType}`}
+              id="input-group-dropdown-1">
+
+                <Dropdown.Item onClick={() => setSearchType("posts")} href="#">Posts</Dropdown.Item>
+                <Dropdown.Item onClick={() => setSearchType("users-username")} href="#">Users by username</Dropdown.Item>
+                <Dropdown.Item onClick={() => setSearchType("users-email")} href="#">Users by email</Dropdown.Item>
+                <Dropdown.Item onClick={() => setSearchType("users-name")} href="#">Users by name</Dropdown.Item>
+
+            </DropdownButton>
+          )}
+          <FormControl
+            className="search-bar"
+            type="text"
+            value={searchTerm}
+            name="topic"
+            onChange={(e) => { setSearchTerm(e.target.value); setShowError(false) }}
+            placeholder={showError ? "Please enter a search term" : searchType === 'posts' ? "Enter a topic" : "Enter username, email, or display name"}
+          />
+        </InputGroup>
         <Button type="submit" variant="dark" onClick={handleSearchClick} style={styles.button}>Search</Button>
-      </Form>
+      </Form >
     </>
   );
 };

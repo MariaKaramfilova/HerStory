@@ -5,6 +5,7 @@ import Posts from '../../components/Posts/Posts.jsx';
 import { getUserByUsername, getUserData } from '../../services/users.services.js';
 import { useLocation, useParams } from 'react-router-dom';
 import PropTypes from "prop-types";
+import Skeleton from 'react-loading-skeleton';
 
 export default function MyAccount({ userName }) {
 
@@ -13,6 +14,8 @@ export default function MyAccount({ userName }) {
   const location = useLocation();
   const params = useParams();
   const userId = params.id;
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   /**
    * Entry points:
@@ -21,6 +24,9 @@ export default function MyAccount({ userName }) {
    * Post-details - view another person or own account (by component) - get username with props
    */
   useEffect(() => {
+    setLoading(true);
+    setError(null);
+
     if (!user) {
       return;
     }
@@ -31,7 +37,9 @@ export default function MyAccount({ userName }) {
           const userData = snapshot.val(Object.keys(snapshot.val())[0]);
           const userInfo = Object.values(userData).filter(el => el.uid === (location.pathname === '/my-account' ? user.uid : userId))[0];
           setUserInfo(userInfo);
-        });
+        })
+        .catch(err => setError(err))
+        .finally(() => setLoading(false));
       return;
     }
 
@@ -40,9 +48,16 @@ export default function MyAccount({ userName }) {
       .then(snapshot => {
         const userData = snapshot.val(Object.keys(snapshot.val())[0]);
         const userInfo = Object.values(userData).filter(el => el.uid === user.uid)[0];
-        setUserInfo(userInfo);
+        setUserInfo(userInfo)
+          .catch(err => setError(err))
+          .finally(() => setLoading(false));
       });
   }, [user, location.pathname, userName, userId]);
+
+  // Need to fix this with error pages - check for lib
+  if (error) {
+    return <h1>Error!!! {error.message}</h1>
+  }
 
   return (
     <>
@@ -51,7 +66,7 @@ export default function MyAccount({ userName }) {
 
           <div className="col-7">
             <h1>My Posts</h1>
-            <Posts userName={userInfo.username} />
+            {loading ? <Skeleton height={300} count={5} style={{ marginBottom: "20px" }} /> : <Posts userName={userInfo.username} />}
           </div>
 
           <div className="col-auto">
