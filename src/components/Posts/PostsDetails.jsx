@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { Card, Image } from "react-bootstrap";
 import { getUserByUsername } from "../../services/users.services";
-
+import MyAccount from "../../views/Account/Account";
 export default function PostsDetails({ goToDetails, ...post }) {
   const [authorData, setAuthorData] = useState(null);
   const [typeFile, setTypeFile] = useState("");
@@ -29,6 +29,10 @@ export default function PostsDetails({ goToDetails, ...post }) {
   }, [post.author, post.file]);
 
   console.log(post);
+
+  if (false) {
+    return <MyAccount userName={post.userName} />
+  }
 
   return (
     <Card className="mb-3">

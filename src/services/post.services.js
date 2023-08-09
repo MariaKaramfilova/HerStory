@@ -1,5 +1,5 @@
 import { database } from "../config/firebase.js";
-import { get, ref, query, orderByChild, equalTo, push, update } from "firebase/database";
+import { get, ref, query, orderByChild, equalTo, push, update, remove } from "firebase/database";
 import { setFileToStorage } from "./storage.services.js";
 
 const fromPostsDocument = snapshot => {
@@ -13,7 +13,7 @@ const fromPostsDocument = snapshot => {
       ...post,
       id: key,
       createdOn: new Date(post.createdOn),
-      likedBy: post.likedBy ? Object.keys(post.likedBy) : [],
+      upvotedBy: post.upvotedBy ? Object.keys(post.upvotedBy) : [],
     };
   });
 }
@@ -30,13 +30,66 @@ export const createPost = async (title, content = null, topic, file = null, hand
       author: handle,
       email: email,
       createdOn: Date.now(),
+      postId: 'null',
     },
   )
     .then(result => {
+      const updatePostIDequalToHandle = {};
+      updatePostIDequalToHandle[`/posts/${result.key}/postId`] = result.key;
+      update(ref(database), updatePostIDequalToHandle)
 
       return getPostById(result.key);
     });
 }
+
+export const createComment = async (content = null, author, postId, userUid) => {
+  return push(
+    ref(database, 'comments'),
+    {
+      author,
+      content,
+      createdOn: Date.now(),
+      postId,
+      commentId: 'null',
+      userUid,
+    },
+  )
+  .then(result => {
+    const updateCommentIDequalToHandle = {};
+    updateCommentIDequalToHandle[`/comments/${result.key}/commentId`] = result.key;
+    update(ref(database), updateCommentIDequalToHandle)
+
+    return getCommentsByPostHandle(result.key);
+  });
+}
+
+export const getCommentsByPostHandle = async (postId) => {
+
+  return get(query(ref(database, 'comments'), orderByChild('postId'), equalTo(postId)))
+    .then(snapshot => {
+
+      if (!snapshot.exists()) return [];
+
+      return fromPostsDocument(snapshot);
+    });
+};
+
+export const deleteCommentID = async (commentID) => {
+
+  const commentLocation = commentID;
+
+  try {
+
+    await remove(ref(database, `comments/${commentLocation}`));
+    console.log('Comment deleted successfully!');
+
+  } catch (error) {
+    throw new Error('Error deleting comment:', error);
+  }
+
+}
+
+
 
 export function editPost(uid) {
   
@@ -57,7 +110,7 @@ export const getPostById = (id) => {
       const post = result.val();
       post.id = id;
       post.createdOn = new Date(post.createdOn);
-      if (!post.likedBy) post.likedBy = [];
+      if (!post.upvotedBy) post.upvotedBy = [];
 
       return post;
     });
@@ -98,23 +151,23 @@ export  const getPostsByAuthor = (handle) => {
 //     });
 // };
 
-export const likePost = (handle, postId) => {
-  const updateLikes = {};
-  updateLikes[`/posts/${postId}/likedBy/${handle}`] = true;
-  updateLikes[`/users/${handle}/likedPosts/${postId}`] = true;
+export const upvotePost = (handle, postId) => {
+  const updateUpvotes = {};
+  updateUpvotes[`/posts/${postId}/upvotedBy/${handle}`] = true;
+  updateUpvotes[`/users/${handle}/upvotedPosts/${postId}`] = true;
 
-  return update(ref(database), updateLikes);
+  return update(ref(database), updateUpvotes);
 };
 
-export const dislikePost = (handle, postId) => {
-  const updateLikes = {};
-  updateLikes[`/posts/${postId}/likedBy/${handle}`] = null;
-  updateLikes[`/users/${handle}/likedPosts/${postId}`] = null;
+export const downvotePost = (handle, postId) => {
+  const updateUpvotes = {};
+  updateUpvotes[`/posts/${postId}/upvotedBy/${handle}`] = null;
+  updateUpvotes[`/users/${handle}/upvotedPosts/${postId}`] = null;
 
-  return update(ref(database), updateLikes);
+  return update(ref(database), updateUpvotes);
 };
 
-export const getLikedPosts = (handle) => {
+export const getUpvotedPosts = (handle) => {
 
   return get(ref(database, `users/${handle}`))
     .then(snapshot => {
@@ -123,9 +176,9 @@ export const getLikedPosts = (handle) => {
       }
 
       const user = snapshot.val();
-      if (!user.likedPosts) return [];
+      if (!user.upvotedPosts) return [];
 
-      return Promise.all(Object.keys(user.likedPosts).map(key => {
+      return Promise.all(Object.keys(user.upvotedPosts).map(key => {
 
         return get(ref(database, `posts/${key}`))
           .then(snapshot => {
@@ -135,7 +188,7 @@ export const getLikedPosts = (handle) => {
               ...post,
               createdOn: new Date(post.createdOn),
               id: key,
-              likedBy: post.likedBy ? Object.keys(post.likedBy) : [],
+              upvotedBy: post.upvotedBy ? Object.keys(post.upvotedBy) : [],
             };
           });
       }));

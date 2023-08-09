@@ -5,10 +5,20 @@ import { logoutUser } from '../../services/auth.services';
 import { getUserData } from '../../services/users.services';
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileDropdown = () => {
   const { user } = useContext(AuthContext);
-  const [profilePictureURL, setProfilePictureURL] = useState("https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png");
+  const [profilePictureURL, setProfilePictureURL] = useState('');
+  const navigate = useNavigate();
+
+  const handleMyAccount = () => {
+    navigate('/my-account')
+  }
+
+  const handleAccountSettings = () => {
+    navigate('/account-settings')
+  }
 
   useEffect(() => {
     const getProfilePictureURL = async () => {
@@ -40,8 +50,8 @@ const ProfileDropdown = () => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu  className="ml-auto">
-        <Dropdown.Item href="/my-account">My Account</Dropdown.Item>
-        <Dropdown.Item href="account-settings">Account Settings</Dropdown.Item>
+        <Dropdown.Item onClick={handleMyAccount}>My Account</Dropdown.Item>
+        <Dropdown.Item onClick={handleAccountSettings}>Account Settings</Dropdown.Item>
         <Button
             type="button"
             variant="danger"

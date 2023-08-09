@@ -1,102 +1,100 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext.js';
-import { Col, Container, Row, ToggleButton, ToggleButtonGroup, Card, ListGroup } from 'react-bootstrap'
-import { getPostsByAuthor } from '../../services/post.services.js';
-import { getUserData } from '../../services/users.services.js';
-import PostsDetails from '../../components/Posts/PostsDetails.jsx';
-import { useNavigate } from 'react-router-dom';
+import { Card, ListGroup } from 'react-bootstrap'
+import Posts from '../../components/Posts/Posts.jsx';
+import { getUserByUsername, getUserData } from '../../services/users.services.js';
+import { useLocation, useParams } from 'react-router-dom';
+import PropTypes from "prop-types";
+import Skeleton from 'react-loading-skeleton';
 
+export default function MyAccount({ userName }) {
 
-export default function MyAccount (props){
+  const { user } = useContext(AuthContext);
+  const [userInfo, setUserInfo] = useState('');
+  const location = useLocation();
+  const params = useParams();
+  const userId = params.id;
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-    const { user } = useContext(AuthContext);
-    const [ userName, setUsername ] = useState('');
-    const [ userDetails, setUserDetails ] = useState('');
-    const [ posts, setPost ] = useState([]);
-    const [ error, setError ] = useState(null);
-    const navigate = useNavigate();
+  /**
+   * Entry points:
+   * admin view another user with /account/uid (navigate) - get Uid from url
+   * menu dropdown - my-account (navigate) - get uid from current user context
+   * Post-details - view another person or own account (by component) - get username with props
+   */
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
 
-    // const [user] = useAuthState(auth);
-    const uid = props.uid || user.uid;
+    if (!user) {
+      return;
+    }
 
-    useEffect(() => {
-        async function fetchData() {
-          try {
-            const userDataSnapshot = await getUserData(uid);
-            const userData = userDataSnapshot.val();
-            const userValues = Object.values(userData);
-            const userWithMatchingUid = userValues.find((el) => el.uid === uid);
-
-            if (userWithMatchingUid) {
-              const { username } = userWithMatchingUid;
-              setUsername(username);
-              setUserDetails(userWithMatchingUid); // Set the userDetails state directly
-    
-              const posts = await getPostsByAuthor(username);
-              setPost(posts);
-            }
-          } catch (error) {
-            setError(error);
-          }
-        }
-    
-        fetchData();
-      }, [uid]);
-
-    console.log(userDetails);
-    console.log(posts);
-    console.log(userName);
-
-    const postsToShow = posts.length ? (
-        posts.map(post => {
-          const postDetailsProp = {
-            goToDetails: () => navigate(`/posts/${post.uid}`),
-            ...post
-          };
-          return <PostsDetails key={post.uid} {...postDetailsProp} />;
+    if (location.pathname === '/my-account' || userId) {
+      getUserData(location.pathname === '/my-account' ? user.uid : userId)
+        .then(snapshot => {
+          const userData = snapshot.val(Object.keys(snapshot.val())[0]);
+          const userInfo = Object.values(userData).filter(el => el.uid === (location.pathname === '/my-account' ? user.uid : userId))[0];
+          setUserInfo(userInfo);
         })
-      ) : (
-        <div>
-          <p>Loading...</p>
-        </div>
-      )
+        .catch(err => setError(err))
+        .finally(() => setLoading(false));
+      return;
+    }
 
-    return (
-        <>
-        <div className="container-fluid">
+
+    getUserByUsername(userName)
+      .then(snapshot => {
+        const userData = snapshot.val(Object.keys(snapshot.val())[0]);
+        const userInfo = Object.values(userData).filter(el => el.uid === user.uid)[0];
+        setUserInfo(userInfo)
+          .catch(err => setError(err))
+          .finally(() => setLoading(false));
+      });
+  }, [user, location.pathname, userName, userId]);
+
+  // Need to fix this with error pages - check for lib
+  if (error) {
+    return <h1>Error!!! {error.message}</h1>
+  }
+
+  return (
+    <>
+      <div className="container-fluid">
         <div className="row">
 
-        <div className="col-7">
-        <h1>My Posts</h1>
-        {postsToShow}
-        </div>
+          <div className="col-7">
+            <h1>My Posts</h1>
+            {loading ? <Skeleton height={300} count={5} style={{ marginBottom: "20px" }} /> : <Posts userName={userInfo.username} />}
+          </div>
 
-        <div className="col-auto">
-        <h1>Account Details</h1>
-        {userDetails && (
-        <Card>
-          <Card.Body>
-            <Card.Title>{userDetails.username}</Card.Title>
-            <ListGroup variant="flush">
-              <ListGroup.Item>Email: {userDetails.email}</ListGroup.Item>
-              <ListGroup.Item>First Name: {userDetails.firstName}</ListGroup.Item>
-              <ListGroup.Item>Last Name: {userDetails.lastName}</ListGroup.Item>
-              {/* If the createdOn is a timestamp, you can format it accordingly */}
-              <ListGroup.Item>
-                Created On: {new Date(userDetails.createdOn).toLocaleString()}
-              </ListGroup.Item>
-            </ListGroup>
-          </Card.Body>
-        </Card>
-      )}
+          <div className="col-auto">
+            <h1>Account Details</h1>
+            {user && (
+              <Card>
+                <Card.Body>
+                  <Card.Title>{userInfo.username}</Card.Title>
+                  <ListGroup variant="flush">
+                    <ListGroup.Item>Email: {userInfo.email}</ListGroup.Item>
+                    <ListGroup.Item>First Name: {userInfo.firstName}</ListGroup.Item>
+                    <ListGroup.Item>Last Name: {userInfo.lastName}</ListGroup.Item>
+                    {/* If the createdOn is a timestamp, you can format it accordingly */}
+                    <ListGroup.Item>
+                      Created On: {new Date(userInfo.createdOn).toLocaleString()}
+                    </ListGroup.Item>
+                  </ListGroup>
+                </Card.Body>
+              </Card>
+            )}
+          </div>
         </div>
-       </div>
-        </div>
-        </>
-    )
+      </div>
+    </>
+  )
 
 }
 
-// MyAccount.propTypes = {
-//     uid: PropTypes.string,
-//   };
+MyAccount.propTypes = {
+  userName: PropTypes.string,
+};

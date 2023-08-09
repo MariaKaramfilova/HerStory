@@ -27,6 +27,7 @@ export const createUserByUsername = (firstName, lastName, uid, email, username, 
         username,
         profilePictureURL,
         email,
+        role: 'user',
         createdOn: Date.now(),
     })
 }
@@ -56,4 +57,20 @@ export const updateProfileEmail = async(email, currentUser) => {
   updateEmail[`/users/${currentUser}/email`] = email;
 
   return update(ref(database), updateEmail);
+}
+
+export const blockUser = (handle) => {
+  const updateBlockedStatus = {};
+
+  updateBlockedStatus[`/users/${handle}/blockedStatus`] = true;
+
+  return update(ref(database), updateBlockedStatus);
+}
+
+export const unblockUser = (handle) => {
+  const updateBlockedStatus = {};
+
+  updateBlockedStatus[`/users/${handle}/blockedStatus`] = false;
+
+  return update(ref(database), updateBlockedStatus);
 }
