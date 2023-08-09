@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { Card, Image } from "react-bootstrap";
+import { Card, Image, Button } from "react-bootstrap";
 import { getUserByUsername } from "../../services/users.services";
 import MyAccount from "../../views/Account/Account";
+import { useNavigate } from 'react-router-dom';
+
 export default function PostsDetails({ goToDetails, ...post }) {
   const [authorData, setAuthorData] = useState(null);
   const [typeFile, setTypeFile] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAuthorData = async () => {
@@ -69,6 +73,8 @@ export default function PostsDetails({ goToDetails, ...post }) {
             )}
           </Card>
         </div>
+        <hr/>
+        <Button type="submit"  variant="dark" onClick={() => navigate(`/detailed-post-view/${post.id}`)}>Comment</Button>
       </Card.Body>
     </Card>
   );
