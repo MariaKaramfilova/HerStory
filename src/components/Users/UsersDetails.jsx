@@ -5,24 +5,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import { Button } from 'react-bootstrap';
-import { blockUser, getUserByUsername, unblockUser } from '../../services/users.services.js';
+import { blockUser, unblockUser } from '../../services/users.services.js';
 import { useNavigate } from 'react-router-dom';
+import { getAllPosts } from '../../services/post.services.js';
 
-export default function UsersDetails(user, goToDetails) {
+export default function UsersDetails(user) {
   const [blockedStatus, setBlockedStatus] = useState(user.blockedStatus);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [postsCount, setPostsCount] = useState('');
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   setError(null);
+  useEffect(() => {
+    setLoading(true);
 
-  //   getUserByUsername(user.username)
-  //     .then(data => setBlockedStatus(data.blockedStatus))
-  //     .catch(err => setError(err))
-  //     .finally(() => setLoading(false))
-  // }, []);
+    getAllPosts()
+      .then(snapshot => {
+        setPostsCount(snapshot.filter(el => el.author === user.username).length);
+      })
+      .catch(err => setError(err))
+      .finally(() => setLoading(false))
+  }, [user]);
 
   const handleBlock = async () => {
     setLoading(true);
@@ -66,7 +69,7 @@ export default function UsersDetails(user, goToDetails) {
               <p className='small text-secondary'>{user.username}</p>
               <span className='text-primary rounded small'>
                 User posts
-                <Badge bg="secondary">9</Badge>
+                <Badge bg="secondary">{postsCount}</Badge>
               </span>
             </div>
           </div>

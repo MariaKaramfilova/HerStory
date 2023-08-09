@@ -14,6 +14,7 @@ import SuccessRegister from "../../views/Success-registrer/SuccessRegister"
 import MyAccount from "../../views/Account/Account"
 import DetailedPostView from "../../views/DetailedPostView/DetailedPostView"
 import UsersDetails from "../Users/UsersDetails.jsx"
+import SearchWrapper from "../../views/Search/SearchWrapper.jsx"
 
 export default function RouteElement() {
 
@@ -23,7 +24,7 @@ export default function RouteElement() {
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/search/:type/:id" element={<Search />} />
+        <Route path="/search/:type/:id" element={<SearchWrapper />} />
         <Route path="/users/:id" element={<AuthenticatedRoute><UsersDetails /></AuthenticatedRoute>} />
         <Route path="/sign-up" element={<AuthModal><RegistrationForm /></AuthModal>} />
         <Route path="/log-in" element={<AuthModal><Login /></AuthModal>} />

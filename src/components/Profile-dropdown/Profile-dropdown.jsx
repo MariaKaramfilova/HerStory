@@ -16,6 +16,10 @@ const ProfileDropdown = () => {
     navigate('/my-account')
   }
 
+  const handleAccountSettings = () => {
+    navigate('/account-settings')
+  }
+
   useEffect(() => {
     const getProfilePictureURL = async () => {
       try {
@@ -47,7 +51,7 @@ const ProfileDropdown = () => {
 
       <Dropdown.Menu  className="ml-auto">
         <Dropdown.Item onClick={handleMyAccount}>My Account</Dropdown.Item>
-        <Dropdown.Item href="account-settings">Account Settings</Dropdown.Item>
+        <Dropdown.Item onClick={handleAccountSettings}>Account Settings</Dropdown.Item>
         <Button
             type="button"
             variant="danger"

@@ -12,48 +12,45 @@ export default function Users({ searchTerm }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
-  
+
   useEffect(() => {
     let result;
     setLoading(true);
-    
+
     getAllUsers()
-    .then(data => {
-      if (params.type.includes('username')) {
-        result = data.filter(el => el.username.toLowerCase().startsWith(searchTerm.toLowerCase()));
+      .then(data => {
+        if (params.type.includes('username')) {
+          result = data.filter(el => el.username.toLowerCase().startsWith(searchTerm.toLowerCase()));
         } else if (params.type.includes('email')) {
           console.log(data);
           result = data.filter(el => el.email.toLowerCase().startsWith(searchTerm.toLowerCase()));
         } else if (params.type.includes('-name')) {
           result = data.filter(el => el.firstName.toLowerCase().startsWith(searchTerm.toLowerCase())
-          || el.lastName.toLowerCase().startsWith(searchTerm.toLowerCase()) 
-          || (el.firstName.toLowerCase() + " " + el.lastName.toLowerCase()) === searchTerm.toLowerCase());
+            || el.lastName.toLowerCase().startsWith(searchTerm.toLowerCase())
+            || (el.firstName.toLowerCase() + " " + el.lastName.toLowerCase()) === searchTerm.toLowerCase());
         }
         setUsers(result);
       })
       .catch(err => setError(err))
       .finally(() => setLoading(false))
-    }, [params.type, searchTerm]);
-    
-    // Need to fix this with error pages - check for lib
-    if (error) {
-      return <h1>Error!!! {error.message}</h1>
-    }
-    
-    const usersToShow = users.length ? (
-      users.map(user => {
-        const userDetailsProp = {
-          goToDetails: () => navigate(`/account/${user.uid}`),
-          ...user
-        };
-        return <UsersDetails key={crypto.randomUUID()} {...userDetailsProp} />;
-      })
-      ) : (
-        <div>
+  }, [params.type, searchTerm]);
+
+  // Need to fix this with error pages - check for lib
+  if (error) {
+    return <h1>Error!!! {error.message}</h1>
+  }
+
+  const usersToShow = users.length ? (
+    users.map(user => {
+      const userDetailsProp = { ...user };
+      return <UsersDetails key={crypto.randomUUID()} {...userDetailsProp} />;
+    })
+  ) : (
+    <div>
       <p>No users to show</p>
     </div>
   )
-  
+
   return (
     <Container>
       {loading && !users.length ? <Skeleton height={300} count={5} style={{ marginBottom: "20px" }} /> : usersToShow}
