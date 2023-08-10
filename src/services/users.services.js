@@ -1,7 +1,7 @@
 import { get, set, ref, query, orderByChild, equalTo, update } from "firebase/database";
 import { auth, database } from "../config/firebase";
 
-const fromUsersDocument = snapshot => {
+export const fromUsersDocument = snapshot => {
     const usersDocument = snapshot.val();
   
     return Object.keys(usersDocument).map(key => {

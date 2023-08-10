@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { useNavigate, useParams,  } from 'react-router-dom';
 import MyAccount from "../Account/Account";
 import Comment from "../../components/Comments/Comments";
+import { getUserData, fromUsersDocument } from "../../services/users.services";
 
 // const demoPost = {
 //     author: 'testingM',
@@ -22,10 +23,12 @@ export default function DetailedPostView () {
     const [ comment, setComment ] = useState('');
     const [ commentsLibrary, setCommentsLibrary ] = useState([]);
     const [ refreshComments, SetRefreshComments ] = useState(true)
-    const [ demoPost, setPost ] = useState ('');
+    const [ post, setPost ] = useState ('');
+    const [ currentUser, setCurrentUser ] = useState ('');
 
     const params = useParams();
     const currentPostID = params.id;
+    const loggedUserID = user.uid;
 
     const postId = currentPostID || '-NbKxeTPPijksjZobtDT';
 
@@ -38,45 +41,55 @@ export default function DetailedPostView () {
             return getCommentsByPostHandle(postId);
           })
           .then(comments => {
-            console.log(comments);
             setCommentsLibrary(comments);
+          })
+          .then(() => {
+            return getUserData(user.uid);
+          })
+          .then(snapshot => {
+            return fromUsersDocument(snapshot);
+          })
+          .then(user => {
+            const filtered = Object.values(user).filter(el => el.uid === loggedUserID)
+            setCurrentUser(filtered[0]);
           })
           .catch(error => {
             console.error('Error fetching post and comments:', error);
           });
       }, [refreshComments]);
 
-    const postDate = new Date(demoPost.createdOn);
+    const postDate = new Date(post.createdOn);
+
+  
+    console.log(currentUser);
+
 
     async function submitComment (e){
         e.preventDefault();
 
-        await createComment(comment, demoPost.author, demoPost.postId, user.uid)
+        await createComment(comment, currentUser.username, post.postId, currentUser.uid)
         alert('comment submitted')
         setComment('')
         SetRefreshComments(!refreshComments)
     }
 
-    async function upvote(handle, postId) {
-        try{
-            upvotePost(handle, postId)
-            console.log('post has been liked');
-        }catch(error){
-            alert(error)
-        }
-    }
+    // async function upvote(handle, postId) {
+    //     try{
+    //         upvotePost(handle, postId)
+    //         console.log('post has been liked');
+    //     }catch(error){
+    //         alert(error)
+    //     }
+    // }
 
-    function clickAccount (username){
-      return <MyAccount userName={username}/>
-    }
 
-    async function removeUpvote (){
-        //to be implemented
-    }
+    // async function removeUpvote (){
+    //     //to be implemented
+    // }
 
     function handleEdit(e){
         e.preventDefault();
-        navigate(`/edit-post/${demoPost.postId}`);
+        navigate(`/edit-post/${postId}`);
     }
 
     async function handleDeletePost(e){
@@ -92,47 +105,18 @@ export default function DetailedPostView () {
                 alert(error)
             }
         }
-        
+  
     }
 
-    async function deleteComment (commentId) {
-        const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
-
-        if (confirmDelete) {
-            await deleteCommentID(commentId);
-            SetRefreshComments(!refreshComments)
-        }
-    }
-
-    console.log(demoPost.postId);
 
     const commentsToShow = commentsLibrary.length > 0 ? (
         commentsLibrary.map((comment) => (
-          // <div key={comment.createdOn}>
-
-          //   <Link onClick={() => clickAccount(comment.author)}>{comment.author}</Link>
-          //   <p>Created On: {new Date(comment.createdOn).toLocaleString()}</p>
-          //   <p>{comment.content}</p>
-       
-          //   {user.uid === comment.userUid && 
-          //     <Button
-          //       type="submit"
-          //       className='mt-1'
-          //       variant="danger"
-          //       onClick={() => deleteComment(comment.commentId)}
-          //     >
-          //       Delete Comment
-          //     </Button>
-          //   } 
-          //   <hr/>
-          // </div>
           <Comment key={crypto.randomUUID()} author={comment.author}  createdOn={comment.createdOn} content={comment.content}
           commentUserUid={comment.userUid} commentId={comment.commentId} SetRefreshComments={SetRefreshComments} refreshComments={refreshComments}/>
         ))
       ) : (
         <p>There are no comments, yet. You can write the first one.</p>
       );
-
 
     return (
   
@@ -143,9 +127,11 @@ export default function DetailedPostView () {
 
             <div className="col-8">
 
-            <h6>Posted by {demoPost.author} on {postDate.toLocaleString()} | {demoPost.topic}</h6>
+            <h6>Posted by {post.author} on {postDate.toLocaleString()} | {post.topic}</h6>
             </div>
             
+            {post.author === currentUser.username && 
+            <>
             <div className="col">
             <Button type="submit" className='mt-1' variant="dark"  onClick={handleEdit}>Edit Post</Button>
             </div>
@@ -153,19 +139,18 @@ export default function DetailedPostView () {
             <div className="col">
             <Button type="submit" className='mt-1' variant="dark"  onClick={handleDeletePost}>Delete Post</Button>
             </div>
-
+            </>}
+            
             </div>
 
             <row className="mt-1">
-            <h1>{demoPost.title}</h1>
-            <p>{demoPost.content}</p>
+            <h1>{post.title}</h1>
+            <p>{post.content}</p>
             </row>
             
-            
-           
-            <div className="row">
+           { user ? <div className="row">
             <div className="col-2">
-            <Button type="submit" variant="danger"  onClick={()=> upvote(demoPost.author, demoPost.postId)}>Upvote Post</Button>
+            <Button type="submit" variant="danger"  onClick={()=> upvote(post.author, post.postId)}>Upvote Post</Button>
             </div>
             
             <div className="col-8">
@@ -181,7 +166,9 @@ export default function DetailedPostView () {
             <div className="col-2">
             <Button type="submit" variant="danger" onClick={submitComment}>Add Comment</Button>
             </div>
-            </div>
+            </div> : <> <hr/>
+            <p> Log in to write a comments, upvote or downvote posts and be part of our community. </p>  </>}
+            
             <hr/>
             <h2>Comments</h2>
             {commentsToShow}
