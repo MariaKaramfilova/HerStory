@@ -1,5 +1,5 @@
 import { createComment, getCommentsByPostHandle, deleteCommentID, upvotePost, getPostById, deletePost } from "../../services/post.services"
-import { Button, Form } from 'react-bootstrap'
+import { Alert, Button, Form } from 'react-bootstrap'
 import { AuthContext } from '../../context/AuthContext.js';
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { useNavigate, useParams, } from 'react-router-dom';
@@ -25,6 +25,7 @@ export default function DetailedPostView() {
   const [refreshComments, SetRefreshComments] = useState(true)
   const [post, setPost] = useState('');
   const [currentUser, setCurrentUser] = useState('');
+  const [error, setError] = useState(null);
 
   const params = useParams();
   const currentPostID = params.id;
@@ -66,6 +67,10 @@ export default function DetailedPostView() {
 
   async function submitComment(e) {
     e.preventDefault();
+    if (currentUser.blockedStatus) {
+      setError('You cannot add comments because you are a blocked user!');
+      return;
+    }
 
     await createComment(comment, currentUser.username, post.postId, currentUser.uid)
     alert('comment submitted')
@@ -146,27 +151,30 @@ export default function DetailedPostView() {
         <p>{post.content}</p>
       </row>
 
-      {user ? <div className="row">
-        <div className="col-2">
-          <Button type="submit" variant="danger" onClick={() => upvote(post.author, post.postId)}>Upvote Post</Button>
-        </div>
+      {user ? (
+        <div className="row">
+          <div className="col-2">
+            <Button type="submit" variant="danger" onClick={() => upvote(post.author, post.postId)}>Upvote Post</Button>
+          </div>
 
-        <div className="col-8">
-          <Form.Group>
-            <Form.Control
-              type="text"
-              placeholder="Add Comment"
-              value={comment} onChange={(e) => setComment(e.target.value)}
-              required className='mb-3' />
-          </Form.Group>
-        </div>
+          <div className="col-8">
+            <Form.Group>
+              <Form.Control
+                type="text"
+                placeholder="Add Comment"
+                value={comment} onChange={(e) => setComment(e.target.value)}
+                required className='mb-3' />
+            </Form.Group>
+          </div>
 
-        <div className="col-2">
-          <Button type="submit" variant="danger" onClick={submitComment}>Add Comment</Button>
+          <div className="col-2">
+            <Button type="submit" variant="danger" onClick={submitComment}>Add Comment</Button>
+          </div>
         </div>
-      </div> : <> <hr />
-        <p> Log in to write a comments, upvote or downvote posts and be part of our community. </p>  </>}
-
+      ) : (
+        <> <hr />
+          <p> Log in to write a comments, upvote or downvote posts and be part of our community. </p>  </>)}
+      {error && <Alert variant='danger'>{error}</Alert>}
       <hr />
       <h2>Comments</h2>
       {commentsToShow}
