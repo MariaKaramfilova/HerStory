@@ -162,18 +162,6 @@ export  const getPostsByAuthor = (handle) => {
     });
 };
 
-// export const getPostsByEmail = (email) => {
-
-//   return get(query(ref(database, 'Posts'), orderByChild('email'), equalTo(email)))
-//     .then(snapshot => {
-
-//       console.log(snapshot);
-//       if (!snapshot.exists()) return [];
-
-//       return fromPostsDocument(snapshot);
-//     });
-// };
-
 export const upvotePost = (handle, postId) => {
   const updateUpvotes = {};
   updateUpvotes[`/posts/${postId}/upvotedBy/${handle}`] = true;
