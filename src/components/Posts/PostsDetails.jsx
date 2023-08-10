@@ -70,6 +70,14 @@ export default function PostsDetails({ ...post }) {
     return <div></div>
   }
 
+  const limitContent = (content) => {
+    const words = content.split(' ');
+    if (words.length > 200) {
+      return words.slice(0, 200).join(' ') + '...';
+    }
+    return content;
+  };
+
   return (
     <Card className="mb-3">
       <Card.Header>
@@ -102,7 +110,21 @@ export default function PostsDetails({ ...post }) {
             paddingRight: "5px",
           }}
         >
-          {post.content}
+           {post.content.split(' ').length > 150 ? (
+        <>
+          {limitContent(post.content)}
+          <Button
+            type="submit"
+            variant="dark"
+            onClick={() => navigate(`/detailed-post-view/${post.id}`)}
+            style={{ marginTop: "10px" }}
+          >
+            Continue Reading
+          </Button>
+        </>
+      ) : (
+        post.content
+      )}
         </Card>
         <div className={`media-element ${typeFile}`}>
           <Card>

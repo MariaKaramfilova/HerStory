@@ -1,5 +1,5 @@
 import { createComment, getCommentsByPostHandle, deleteCommentID, upvotePost, getPostById, deletePost } from "../../services/post.services"
-import { Alert, Button, Form, NavLink } from 'react-bootstrap'
+import { Alert, Button, Form, NavLink, Image, Card } from 'react-bootstrap'
 import { AuthContext } from '../../context/AuthContext.js';
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { Link, useNavigate, useParams, } from 'react-router-dom';
@@ -25,6 +25,7 @@ export default function DetailedPostView() {
   const [refreshComments, SetRefreshComments] = useState(true)
   const [post, setPost] = useState('');
   const [currentUser, setCurrentUser] = useState('');
+    const [typeFile, setTypeFile] = useState("");
   const [error, setError] = useState(null);
 
   const params = useParams();
@@ -39,29 +40,39 @@ export default function DetailedPostView() {
   //   return <MyAccount userName={post.author}/>
   // }
 
-  useEffect(() => {
-    getPostById(postId)
-      .then(currentPost => {
-        setPost(currentPost);
-        return getCommentsByPostHandle(postId);
-      })
-      .then(comments => {
-        setCommentsLibrary(comments);
-      })
-      .then(() => {
-        return getUserData(user.uid);
-      })
-      .then(snapshot => {
-        return fromUsersDocument(snapshot);
-      })
-      .then(user => {
-        const filtered = Object.values(user).filter(el => el.uid === loggedUserID)
-        setCurrentUser(filtered[0]);
-      })
-      .catch(error => {
-        console.error('Error fetching post and comments:', error);
-      });
-  }, [refreshComments]);
+    useEffect(() => {
+        getPostById(postId)
+          .then(currentPost => {
+            setPost(currentPost);
+            if (post.file) {
+              if (post.file.includes("mp4")) {
+                setTypeFile("video");
+              } else if (
+                post.file.includes("images") &&
+                !post.file.includes("mp4")
+              ) {
+                setTypeFile("image");
+              }
+            }      
+            return getCommentsByPostHandle(postId);
+          })
+          .then(comments => {
+            setCommentsLibrary(comments);
+          })
+          .then(() => {
+            return getUserData(user.uid);
+          })
+          .then(snapshot => {
+            return fromUsersDocument(snapshot);
+          })
+          .then(user => {
+            const filtered = Object.values(user).filter(el => el.uid === loggedUserID)
+            setCurrentUser(filtered[0]);
+          })
+          .catch(error => {
+            console.error('Error fetching post and comments:', error);
+          });
+      }, [refreshComments]);
 
   const postDate = new Date(post.createdOn);
 
@@ -117,6 +128,7 @@ export default function DetailedPostView() {
 
   }
 
+    console.log(post.file);
 
   const commentsToShow = commentsLibrary.length > 0 ? (
     commentsLibrary.map((comment) => (
@@ -127,6 +139,7 @@ export default function DetailedPostView() {
     <p>There are no comments, yet. You can write the first one.</p>
   );
 
+     
   return (
 
     <div className="container-auto mt-3">
@@ -150,18 +163,29 @@ export default function DetailedPostView() {
           </div>)}
       </div>
 
-      <row className="mt-1">
-        <h1>{post.title}</h1>
-        <p>{post.content}</p>
-      </row>
+            <row className="mt-1">
+            <h1>{post.title}</h1>
+            <p>{post.content}</p>
 
-      {user ? (
-        <div className="row">
-          <div className="col-2">
-            <Button type="submit" variant="danger" onClick={() => upvote(post.author, post.postId)}>Upvote Post</Button>
-          </div>
+            <div className={`media-element ${typeFile}`}>
+            {typeFile === "image" && (
+              <Image src={post.file} fluid style={{ width: "60%" }} />
+            )}
+            {typeFile === "video" && (
+              <video controls className="media-element">
+                <source src={post.file} type="video/mp4" />
+              </video>
+            )}
+            </div>
 
-          <div className="col-8">
+            </row>
+            
+           { user ? (<div className="row">
+            <div className="col-2">
+            <Button type="submit" variant="danger"  onClick={()=> upvote(post.author, post.postId)}>Upvote Post</Button>
+            </div>
+            
+            <div className="col-8">
             <Form.Group>
               <Form.Control
                 type="text"
