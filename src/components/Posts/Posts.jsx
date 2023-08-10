@@ -81,4 +81,5 @@ export default function Posts({ searchTerm, userName }) {
 
 Posts.propTypes = {
   searchTerm: PropTypes.string,
+  username: PropTypes.string,
 };

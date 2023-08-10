@@ -2,8 +2,9 @@ import { createComment, getCommentsByPostHandle, deleteCommentID, upvotePost, ge
 import { Button, Form } from 'react-bootstrap'
 import { AuthContext } from '../../context/AuthContext.js';
 import React, { useContext, useEffect, useState, useCallback } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
-
+import { useNavigate, useParams,  } from 'react-router-dom';
+import MyAccount from "../Account/Account";
+import Comment from "../../components/Comments/Comments";
 
 // const demoPost = {
 //     author: 'testingM',
@@ -45,16 +46,6 @@ export default function DetailedPostView () {
           });
       }, [refreshComments]);
 
-    //   useEffect(() => {
-    //     getCommentsByPostHandle(demoPost.postId)
-    //       .then(comments => {
-    //         setCommentsLibrary(comments);
-    //       })
-    //       .catch(error => {
-    //         alert(error);
-    //       });
-    //   }, [refreshComments, demoPost.postId]);
-
     const postDate = new Date(demoPost.createdOn);
 
     async function submitComment (e){
@@ -73,6 +64,10 @@ export default function DetailedPostView () {
         }catch(error){
             alert(error)
         }
+    }
+
+    function clickAccount (username){
+      return <MyAccount userName={username}/>
     }
 
     async function removeUpvote (){
@@ -113,22 +108,26 @@ export default function DetailedPostView () {
 
     const commentsToShow = commentsLibrary.length > 0 ? (
         commentsLibrary.map((comment) => (
-          <div key={comment.createdOn}>
-            <p>Author: {comment.author}</p>
-            <p>Created On: {new Date(comment.createdOn).toLocaleString()}</p>
-            <p>{comment.content}</p>
-            {user.uid === comment.userUid && 
-              <Button
-                type="submit"
-                className='mt-1'
-                variant="danger"
-                onClick={() => deleteComment(comment.commentId)}
-              >
-                Delete Comment
-              </Button>
-            } 
-            <hr />
-          </div>
+          // <div key={comment.createdOn}>
+
+          //   <Link onClick={() => clickAccount(comment.author)}>{comment.author}</Link>
+          //   <p>Created On: {new Date(comment.createdOn).toLocaleString()}</p>
+          //   <p>{comment.content}</p>
+       
+          //   {user.uid === comment.userUid && 
+          //     <Button
+          //       type="submit"
+          //       className='mt-1'
+          //       variant="danger"
+          //       onClick={() => deleteComment(comment.commentId)}
+          //     >
+          //       Delete Comment
+          //     </Button>
+          //   } 
+          //   <hr/>
+          // </div>
+          <Comment key={crypto.randomUUID()} author={comment.author}  createdOn={comment.createdOn} content={comment.content}
+          commentUserUid={comment.userUid} commentId={comment.commentId} SetRefreshComments={SetRefreshComments} refreshComments={refreshComments}/>
         ))
       ) : (
         <p>There are no comments, yet. You can write the first one.</p>
@@ -143,6 +142,7 @@ export default function DetailedPostView () {
             <div className="row">
 
             <div className="col-8">
+
             <h6>Posted by {demoPost.author} on {postDate.toLocaleString()} | {demoPost.topic}</h6>
             </div>
             
