@@ -1,8 +1,8 @@
 import { createComment, getCommentsByPostHandle, deleteCommentID, upvotePost, getPostById, deletePost } from "../../services/post.services"
-import { Alert, Button, Form } from 'react-bootstrap'
+import { Alert, Button, Form, NavLink } from 'react-bootstrap'
 import { AuthContext } from '../../context/AuthContext.js';
 import React, { useContext, useEffect, useState, useCallback } from 'react'
-import { useNavigate, useParams, } from 'react-router-dom';
+import { Link, useNavigate, useParams, } from 'react-router-dom';
 import MyAccount from "../Account/Account";
 import Comment from "../../components/Comments/Comments";
 import { getUserData, fromUsersDocument } from "../../services/users.services";
@@ -34,6 +34,10 @@ export default function DetailedPostView() {
   const postId = currentPostID || '-NbKxeTPPijksjZobtDT';
 
   const navigate = useNavigate();
+
+  // const handleViewAccount = () => {
+  //   return <MyAccount userName={post.author}/>
+  // }
 
   useEffect(() => {
     getPostById(postId)
@@ -132,7 +136,7 @@ export default function DetailedPostView() {
 
         <div className="col-8">
 
-          <h6>Posted by {post.author} on {postDate.toLocaleString()} | {post.topic}</h6>
+          <h6>Posted by <Link to={`/account/${post.userId}`}>{post.author}</Link> on {postDate.toLocaleString()} | {post.topic}</h6>
         </div>
         {post.author === currentUser.username && (
           <div className="col">

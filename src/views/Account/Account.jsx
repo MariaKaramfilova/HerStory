@@ -2,12 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext.js';
 import { Card, ListGroup } from 'react-bootstrap'
 import Posts from '../../components/Posts/Posts.jsx';
-import { getUserByUsername, getUserData } from '../../services/users.services.js';
+import { getUserData } from '../../services/users.services.js';
 import { useLocation, useParams } from 'react-router-dom';
-import PropTypes from "prop-types";
 import Skeleton from 'react-loading-skeleton';
 
-export default function MyAccount({ userName }) {
+export default function MyAccount() {
 
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState('');
@@ -21,7 +20,7 @@ export default function MyAccount({ userName }) {
    * Entry points:
    * admin view another user with /account/uid (navigate) - get Uid from url
    * menu dropdown - my-account (navigate) - get uid from current user context
-   * Post-details - view another person or own account (by component) - get username with props
+   * Post-details - view another person or own account with /account/uid
    */
   useEffect(() => {
     setLoading(true);
@@ -43,16 +42,7 @@ export default function MyAccount({ userName }) {
       return;
     }
 
-
-    getUserByUsername(userName)
-      .then(snapshot => {
-        const userData = snapshot.val(Object.keys(snapshot.val())[0]);
-        const userInfo = Object.values(userData).filter(el => el.uid === user.uid)[0];
-        setUserInfo(userInfo)
-          .catch(err => setError(err))
-          .finally(() => setLoading(false));
-      });
-  }, [user, location.pathname, userName, userId]);
+  }, [user, location.pathname, userId]);
 
   // Need to fix this with error pages - check for lib
   if (error) {
@@ -94,7 +84,3 @@ export default function MyAccount({ userName }) {
   )
 
 }
-
-MyAccount.propTypes = {
-  userName: PropTypes.string,
-};

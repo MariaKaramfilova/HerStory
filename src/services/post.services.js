@@ -18,11 +18,12 @@ const fromPostsDocument = snapshot => {
   });
 }
 
-export const createPost = async (title, content = null, topic, file = null, handle, email) => {
+export const createPost = async (title, content = null, topic, file = null, handle, email, userId) => {
   return push(
     ref(database, 'posts'),
     {
       title,
+      userId,
       content,
       topic,
       file: file ? await setFileToStorage(file) : null,

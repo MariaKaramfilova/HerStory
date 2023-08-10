@@ -2,7 +2,6 @@
 import { AuthContext } from '../../context/AuthContext.js';
 import React, { useContext} from 'react';
 import { deleteCommentID } from '../../services/post.services';
-import MyAccount from '../../views/Account/Account';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
@@ -20,16 +19,10 @@ export default function Comment ({author, createdOn, content, commentUserUid, co
         }
     }
 
-    function clickAccount (username){
-        return <MyAccount userName={username}/>
-      }
-
-      console.log(commentUserUid, user.uid);
-
     return (
         <div key={createdOn}>
 
-            <Link onClick={() => clickAccount(author)}>{author}</Link>
+            <Link to={`/account/${commentUserUid}`}>{author}</Link>
             <p>Created On: {new Date(createdOn).toLocaleString()}</p>
             <p>{content}</p>
        

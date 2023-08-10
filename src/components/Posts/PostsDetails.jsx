@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import moment from "moment";
-import { Card, Image, Button, Alert } from "react-bootstrap";
+import { Card, Image, Button } from "react-bootstrap";
 import { getUserByUsername, getUserData } from "../../services/users.services";
-import MyAccount from "../../views/Account/Account";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { deletePost } from "../../services/post.services.js";
 import { AuthContext } from "../../context/AuthContext.js";
 
-export default function PostsDetails({ goToDetails, ...post }) {
+export default function PostsDetails({ ...post }) {
   const [userRole, setUserRole] = useState('');
   const [authorData, setAuthorData] = useState(null);
   const [typeFile, setTypeFile] = useState("");
@@ -75,16 +74,18 @@ export default function PostsDetails({ goToDetails, ...post }) {
     <Card className="mb-3">
       <Card.Header>
         {authorData && (
-          <Image
-            src={authorData.profilePictureURL}
-            alt="Profile Picture"
-            roundedCircle
-            width={60}
-            height={60}
-          />
+          <Link to={`/account/${post.userId}`}>
+            <Image
+              src={authorData.profilePictureURL}
+              alt="Profile Picture"
+              roundedCircle
+              width={60}
+              height={60}
+            />
+          </Link>
         )}
         <span className="ml-2" style={{ paddingLeft: "5px" }}>
-          {post.author}
+          <Link to={`/account/${post.userId}`}>{post.author}</Link>
         </span>
       </Card.Header>
       <Card.Body>

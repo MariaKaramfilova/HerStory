@@ -13,7 +13,7 @@ const ProfileDropdown = () => {
   const navigate = useNavigate();
 
   const handleMyAccount = () => {
-    navigate('/my-account')
+    navigate(`/my-account`);
   }
 
   const handleAccountSettings = () => {
