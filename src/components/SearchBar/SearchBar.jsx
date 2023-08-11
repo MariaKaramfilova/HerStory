@@ -8,23 +8,18 @@ import { InputGroup } from 'react-bootstrap';
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showError, setShowError] = useState(false);
-  const { user } = useContext(AuthContext);
+  const { loggedInUser } = useContext(AuthContext);
   const [userRole, setUserRole] = useState('');
   const [searchType, setSearchType] = useState('posts');
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (!loggedInUser) {
       setUserRole('user');
       return;
     }
-    getUserData(user.uid)
-      .then(snapshot => {
-        const userData = snapshot.val(Object.keys(snapshot.val())[0]);
-        const userInfo = Object.values(userData).filter(el => el.uid === user.uid)[0].role;
-        setUserRole(userInfo);
-      });
-  }, [user])
+    setUserRole(loggedInUser.role);
+  }, [loggedInUser])
 
   const handleSearchClick = (e) => {
     e.preventDefault();
@@ -48,10 +43,11 @@ const SearchBar = () => {
               title={`Search in ${searchType}`}
               id="input-group-dropdown-1">
 
-                <Dropdown.Item onClick={() => setSearchType("posts")} href="#">Posts</Dropdown.Item>
-                <Dropdown.Item onClick={() => setSearchType("users-username")} href="#">Users by username</Dropdown.Item>
-                <Dropdown.Item onClick={() => setSearchType("users-email")} href="#">Users by email</Dropdown.Item>
-                <Dropdown.Item onClick={() => setSearchType("users-name")} href="#">Users by name</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSearchType("posts")} href="#">Posts</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSearchType("users-username")} href="#">Users by username</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSearchType("users-email")} href="#">Users by email</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSearchType("users-name")} href="#">Users by name</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSearchType("tag")} href="#">By post tag</Dropdown.Item>
 
             </DropdownButton>
           )}

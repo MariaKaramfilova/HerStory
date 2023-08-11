@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { getAllPosts } from "../../services/post.services.js";
 import { getAllUsers } from "../../services/users.services.js";
 import Skeleton from "react-loading-skeleton";
@@ -66,7 +66,7 @@ function SideBar(props) {
     <div className="container-fluid" style={styles.container}>
       <div className="row align-items-center" >
         <div className="col-auto min-vh-100 w-100 bg-light py-4 px-4"  >
-          <Container style={{height: "30px"}}>
+          <Container style={{ height: "30px" }}>
             {loading ? <Skeleton /> : <Row>
               <Col><h6>{forumUsers} Users</h6></Col>
               <Col><h6>{forumPosts} Posts</h6></Col>

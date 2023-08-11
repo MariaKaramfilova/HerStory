@@ -10,9 +10,9 @@ import Skeleton from "react-loading-skeleton";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { user, loading } = useContext(AuthContext);
+  const { loggedInUser, loading } = useContext(AuthContext);
 
-  const renderAuthView = user ? (
+  const renderAuthView = loggedInUser ? (
     <ProfileDropdown />
   ) : (
     <>

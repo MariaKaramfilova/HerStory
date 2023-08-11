@@ -4,16 +4,24 @@ import { auth } from '../../config/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth'
 import PropTypes from "prop-types";
 import { onAuthStateChanged } from 'firebase/auth';
+import { getUserData } from '../../services/users.services.js';
 
 const RoutePage = ({ children }) => {
-  // const [user] = useAuthState(auth);
-  const { user } = useContext(AuthContext);
-  const [appState, setAppState] = useState({user});
+  const { user, loggedInUser } = useContext(AuthContext);
+  const [appState, setAppState] = useState({ user, loggedInUser });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setAppState((prev) => ({...prev, user: currentUser}));
+      (async () => {
+        if (currentUser) {
+          const loggedUserSnapshot = await getUserData(currentUser.uid);
+          const loggedInUser = Object.values(loggedUserSnapshot.val()).find((el) => el.uid === currentUser.uid);
+          setAppState((prev) => ({ ...prev, loggedInUser, user: currentUser }));
+        } else {
+          setAppState((prev) => ({ ...prev, loggedInUser: currentUser, user: currentUser }));
+        }
+      })();
       setLoading(false);
     });
     return () => unsubscribe();
@@ -22,7 +30,7 @@ const RoutePage = ({ children }) => {
   return (
     <div className='main-content'>
       <AuthContext.Provider value={{ ...appState, setUser: setAppState, loading }}>
-      {children}
+        {children}
       </AuthContext.Provider>
     </div>
   );

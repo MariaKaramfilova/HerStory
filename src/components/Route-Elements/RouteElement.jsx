@@ -7,7 +7,6 @@ import { Routes, Route } from 'react-router-dom';
 import AuthModal from "../Modal/AuthModal.jsx"
 import AuthenticatedRoute from "../../hoc/AuthenticatedRoute.jsx"
 import SuccessPosting from "../../views/Success-posting/SuccessPosting.jsx"
-import Search from "../../views/Search/Search.jsx"
 import ForgottenPassword from "../ResetPassword/ResetPassword"
 import AccountSettings from "../Account-Settings/Account-Settings"
 import SuccessRegister from "../../views/Success-registrer/SuccessRegister"

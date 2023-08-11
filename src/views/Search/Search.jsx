@@ -13,6 +13,7 @@ export default function Search() {
       <Container className='mt-3'>
         <h3>Results for {searchTerm}:</h3>
         {params.type === 'posts' && <Posts searchTerm={params.id}/>}
+        {params.type === 'tag' && <Posts tag={params.id} />}
         {params.type.includes('users') && <Users searchTerm={params.id}/>}
       </Container>
     </>

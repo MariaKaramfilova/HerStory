@@ -11,7 +11,7 @@ import Loading from '../Loading/Loading.jsx';
 
 export default function CreatePost() {
   // Need to import theme
-  const { user } = useContext(AuthContext);
+  const { loggedInUser } = useContext(AuthContext);
 
   const [isTypeText, setIsTypeText] = useState(true);
   const [postTopic, setPostTopic] = useState('Choose topic');
@@ -51,15 +51,13 @@ export default function CreatePost() {
       return;
     }
 
-
     const formContent = new FormData();
     formContent.append('file', postFile);
-    const snapshot = await getUserData(user.uid);
-    const userData = snapshot.val(Object.keys(snapshot.val())[0]);
 
-    const userName = Object.values(userData).filter(el => el.uid === user.uid)[0].username;
-    const userEmail = Object.values(userData).filter(el => el.uid === user.uid)[0].email;
-    const isBlocked = Object.values(userData).filter(el => el.uid === user.uid)[0].blockedStatus;
+    const userName = loggedInUser.username;
+    const userEmail = loggedInUser.email;
+    const isBlocked = loggedInUser.blockedStatus;
+    const userId = loggedInUser.uid;
 
     if(isBlocked) {
       setError('You cannot create post because you are a blocked user!');
@@ -67,7 +65,7 @@ export default function CreatePost() {
       return;
     }
 
-    createPost(postTitle, postDescription, postTopic, postFile, userName, userEmail)
+    createPost(postTitle, postDescription, postTopic, postFile, userName, userEmail, userId)
       .then(() => {
         setIsCompleted(true);
       })
@@ -82,34 +80,6 @@ export default function CreatePost() {
   if (loading) {
     return <Loading />
   }
-
-  /** 
-   * const user = {
-          uuid: 55655666
-          userName: 'John',
-          memberSince: '05.12.2021',
-          post: '72',
-          rank: 'Rookie',
-          likedPosts: [{}, {}],
-          postedPosts: [id, id]
-      }
-    const forumPost = { 
-      uuidPOst: 4566621
-      headline: 'test',
-      text: 'test',
-      upvotedBy: {uuid: true, uuid: true} (set, array?)
-      user/author: uuid of user,
-      topic: ekjnskdfj,
-  }
-  const comment = {
-    uuid: 6546512
-    upvoted: '3',
-    author: uuid,
-    text: 'test',
-    date: '28.07.2023'
-    postId: 654665456
-  }
-  */
  
   return (
     <Container className='w-100 mt-3 mb-3' style={{ minHeight: "100vh", maxWidth: "60%", marginLeft: "0" }}>

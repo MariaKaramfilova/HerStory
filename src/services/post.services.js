@@ -18,11 +18,12 @@ const fromPostsDocument = snapshot => {
   });
 }
 
-export const createPost = async (title, content = null, topic, file = null, handle, email) => {
+export const createPost = async (title, content = null, topic, file = null, handle, email, userId) => {
   return push(
     ref(database, 'posts'),
     {
       title,
+      userId,
       content,
       topic,
       file: file ? await setFileToStorage(file) : null,
@@ -71,13 +72,13 @@ export const createComment = async (content = null, author, postId, userUid) => 
       userUid,
     },
   )
-  .then(result => {
-    const updateCommentIDequalToHandle = {};
-    updateCommentIDequalToHandle[`/comments/${result.key}/commentId`] = result.key;
-    update(ref(database), updateCommentIDequalToHandle)
+    .then(result => {
+      const updateCommentIDequalToHandle = {};
+      updateCommentIDequalToHandle[`/comments/${result.key}/commentId`] = result.key;
+      update(ref(database), updateCommentIDequalToHandle)
 
-    return getCommentsByPostHandle(result.key);
-  });
+      return getCommentsByPostHandle(result.key);
+    });
 }
 
 export const getCommentsByPostHandle = async (postId) => {
@@ -107,7 +108,7 @@ export const deleteCommentID = async (commentID) => {
 
 
 export async function deletePost(postId) {
- 
+
   await remove(ref(database, `posts/${postId}`));
 
   const comments = await getCommentsByPostHandle(postId);
@@ -151,7 +152,7 @@ export const getAllPosts = () => {
     });
 };
 
-export  const getPostsByAuthor = (handle) => {
+export const getPostsByAuthor = (handle) => {
 
   return get(query(ref(database, 'posts'), orderByChild('author'), equalTo(handle)))
     .then(snapshot => {
@@ -161,18 +162,6 @@ export  const getPostsByAuthor = (handle) => {
       return fromPostsDocument(snapshot);
     });
 };
-
-// export const getPostsByEmail = (email) => {
-
-//   return get(query(ref(database, 'Posts'), orderByChild('email'), equalTo(email)))
-//     .then(snapshot => {
-
-//       console.log(snapshot);
-//       if (!snapshot.exists()) return [];
-
-//       return fromPostsDocument(snapshot);
-//     });
-// };
 
 export const upvotePost = (handle, postId) => {
   const updateUpvotes = {};
@@ -217,3 +206,26 @@ export const getUpvotedPosts = (handle) => {
       }));
     });
 };
+
+export const addPostTags = (postId, tags) => {
+  const updatePostTags = {};
+  tags.map(tag => {
+    updatePostTags[`/posts/${postId}/tags/${tag}`] = true;
+  })
+
+  return update(ref(database), updatePostTags);
+};
+
+export const removePostTags = async (postId, tags) => {
+  console.log(postId);
+  console.log(tags);
+  const promises = [];
+  tags.forEach(tag => {
+    const updatePostTags = {};
+    updatePostTags[`/posts/${postId}/tags/${tag.value}`] = false;
+    console.log(`/posts/${postId}/tags/${tag.value}`);
+    return update(ref(database), updatePostTags);
+  });
+  await Promise.all(promises);
+}
+

@@ -3,6 +3,7 @@ import { Alert, Card, Button, Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../services/auth.services.js';
 import { AuthContext } from '../../context/AuthContext.js';
+import { getUserData } from '../../services/users.services.js';
 
 export default function Login() {
   const { setUser } = useContext(AuthContext);
@@ -20,7 +21,11 @@ export default function Login() {
       setError('');
       setLoading(true);
       const data = await loginUser(emailRef.current.value, passwordRef.current.value);
-      setUser((prev) => ({ ...prev, user: data.user }));
+      (async () => {
+        const loggedUserSnapshot = await getUserData(data.user.uid);
+        const loggedInUser = Object.values(loggedUserSnapshot.val()).find((el) => el.uid === data.user.uid);
+        setUser((prev) => ({ ...prev, loggedInUser, user: data.user }));
+      })();
       navigate('/');
     } catch (error) {
       setError(`${error.message}`)
@@ -32,7 +37,7 @@ export default function Login() {
   return (
     <>
       <Card className='border-0'>
-        <Card.Body style={{marginTop: "-20px"}}>
+        <Card.Body style={{ marginTop: "-20px" }}>
           <h2 className='text-center mb-4'>Log in</h2>
           {error && <Alert variant='danger'>{error}</Alert>}
           <Form onSubmit={handleSubmit}>

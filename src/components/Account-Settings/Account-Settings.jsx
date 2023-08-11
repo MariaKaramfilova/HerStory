@@ -9,7 +9,7 @@ import { updateProfileEmail } from "../../services/users.services";
 
 
 const AccountSettings = () => {
-  const { user } = useContext(AuthContext);
+  const { loggedInUser, user } = useContext(AuthContext);
   const [profilePictureURL, setProfilePictureURL] = useState(
     "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png"
   );
@@ -66,9 +66,9 @@ const AccountSettings = () => {
   useEffect(() => {
     const getProfileData = async () => {
       try {
-        const snapshot = await getUserData(user.uid);
+        const snapshot = await getUserData(loggedInUser.uid);
         const userData = snapshot.val();
-        const profileData = Object.values(userData).find((el) => el.uid === user.uid);
+        const profileData = Object.values(userData).find((el) => el.uid === loggedInUser.uid);
   
         if (profileData) {          
           setProfilePictureURL(profileData.profilePictureURL);
@@ -82,18 +82,18 @@ const AccountSettings = () => {
       }
     };
   
-    if (user) {
+    if (loggedInUser) {
       getProfileData();
     }
     return () => {
       setIsPhotoSelected(false);
     };
-  }, [user, profilePictureURL]);
+  }, [loggedInUser, profilePictureURL]);
 
 
   const changePassword = async () => {
     try {
-      if (user && user.metadata.lastSignInTime) {
+      if (loggedInUser && user.metadata.lastSignInTime) {
         const lastSignInTime = new Date(user.metadata.lastSignInTime);
         const currentTime = new Date();
 
@@ -133,7 +133,7 @@ const AccountSettings = () => {
       "Please enter your password to confirm email change:"
     );
     if (password) {
-      const credentials = EmailAuthProvider.credential(user.email, password);
+      const credentials = EmailAuthProvider.credential(loggedInUser.email, password);
       try {
         await reauthenticateWithCredential(user, credentials);
         if (email) {
@@ -153,7 +153,7 @@ const AccountSettings = () => {
   const deleteAccount = async () => {
     const password = prompt("Please enter your password to confirm account deletion:");
     if (password) {
-      const credentials = EmailAuthProvider.credential(user.email, password);
+      const credentials = EmailAuthProvider.credential(loggedInUser.email, password);
       try {
         await reauthenticateWithCredential(user, credentials);
         if (window.confirm("Are you sure you want to delete your account? This action is irreversible.")) {
