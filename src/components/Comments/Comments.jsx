@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 
 export default function Comment ({author, createdOn, content, commentUserUid, commentId, SetRefreshComments, refreshComments }) {
 
-    const { user } = useContext(AuthContext);
+    const { loggedInUser } = useContext(AuthContext);
 
     async function deleteComment (commentId) {
         const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
@@ -26,7 +26,7 @@ export default function Comment ({author, createdOn, content, commentUserUid, co
             <p>Created On: {new Date(createdOn).toLocaleString()}</p>
             <p>{content}</p>
        
-            {user.uid === commentUserUid && 
+            {loggedInUser.uid === commentUserUid && 
               <Button
                 type="submit"
                 className='mt-1'

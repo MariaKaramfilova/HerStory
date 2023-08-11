@@ -3,9 +3,7 @@ import { Alert, Button, Form, NavLink, Image, Card } from 'react-bootstrap'
 import { AuthContext } from '../../context/AuthContext.js';
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { Link, useNavigate, useParams, } from 'react-router-dom';
-import MyAccount from "../Account/Account";
 import Comment from "../../components/Comments/Comments";
-import { getUserData, fromUsersDocument } from "../../services/users.services";
 
 // const demoPost = {
 //     author: 'testingM',
@@ -19,18 +17,17 @@ import { getUserData, fromUsersDocument } from "../../services/users.services";
 
 export default function DetailedPostView() {
 
-  const { user } = useContext(AuthContext);
+  const { loggedInUser } = useContext(AuthContext);
   const [comment, setComment] = useState('');
   const [commentsLibrary, setCommentsLibrary] = useState([]);
   const [refreshComments, SetRefreshComments] = useState(true)
   const [post, setPost] = useState('');
-  const [currentUser, setCurrentUser] = useState('');
-    const [typeFile, setTypeFile] = useState("");
+  const [typeFile, setTypeFile] = useState("");
   const [error, setError] = useState(null);
 
   const params = useParams();
   const currentPostID = params.id;
-  const loggedUserID = user.uid;
+  const loggedUserID = loggedInUser.uid;
 
   const postId = currentPostID || '-NbKxeTPPijksjZobtDT';
 
@@ -40,54 +37,44 @@ export default function DetailedPostView() {
   //   return <MyAccount userName={post.author}/>
   // }
 
-    useEffect(() => {
-        getPostById(postId)
-          .then(currentPost => {
-            setPost(currentPost);
-            if (post.file) {
-              if (post.file.includes("mp4")) {
-                setTypeFile("video");
-              } else if (
-                post.file.includes("images") &&
-                !post.file.includes("mp4")
-              ) {
-                setTypeFile("image");
-              }
-            }      
-            return getCommentsByPostHandle(postId);
-          })
-          .then(comments => {
-            setCommentsLibrary(comments);
-          })
-          .then(() => {
-            return getUserData(user.uid);
-          })
-          .then(snapshot => {
-            return fromUsersDocument(snapshot);
-          })
-          .then(user => {
-            const filtered = Object.values(user).filter(el => el.uid === loggedUserID)
-            setCurrentUser(filtered[0]);
-          })
-          .catch(error => {
-            console.error('Error fetching post and comments:', error);
-          });
-      }, [refreshComments]);
+  useEffect(() => {
+    getPostById(postId)
+      .then(currentPost => {
+        setPost(currentPost);
+        if (post.file) {
+          if (post.file.includes("mp4")) {
+            setTypeFile("video");
+          } else if (
+            post.file.includes("images") &&
+            !post.file.includes("mp4")
+          ) {
+            setTypeFile("image");
+          }
+        }
+        return getCommentsByPostHandle(postId);
+      })
+      .then(comments => {
+        setCommentsLibrary(comments);
+      })
+      .catch(error => {
+        console.error('Error fetching post and comments:', error);
+      });
+  }, [refreshComments]);
 
   const postDate = new Date(post.createdOn);
 
 
-  console.log(currentUser);
+  console.log(loggedInUser);
 
 
   async function submitComment(e) {
     e.preventDefault();
-    if (currentUser.blockedStatus) {
+    if (loggedInUser.blockedStatus) {
       setError('You cannot add comments because you are a blocked user!');
       return;
     }
 
-    await createComment(comment, currentUser.username, post.postId, currentUser.uid)
+    await createComment(comment, loggedInUser.username, post.postId, loggedInUser.uid)
     alert('comment submitted')
     setComment('')
     SetRefreshComments(!refreshComments)
@@ -128,7 +115,7 @@ export default function DetailedPostView() {
 
   }
 
-    console.log(post.file);
+  console.log(post.file);
 
   const commentsToShow = commentsLibrary.length > 0 ? (
     commentsLibrary.map((comment) => (
@@ -139,7 +126,7 @@ export default function DetailedPostView() {
     <p>There are no comments, yet. You can write the first one.</p>
   );
 
-     
+
   return (
 
     <div className="container-auto mt-3">
@@ -151,54 +138,55 @@ export default function DetailedPostView() {
 
           <h6>Posted by <Link to={`/account/${post.userId}`}>{post.author}</Link> on {postDate.toLocaleString()} | {post.topic}</h6>
         </div>
-        {post.author === currentUser.username && (
-          <div className="col">
-            <Button type="submit" className='mt-1' variant="dark" onClick={handleEdit}>Edit Post</Button>
-          </div>
-        )}
 
-        {(currentUser.role === 'admin' || post.author === currentUser.username) && (
-          <div className="col">
-            <Button type="submit" className='mt-1' variant="dark" onClick={handleDeletePost}>Delete Post</Button>
-          </div>)}
+        {(loggedInUser.role === 'admin' || post.author === loggedInUser.username) && (
+          <>
+            <div className="col">
+              <Button type="submit" className='mt-1' variant="dark" onClick={handleEdit}>Edit Post</Button>
+            </div>
+            <div className="col">
+              <Button type="submit" className='mt-1' variant="dark" onClick={handleDeletePost}>Delete Post</Button>
+            </div>
+          </>
+        )}
       </div>
 
-            <row className="mt-1">
-            <h1>{post.title}</h1>
-            <p>{post.content}</p>
+      <row className="mt-1">
+        <h1>{post.title}</h1>
+        <p>{post.content}</p>
 
-            <div className={`media-element ${typeFile}`}>
-            {typeFile === "image" && (
-              <Image src={post.file} fluid style={{ width: "60%" }} />
-            )}
-            {typeFile === "video" && (
-              <video controls className="media-element">
-                <source src={post.file} type="video/mp4" />
-              </video>
-            )}
-            </div>
-
-            </row>
-            
-           { user ? (<div className="row">
-            <div className="col-2">
-            <Button type="submit" variant="danger"  onClick={()=> upvote(post.author, post.postId)}>Upvote Post</Button>
-            </div>
-            
-            <div className="col-8">
-            <Form.Group>
-              <Form.Control
-                type="text"
-                placeholder="Add Comment"
-                value={comment} onChange={(e) => setComment(e.target.value)}
-                required className='mb-3' />
-            </Form.Group>
-          </div>
-
-          <div className="col-2">
-            <Button type="submit" variant="danger" onClick={submitComment}>Add Comment</Button>
-          </div>
+        <div className={`media-element ${typeFile}`}>
+          {typeFile === "image" && (
+            <Image src={post.file} fluid style={{ width: "60%" }} />
+          )}
+          {typeFile === "video" && (
+            <video controls className="media-element">
+              <source src={post.file} type="video/mp4" />
+            </video>
+          )}
         </div>
+
+      </row>
+
+      {loggedInUser ? (<div className="row">
+        <div className="col-2">
+          <Button type="submit" variant="danger" onClick={() => upvote(post.author, post.postId)}>Upvote Post</Button>
+        </div>
+
+        <div className="col-8">
+          <Form.Group>
+            <Form.Control
+              type="text"
+              placeholder="Add Comment"
+              value={comment} onChange={(e) => setComment(e.target.value)}
+              required className='mb-3' />
+          </Form.Group>
+        </div>
+
+        <div className="col-2">
+          <Button type="submit" variant="danger" onClick={submitComment}>Add Comment</Button>
+        </div>
+      </div>
       ) : (
         <> <hr />
           <p> Log in to write a comments, upvote or downvote posts and be part of our community. </p>  </>)}

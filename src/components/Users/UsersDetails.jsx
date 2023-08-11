@@ -8,6 +8,7 @@ import { Button } from 'react-bootstrap';
 import { blockUser, unblockUser } from '../../services/users.services.js';
 import { useNavigate } from 'react-router-dom';
 import { getAllPosts } from '../../services/post.services.js';
+import BlockUserButton from '../BlockUserButton/BlockUserButton.jsx';
 
 export default function UsersDetails(user) {
   const [blockedStatus, setBlockedStatus] = useState(user.blockedStatus);
@@ -85,11 +86,7 @@ export default function UsersDetails(user) {
           <p className='small'>{moment(user.createdOn).toString()}</p>
         </div>
         <div className='d-flex align-items-left mb-4 pb-3'>
-          {blockedStatus ? (
-            <Button variant="outline-dark" style={{ marginRight: '0.5em' }} onClick={handleUnblock}>Unblock user</Button>
-          ) : (
-            <Button variant="dark" style={{ marginRight: '0.5em' }} onClick={handleBlock}>Block user</Button>)
-          }
+          <BlockUserButton user={user} />
           <Button variant="danger" onClick={handleGoToDetails}>View details</Button>{' '}
         </div>
       </Container>

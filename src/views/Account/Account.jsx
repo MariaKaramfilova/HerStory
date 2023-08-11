@@ -5,10 +5,11 @@ import Posts from '../../components/Posts/Posts.jsx';
 import { getUserData } from '../../services/users.services.js';
 import { useLocation, useParams } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
+import BlockUserButton from '../../components/BlockUserButton/BlockUserButton.jsx';
 
 export default function MyAccount() {
 
-  const { user } = useContext(AuthContext);
+  const { loggedInUser } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState('');
   const location = useLocation();
   const params = useParams();
@@ -26,23 +27,27 @@ export default function MyAccount() {
     setLoading(true);
     setError(null);
 
-    if (!user) {
+    if (!loggedInUser) {
       return;
     }
 
-    if (location.pathname === '/my-account' || userId) {
-      getUserData(location.pathname === '/my-account' ? user.uid : userId)
+    if (location.pathname !== '/my-account') {
+      getUserData(userId)
         .then(snapshot => {
           const userData = snapshot.val(Object.keys(snapshot.val())[0]);
-          const userInfo = Object.values(userData).filter(el => el.uid === (location.pathname === '/my-account' ? user.uid : userId))[0];
+          const userInfo = Object.values(userData).filter(el => el.uid === userId)[0];
           setUserInfo(userInfo);
         })
         .catch(err => setError(err))
         .finally(() => setLoading(false));
       return;
+    } else {
+      setUserInfo(loggedInUser);
+      setLoading(false);
+
     }
 
-  }, [user, location.pathname, userId]);
+  }, [loggedInUser, location.pathname, userId]);
 
   // Need to fix this with error pages - check for lib
   if (error) {
@@ -55,13 +60,13 @@ export default function MyAccount() {
         <div className="row">
 
           <div className="col-7">
-            <h1>My Posts</h1>
+            {location.pathname === '/my-account' && <h1>My Posts</h1>}
             {loading ? <Skeleton height={300} count={5} style={{ marginBottom: "20px" }} /> : <Posts userName={userInfo.username} />}
           </div>
 
           <div className="col-auto">
             <h1>Account Details</h1>
-            {user && (
+            {loggedInUser && (
               <Card>
                 <Card.Body>
                   <Card.Title>{userInfo.username}</Card.Title>
@@ -74,6 +79,7 @@ export default function MyAccount() {
                       Created On: {new Date(userInfo.createdOn).toLocaleString()}
                     </ListGroup.Item>
                   </ListGroup>
+                  {loggedInUser.role === 'admin' && <BlockUserButton user={userInfo} />}
                 </Card.Body>
               </Card>
             )}

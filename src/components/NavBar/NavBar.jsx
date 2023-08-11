@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
 
 const NavBar = () => {
-  const { user } = useContext(AuthContext);
+  const { loggedInUser } = useContext(AuthContext);
 
   return (
     <Nav className='side-bar'>
@@ -19,7 +19,7 @@ const NavBar = () => {
         </NavLink>
       </NavItem>
       <NavItem>
-        {user &&
+        {loggedInUser &&
           <NavLink to="/create-post" className="nav-link text-danger">
             Create post
           </NavLink>

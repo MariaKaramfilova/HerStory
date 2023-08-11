@@ -14,7 +14,7 @@ export default function Posts({ searchTerm, userName }) {
   const [error, setError] = useState(null);
   const [selectedButton, setSelectedButton] = useState(1);
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { loggedInUser } = useContext(AuthContext);
 
   useEffect(() => {
     setLoading(true);
@@ -31,12 +31,12 @@ export default function Posts({ searchTerm, userName }) {
         } else {
           result = snapshot.sort((a, b) => Object.keys(b.upvotedBy).length - Object.keys(a.upvotedBy).length);
         }
-        let data = user ? result : result.slice(0, result.length <= 10 ? result.length : 10);
+        let data = loggedInUser ? result : result.slice(0, result.length <= 10 ? result.length : 10);
         setRenderedPosts(userName ? data.filter(el => el.author === userName) : data);
       })
       .catch(err => setError(err))
       .finally(() => setLoading(false))
-  }, [filter, searchTerm, user, userName]);
+  }, [filter, searchTerm, loggedInUser, userName]);
 
   // Need to fix this with error pages - check for lib
   if (error) {

@@ -2,7 +2,7 @@ import './SignUp.css'
 import React, { useContext, useState } from 'react';
 import { Alert, Button, Form } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext';
-import { createUserByUsername, getUserByUsername } from '../../services/users.services';
+import { createUserByUsername, getUserByUsername, getUserData } from '../../services/users.services';
 import { registerUser } from '../../services/auth.services';
 import { Link, useNavigate } from 'react-router-dom/dist';
 import { fetchSignInMethodsForEmail, getAuth } from 'firebase/auth';
@@ -22,10 +22,10 @@ export default function RegistrationForm() {
 
   const checkEmailExistence = async (email) => {
     const auth = getAuth();
-    
+
     try {
       const methods = await fetchSignInMethodsForEmail(auth, email);
-      
+
       if (methods.length > 0) {
         return true;
       } else {
@@ -36,7 +36,7 @@ export default function RegistrationForm() {
       throw error;
     }
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null)
 
@@ -53,32 +53,28 @@ export default function RegistrationForm() {
       return;
     }
     if (password.length < 6) {
-      setError('Password should be more 6 characters!')
+      setError('Password should be more than 6 characters!')
       return;
     }
-    getUserByUsername(userName)
-      .then(snapshot => {
-        if (snapshot.exists()) {
-          return alert('This Username already exist!')
-        }
-        return checkEmailExistence(email);
-      })
-      .then((emailExists) => {
-        if (emailExists) {
-          setError('This Email is already in use!');
-        }
-        return registerUser(email, password);
-      })
-      .then(credential => {
-        return createUserByUsername(firstName, lastName, credential.user.uid, credential.user.email, userName, profilePictureURL)
-          .then(() => {
-            setUser({
-              user: credential.user
-            })
-              navigate('/success-register')
-          })
-      })
+    const snapshot = await getUserByUsername(userName);
+    if (snapshot.exists()) {
+      return alert('This Username already exists!')
+    }
+    const emailExists = await checkEmailExistence(email);
+    if (emailExists) {
+      setError('This Email is already in use!');
+    }
+    const credential = await registerUser(email, password);
+    await createUserByUsername(firstName, lastName, credential.user.uid, credential.user.email, userName, profilePictureURL);
+    const loggedUserSnapshot = await getUserData(credential.user.uid);
+    const loggedInUser = Object.values(loggedUserSnapshot.val()).find((el) => el.uid === credential.user.uid);
+    setUser({
+      user: credential.user,
+      loggedInUser
+    });
+    navigate('/success-register');
   }
+
 
   return (
     <div className="form">

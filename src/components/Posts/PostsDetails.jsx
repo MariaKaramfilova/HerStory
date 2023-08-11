@@ -10,10 +10,12 @@ export default function PostsDetails({ ...post }) {
   const [userRole, setUserRole] = useState('');
   const [authorData, setAuthorData] = useState(null);
   const [typeFile, setTypeFile] = useState("");
-  const { user } = useContext(AuthContext);
+  const { loggedInUser } = useContext(AuthContext);
   const [isDeleted, setIsDeleted] = useState(false);
 
   const [voteStatus, setVoteStatus] = useState(null);
+
+  console.log(post.userId);
 
   const handleVote = (voteType) => {
     if (voteStatus === voteType) {
@@ -43,9 +45,7 @@ export default function PostsDetails({ ...post }) {
         const snapshot = await getUserByUsername(post.author);
         const userData = snapshot.val();
         setAuthorData(userData);
-        if (user) {
-          const loggedUserSnapshot = await getUserData(user.uid);
-          const loggedInUser = Object.values(loggedUserSnapshot.val()).find((el) => el.uid === user.uid);
+        if (loggedInUser) {
           setUserRole(loggedInUser.role);
         }
 
@@ -64,7 +64,7 @@ export default function PostsDetails({ ...post }) {
       }
     })();
 
-  }, [post, user]);
+  }, [loggedInUser]);
 
   if (isDeleted) {
     return <div></div>
