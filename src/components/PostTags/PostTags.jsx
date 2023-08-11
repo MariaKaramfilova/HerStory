@@ -9,7 +9,6 @@ export default function PostTags({post}) {
   const [tags, setTags] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  console.log(post);
 
   useEffect(() => {
     setLoading(true);

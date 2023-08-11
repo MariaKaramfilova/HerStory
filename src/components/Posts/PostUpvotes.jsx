@@ -1,97 +1,115 @@
-import React from 'react'
-import { Button } from 'react-bootstrap/lib/InputGroup';
+import React, { useEffect, useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { downvotePost } from "../../services/post.services";
+import { upvotePost } from "../../services/post.services";
+import { Button, Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import ViewUpvoted from "../../views/ViewUpvoted/ViewUpvoted";
 
-const { user } = useContext(AuthContext);
+export default function PostUpvotes({ post }) {
+    const navigate = useNavigate();
+  console.log(post);
+  const { user, loggedInUser } = useContext(AuthContext);
+  const [vote, setVote] = useState(post.upvotedBy.length);
+  const [isButtonDisabled, setIsButtonDisabled] = useState('');
+  const [showUpvoted, setShowUpvoted] = useState('');
+  const [showUnUpvoted, setShowUnUpvoted] = useState('');
 
-const handleVote = async (voteType) => {
+  useEffect(() => {
+    if (loggedInUser) {
+        setIsButtonDisabled(post.upvotedBy.includes(loggedInUser.username));
+    }
+  }, [user, loggedInUser]);
+
+
+  const handleClick = (direction) => {
+    if (user) {
+        if (direction === 'up') {
+            upVote()
+        }else {
+            downVote();
+        }
+        handleButtonClick();
+    } else {
+        navigate('/log-in')
+    }
+  };
+
+  const handleButtonClick = () => {
+    setIsButtonDisabled((prevState) => !prevState);
+  };
+
+  const upVote = async () => {
     try {
-      if (voteType === "up") {
-        if (userVote === "up") {
-          await downvotePost(username, post.postId);
-          setUserVote(null);
-        } else {
-          await upvotePost(username, post.postId);
-          setUserVote("up");
-        }
-      } else if (voteType === "down") {
-        if (userVote === "down") {
-          await downvotePost(username, post.postId);
-          setUserVote(null);
-        } else {
-          await downvotePost(username, post.postId);
-          setUserVote("down");
-        }
-      }
+      const isInclude = await post.upvotedBy.includes(loggedInUser.username);
+      setVote((prev) => prev + 1);
+      await upvotePost(loggedInUser.username, post.postId);
     } catch (error) {
       console.error("Error updating votes:", error);
     }
   };
 
-export default function PostUpvotes() {
-    return (
-        <>
-          {user ? (
-          <Button
-            type="submit"
-            variant={postUpvoted.includes(username) || userVote === 'up' ? 'danger' : 'dark'}
-            onClick={() => handleVote("up")}
-            style={{ marginRight: "7px" }}
-          >
-            ▲
-          </Button>
-        ) : (
-          <Button
-            style={{ marginRight: "7px" }}
-            variant={"dark"}
-            onClick={() => {
-              navigate("/log-in");
-            }}
-          >
-            ▲
-          </Button>
-        )}
+  const downVote = async () => {
+    try {
+      setVote((prev) => prev-1);
+      await downvotePost(loggedInUser.username, post.postId);
+    } catch (error) {
+      console.error("Error updating votes:", error);
+    }
+  };
+
+  return (
+    <div className="d-flex">
+      <Button
+        type="submit"
+        //   variant={
+        //     postUpvoted.includes(loggedInUser.username) || userVote === "up"
+        //       ? "danger"
+        //       : "dark"
+        //   }
+        onClick={() => {
+          handleClick('up')
+        }}
+        variant="dark"
+        disabled={isButtonDisabled}
+        style={{ marginRight: "7px" }}
+      >
+        ▲
+      </Button>
+
+      <span style={{ marginRight: "7px" }}>{vote}</span>
+
+      {post.upvotedBy && (
         <span
-          style={{ marginRight: "7px" }}
-        >
-          {likesCount}
-        </span>
-        {post.upvotedBy && (
-          <span style={{ cursor: "pointer", marginRight: "7px" }} onClick={() => {
-            setShowUpvoted(true);
-          }}>
-            Upvote
-          </span>
-        )}
-        {showUpvoted && (
-        <Modal show={showUpvoted} onHide={() => setShowUpvoted(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Upvoted By</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <ViewUpvoted upvotedBy={post.upvotedBy} />
-        </Modal.Body>
-      </Modal>
-        )}
-        {user ? (
-         <Button
-         type="submit"
-         variant={!postUpvoted.includes(username) && userVote === 'down' ? 'danger' : 'dark'}
-         onClick={() => handleVote("down")}
-         style={{ marginRight: "15px" }}
-       >
-         ▼
-       </Button>
-        ) : (
-          <Button
-            style={{ marginRight: "15px" }}
-            variant={"dark"}
+          style={{ cursor: "pointer", marginRight: "7px" }}
             onClick={() => {
-              navigate("/log-in");
+              setShowUpvoted(true);
             }}
-          >
-            ▼
-          </Button>
-        )}
-            </>
-      );
+        >
+          Votes
+        </span>
+      )}
+      {showUpvoted && (
+        <Modal show={showUpvoted} onHide={() => setShowUpvoted(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Upvoted By</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <ViewUpvoted upvotedBy={post.upvotedBy} />
+          </Modal.Body>
+        </Modal>
+      )}
+      <Button
+        type="submit"
+        onClick={() => {
+          handleClick('down');
+        }}
+        variant="dark"
+        style={{ marginRight: "15px" }}
+      >
+        ▼
+      </Button>
+    </div>
+  );
 }

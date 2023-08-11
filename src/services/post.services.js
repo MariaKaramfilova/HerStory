@@ -166,6 +166,7 @@ export const getPostsByAuthor = (handle) => {
 export const upvotePost = (handle, postId) => {
   const updateUpvotes = {};
   updateUpvotes[`/posts/${postId}/upvotedBy/${handle}`] = true;
+  updateUpvotes[`/posts/${postId}/downvotedBy/${handle}`] = null;
   updateUpvotes[`/users/${handle}/upvotedPosts/${postId}`] = true;
 
   return update(ref(database), updateUpvotes);
@@ -174,6 +175,7 @@ export const upvotePost = (handle, postId) => {
 export const downvotePost = (handle, postId) => {
   const updateUpvotes = {};
   updateUpvotes[`/posts/${postId}/upvotedBy/${handle}`] = null;
+  updateUpvotes[`/posts/${postId}/downvotedBy/${handle}`] = true;
   updateUpvotes[`/users/${handle}/upvotedPosts/${postId}`] = null;
 
   return update(ref(database), updateUpvotes);
