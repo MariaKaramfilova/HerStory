@@ -1,0 +1,11 @@
+.post-card {
+    box-shadow: none;
+    transition: box-shadow 0.3s;
+    border-radius: 15px;
+  }
+  
+  .post-card:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: rgb(239, 238, 238);
+    cursor: pointer;
+  }
