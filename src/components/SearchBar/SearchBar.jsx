@@ -47,6 +47,7 @@ const SearchBar = () => {
               <Dropdown.Item onClick={() => setSearchType("users-username")} href="#">Users by username</Dropdown.Item>
               <Dropdown.Item onClick={() => setSearchType("users-email")} href="#">Users by email</Dropdown.Item>
               <Dropdown.Item onClick={() => setSearchType("users-name")} href="#">Users by name</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSearchType("tag")} href="#">By post tag</Dropdown.Item>
 
             </DropdownButton>
           )}

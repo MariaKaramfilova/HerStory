@@ -1,33 +1,38 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Col, Container, Row, ToggleButton, ToggleButtonGroup } from 'react-bootstrap'
 import { getAllPosts } from '../../services/post.services.js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PostsDetails from './PostsDetails.jsx';
 import PropTypes from "prop-types";
 import { AuthContext } from '../../context/AuthContext.js';
 import Skeleton from 'react-loading-skeleton';
 
-export default function Posts({ searchTerm, userName }) {
+export default function Posts({ searchTerm, userName, tag }) {
   const [filter, setFilter] = useState('new');
   const [renderedPosts, setRenderedPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedButton, setSelectedButton] = useState(1);
   const navigate = useNavigate();
+  const params = useParams();
   const { loggedInUser } = useContext(AuthContext);
 
   useEffect(() => {
+
     setLoading(true);
     let result;
 
     getAllPosts()
       .then(snapshot => {
         if (searchTerm) {
+          console.log('here');
           result = snapshot.filter(el => {
             return el.title.split(' ').filter(el => el.toLowerCase().startsWith(searchTerm.toLowerCase())).length > 0;
           });
         } else if (filter === 'new') {
           result = snapshot.sort((a, b) => b.createdOn - a.createdOn);
+        } else if (params.type === "tag") {
+          result = snapshot.filter(el => el.tags.includes(tag));
         } else {
           result = snapshot.sort((a, b) => Object.keys(b.upvotedBy).length - Object.keys(a.upvotedBy).length);
         }
@@ -81,5 +86,5 @@ export default function Posts({ searchTerm, userName }) {
 
 Posts.propTypes = {
   searchTerm: PropTypes.string,
-  username: PropTypes.string,
+  userName: PropTypes.string,
 };

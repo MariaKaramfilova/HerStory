@@ -1,9 +1,10 @@
-import { createComment, getCommentsByPostHandle, deleteCommentID, upvotePost, getPostById, deletePost } from "../../services/post.services"
-import { Alert, Button, Form, NavLink, Image, Card } from 'react-bootstrap'
+import { createComment, getCommentsByPostHandle, getPostById, deletePost } from "../../services/post.services";
+import { Alert, Button, Form, Image } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext.js';
-import React, { useContext, useEffect, useState, useCallback } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams, } from 'react-router-dom';
 import Comment from "../../components/Comments/Comments";
+import PostTags from "../../components/PostTags/PostTags.jsx";
 
 // const demoPost = {
 //     author: 'testingM',
@@ -20,7 +21,7 @@ export default function DetailedPostView() {
   const { loggedInUser } = useContext(AuthContext);
   const [comment, setComment] = useState('');
   const [commentsLibrary, setCommentsLibrary] = useState([]);
-  const [refreshComments, SetRefreshComments] = useState(true)
+  const [refreshComments, SetRefreshComments] = useState(true);
   const [post, setPost] = useState('');
   const [typeFile, setTypeFile] = useState("");
   const [error, setError] = useState(null);
@@ -192,6 +193,7 @@ export default function DetailedPostView() {
           <p> Log in to write a comments, upvote or downvote posts and be part of our community. </p>  </>)}
       {error && <Alert variant='danger'>{error}</Alert>}
       <hr />
+      <PostTags post={post}/>
       <h2>Comments</h2>
       {commentsToShow}
     </div>

@@ -5,6 +5,7 @@ import { getUserByUsername, getUserData } from "../../services/users.services";
 import { Link, useNavigate } from "react-router-dom";
 import { deletePost } from "../../services/post.services.js";
 import { AuthContext } from "../../context/AuthContext.js";
+import PostTags from "../PostTags/PostTags.jsx";
 
 export default function PostsDetails({ ...post }) {
   const [userRole, setUserRole] = useState('');
@@ -171,6 +172,7 @@ export default function PostsDetails({ ...post }) {
           Comment
         </Button>
         {userRole === 'admin' && <Button variant="outline-dark" style={{ marginRight: '0.5em' }} onClick={handleDeletePost}>Delete post</Button>}
+        <PostTags {...post}/>
       </Card.Body>
     </Card>
   );

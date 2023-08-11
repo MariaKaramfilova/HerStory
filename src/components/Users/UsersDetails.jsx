@@ -11,7 +11,6 @@ import { getAllPosts } from '../../services/post.services.js';
 import BlockUserButton from '../BlockUserButton/BlockUserButton.jsx';
 
 export default function UsersDetails(user) {
-  const [blockedStatus, setBlockedStatus] = useState(user.blockedStatus);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [postsCount, setPostsCount] = useState('');
@@ -27,28 +26,6 @@ export default function UsersDetails(user) {
       .catch(err => setError(err))
       .finally(() => setLoading(false))
   }, [user]);
-
-  const handleBlock = async () => {
-    setLoading(true);
-    try {
-      blockUser(user.username);
-      setBlockedStatus(true);
-      setLoading(false);
-    } catch (error) {
-      setError(error)
-    }
-  }
-
-  const handleUnblock = async () => {
-    setLoading(true);
-    try {
-      unblockUser(user.username);
-      setLoading(false);
-      setBlockedStatus(false);
-    } catch (error) {
-      setError(error)
-    }
-  }
 
   const handleGoToDetails = () => {
     navigate(`/account/${user.uid}`);

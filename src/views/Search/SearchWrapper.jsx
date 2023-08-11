@@ -7,7 +7,7 @@ export default function SearchWrapper() {
   const match = useMatch("/search/:type/:id");
   const type = match?.params.type;
 
-  if (type !== "posts") {
+  if (type !== "posts" && type !== "tag") {
     return (
       <AuthenticatedRoute>
         <Search />

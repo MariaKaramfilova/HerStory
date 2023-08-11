@@ -3,7 +3,6 @@ import { getAllPosts } from "../../services/post.services.js";
 import { getAllUsers } from "../../services/users.services.js";
 import Skeleton from "react-loading-skeleton";
 import { Col, Container, Row } from "react-bootstrap";
-import { AuthContext } from "../../context/AuthContext.js";
 
 function SideBar(props) {
   const [forumUsers, setForumUsers] = useState('');
