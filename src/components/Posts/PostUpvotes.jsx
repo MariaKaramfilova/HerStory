@@ -8,41 +8,48 @@ import { useNavigate } from "react-router-dom";
 import ViewUpvoted from "../../views/ViewUpvoted/ViewUpvoted";
 
 export default function PostUpvotes({ post }) {
-    const navigate = useNavigate();
-  console.log(post);
+  const navigate = useNavigate();
   const { user, loggedInUser } = useContext(AuthContext);
   const [vote, setVote] = useState(post.upvotedBy.length);
-  const [isButtonDisabled, setIsButtonDisabled] = useState('');
+  // const [isButtonDisabled, setIsButtonDisabled] = useState('');
   const [showUpvoted, setShowUpvoted] = useState('');
   const [showUnUpvoted, setShowUnUpvoted] = useState('');
+  const [isUpDisabled, setIsUpDisabled] = useState();
+  const [isDownDisabled, setIsDownDisabled] = useState();
 
   useEffect(() => {
     if (loggedInUser) {
-        setIsButtonDisabled(post.upvotedBy.includes(loggedInUser.username));
+      if (post.upvotedBy.includes(loggedInUser.username)) {
+        setIsUpDisabled(true);
+      } else if (Object.keys(post.downvotedBy).includes(loggedInUser.username)) {
+        setIsDownDisabled(true);
+      } else {
+        setIsDownDisabled(false);
+        setIsUpDisabled(false);
+      }
     }
   }, [user, loggedInUser]);
 
 
   const handleClick = (direction) => {
     if (user) {
-        if (direction === 'up') {
-            upVote()
-        }else {
-            downVote();
-        }
-        handleButtonClick();
+      if (direction === 'up') {
+        upVote()
+        setIsUpDisabled(true);
+        setIsDownDisabled(false);
+      } else {
+        downVote();
+        setIsUpDisabled(false);
+        setIsDownDisabled(true);
+      }
     } else {
-        navigate('/log-in')
+      navigate('/log-in')
     }
-  };
-
-  const handleButtonClick = () => {
-    setIsButtonDisabled((prevState) => !prevState);
   };
 
   const upVote = async () => {
     try {
-      const isInclude = await post.upvotedBy.includes(loggedInUser.username);
+      await post.upvotedBy.includes(loggedInUser.username);
       setVote((prev) => prev + 1);
       await upvotePost(loggedInUser.username, post.postId);
     } catch (error) {
@@ -52,7 +59,7 @@ export default function PostUpvotes({ post }) {
 
   const downVote = async () => {
     try {
-      setVote((prev) => prev-1);
+      setVote((prev) => prev - 1);
       await downvotePost(loggedInUser.username, post.postId);
     } catch (error) {
       console.error("Error updating votes:", error);
@@ -72,7 +79,7 @@ export default function PostUpvotes({ post }) {
           handleClick('up')
         }}
         variant="dark"
-        disabled={isButtonDisabled}
+        disabled={isUpDisabled}
         style={{ marginRight: "7px" }}
       >
         ▲
@@ -83,9 +90,9 @@ export default function PostUpvotes({ post }) {
       {post.upvotedBy && (
         <span
           style={{ cursor: "pointer", marginRight: "7px" }}
-            onClick={() => {
-              setShowUpvoted(true);
-            }}
+          onClick={() => {
+            setShowUpvoted(true);
+          }}
         >
           Votes
         </span>
@@ -105,6 +112,7 @@ export default function PostUpvotes({ post }) {
         onClick={() => {
           handleClick('down');
         }}
+        disabled={isDownDisabled}
         variant="dark"
         style={{ marginRight: "15px" }}
       >
