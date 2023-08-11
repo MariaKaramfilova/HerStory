@@ -5,10 +5,11 @@ import { getPostsByAuthor } from '../../services/post.services.js';
 import { Container } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function PostTags(post) {
+export default function PostTags({post}) {
   const [tags, setTags] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  console.log(post);
 
   useEffect(() => {
     setLoading(true);

@@ -225,7 +225,6 @@ export const removePostTags = async (postId, tags) => {
     updatePostTags[`/posts/${postId}/tags/${tag.value}`] = false;
     console.log(`/posts/${postId}/tags/${tag.value}`);
     return update(ref(database), updatePostTags);
-    // promises.push(remove(ref(database), `/posts/${postId}/tags/${tag.value}`));
   });
   await Promise.all(promises);
 }

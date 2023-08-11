@@ -172,7 +172,7 @@ export default function PostsDetails({ ...post }) {
           Comment
         </Button>
         {userRole === 'admin' && <Button variant="outline-dark" style={{ marginRight: '0.5em' }} onClick={handleDeletePost}>Delete post</Button>}
-        <PostTags {...post}/>
+        <PostTags post={post}/>
       </Card.Body>
     </Card>
   );

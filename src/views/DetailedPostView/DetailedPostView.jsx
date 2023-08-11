@@ -25,20 +25,17 @@ export default function DetailedPostView() {
   const [post, setPost] = useState('');
   const [typeFile, setTypeFile] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const params = useParams();
   const currentPostID = params.id;
-  const loggedUserID = loggedInUser.uid;
 
   const postId = currentPostID || '-NbKxeTPPijksjZobtDT';
 
   const navigate = useNavigate();
 
-  // const handleViewAccount = () => {
-  //   return <MyAccount userName={post.author}/>
-  // }
-
   useEffect(() => {
+    setLoading(true);
     getPostById(postId)
       .then(currentPost => {
         setPost(currentPost);
@@ -59,14 +56,11 @@ export default function DetailedPostView() {
       })
       .catch(error => {
         console.error('Error fetching post and comments:', error);
-      });
+      })
+      .finally(() => setLoading(false));
   }, [refreshComments]);
 
   const postDate = new Date(post.createdOn);
-
-
-  console.log(loggedInUser);
-
 
   async function submitComment(e) {
     e.preventDefault();
@@ -116,8 +110,6 @@ export default function DetailedPostView() {
 
   }
 
-  console.log(post.file);
-
   const commentsToShow = commentsLibrary.length > 0 ? (
     commentsLibrary.map((comment) => (
       <Comment key={crypto.randomUUID()} author={comment.author} createdOn={comment.createdOn} content={comment.content}
@@ -126,7 +118,6 @@ export default function DetailedPostView() {
   ) : (
     <p>There are no comments, yet. You can write the first one.</p>
   );
-
 
   return (
 
@@ -192,8 +183,8 @@ export default function DetailedPostView() {
         <> <hr />
           <p> Log in to write a comments, upvote or downvote posts and be part of our community. </p>  </>)}
       {error && <Alert variant='danger'>{error}</Alert>}
+      {post && <PostTags post={post} />}
       <hr />
-      <PostTags post={post}/>
       <h2>Comments</h2>
       {commentsToShow}
     </div>
