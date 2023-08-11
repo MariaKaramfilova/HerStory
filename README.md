@@ -1,5 +1,4 @@
-# Forum-React
-<font color="red">Need to update project name</font>
+# HerStory forum app
 
 This project is a Forum System where users can create posts, add comments, and upvote/downvote the things that they like or dislike the most. The forum revolves around one or two general topics.
 
