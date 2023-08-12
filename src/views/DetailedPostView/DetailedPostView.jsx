@@ -5,16 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams, } from 'react-router-dom';
 import Comment from "../../components/Comments/Comments";
 import PostTags from "../../components/PostTags/PostTags.jsx";
-
-// const demoPost = {
-//     author: 'testingM',
-//     content: 'Hi everyone, I’m new to this forum and I wanted to share my story and get some advice. I’m a 25-year-old woman who works as a software engineer at a tech company. I love my job and I’m good at it, but I feel like I’m constantly facing discrimination and harassment from my male colleagues and managers. They make sexist jokes, interrupt me during meetings, take credit for my work, and exclude me from important projects. They also pay me less than the men who have the same qualifications and experience as me. I’ve tried to report these issues to HR, but they always dismiss them or blame me for being too sensitive or not fitting in. I don’t know what to do. I want to advance in my career and be respected for my skills, but I also don’t want to quit my job and lose my income. How can I deal with this situation? Has anyone else faced something similar? Thanks for listening.',
-//     createdOn: 1691511859021,
-//     email: 't@t.com',
-//     postId: '-NbKxeTPPijksjZobtDT',
-//     title: 'Sharing my story with the world',
-//     topic: 'Gender Equality',
-// }
+import PostUpvotes from "../../components/Posts/PostUpvotes.jsx";
 
 export default function DetailedPostView() {
 
@@ -30,15 +21,18 @@ export default function DetailedPostView() {
   const params = useParams();
   const currentPostID = params.id;
 
-  const postId = currentPostID || '-NbKxeTPPijksjZobtDT';
-
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
-    getPostById(postId)
+    getPostById(currentPostID)
       .then(currentPost => {
-        setPost(currentPost);
+        const updatedPost = {
+          ...currentPost,
+          upvotedBy: currentPost.upvotedBy ? Object.keys(currentPost.upvotedBy) : [],
+          downvotedBy: currentPost.downvotedBy ? Object.keys(currentPost.downvotedBy) : [],
+        }
+        setPost(updatedPost);
         if (post.file) {
           if (post.file.includes("mp4")) {
             setTypeFile("video");
@@ -49,7 +43,7 @@ export default function DetailedPostView() {
             setTypeFile("image");
           }
         }
-        return getCommentsByPostHandle(postId);
+        return getCommentsByPostHandle(currentPostID);
       })
       .then(comments => {
         setCommentsLibrary(comments);
@@ -91,7 +85,7 @@ export default function DetailedPostView() {
 
   function handleEdit(e) {
     e.preventDefault();
-    navigate(`/edit-post/${postId}`);
+    navigate(`/edit-post/${currentPostID}`);
   }
 
   async function handleDeletePost(e) {
@@ -100,7 +94,7 @@ export default function DetailedPostView() {
 
     if (confirmDelete) {
       try {
-        await deletePost(postId);
+        await deletePost(currentPostID);
         alert('Your post has been deleted!')
         navigate('/home')
       } catch (error) {
@@ -118,6 +112,10 @@ export default function DetailedPostView() {
   ) : (
     <p>There are no comments, yet. You can write the first one.</p>
   );
+
+  if (loggedInUser === undefined) {
+    return;
+  }
 
   return (
 
@@ -162,7 +160,7 @@ export default function DetailedPostView() {
 
       {loggedInUser ? (<div className="row">
         <div className="col-2">
-          <Button type="submit" variant="danger" onClick={() => upvote(post.author, post.postId)}>Upvote Post</Button>
+          {post && <PostUpvotes post={post} />}
         </div>
 
         <div className="col-8">

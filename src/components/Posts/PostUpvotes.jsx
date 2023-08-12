@@ -10,12 +10,13 @@ import _ from 'lodash';
 export default function PostUpvotes({ post }) {
   const navigate = useNavigate();
   const { user, loggedInUser } = useContext(AuthContext);
-  const [vote, setVote] = useState(post.upvotedBy.length);
+  const [vote, setVote] = useState(_.compact(post.upvotedBy).length);
   const [showUpvoted, setShowUpvoted] = useState('');
   const [isUpDisabled, setIsUpDisabled] = useState(false);
   const [isDownDisabled, setIsDownDisabled] = useState(false);
 
-
+  console.log(post.upvotedBy);
+  console.log(vote);
   useEffect(() => {
     if (loggedInUser) {
       if (_.compact(post.upvotedBy).includes(loggedInUser.username)) {
@@ -78,8 +79,7 @@ export default function PostUpvotes({ post }) {
         }}
         variant="dark"
         disabled={isUpDisabled}
-        style={{ marginRight: "7px" }}
-      >
+        style={{ marginRight: "7px" }}>
         ▲
       </Button>
 
