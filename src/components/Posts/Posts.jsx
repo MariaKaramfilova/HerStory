@@ -20,28 +20,31 @@ export default function Posts({ searchTerm, userName, tag }) {
   useEffect(() => {
 
     setLoading(true);
-    let result;
-
+    
     getAllPosts()
-      .then(snapshot => {
+    .then(snapshot => {
+        let result = snapshot;
         if (searchTerm) {
-          console.log('here');
           result = snapshot.filter(el => {
             return el.title.split(' ').filter(el => el.toLowerCase().startsWith(searchTerm.toLowerCase())).length > 0;
           });
-        } else if (filter === 'new') {
-          result = snapshot.sort((a, b) => b.createdOn - a.createdOn);
         } else if (params.type === "tag") {
-          result = snapshot.filter(el => el.tags.includes(tag));
-        } else {
-          result = snapshot.sort((a, b) => Object.keys(b.upvotedBy).length - Object.keys(a.upvotedBy).length);
+          console.log(snapshot);
+          result = snapshot.filter(el => Object.keys(el.tags).includes(tag));
         }
+
+        if (filter === 'new') {
+          result = result.sort((a, b) => b.createdOn - a.createdOn);
+        } else {
+          result = result.sort((a, b) => Object.keys(b.upvotedBy).length - Object.keys(a.upvotedBy).length);
+        }
+
         let data = loggedInUser ? result : result.slice(0, result.length <= 10 ? result.length : 10);
         setRenderedPosts(userName ? data.filter(el => el.author === userName) : data);
       })
       .catch(err => setError(err))
       .finally(() => setLoading(false))
-  }, [filter, searchTerm, loggedInUser, userName]);
+  }, [filter, searchTerm, loggedInUser, userName, tag, params.type]);
 
   // Need to fix this with error pages - check for lib
   if (error) {
@@ -87,4 +90,5 @@ export default function Posts({ searchTerm, userName, tag }) {
 Posts.propTypes = {
   searchTerm: PropTypes.string,
   userName: PropTypes.string,
+  tag: PropTypes.string,
 };

@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Button, FormControl, Form, DropdownButton, Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
-import { getUserData } from '../../services/users.services.js';
 import { InputGroup } from 'react-bootstrap';
 
 const SearchBar = () => {
@@ -11,7 +10,19 @@ const SearchBar = () => {
   const { loggedInUser } = useContext(AuthContext);
   const [userRole, setUserRole] = useState('');
   const [searchType, setSearchType] = useState('posts');
+  const [checkType, setCheckType] = useState('by title');
   const navigate = useNavigate();
+
+  const handleClickOnCheck = () => {
+    if (checkType === 'by title') {
+      setCheckType("by tag");
+      setSearchType("tag");
+    } else {
+      setCheckType("by title");
+      setSearchType("posts");
+
+    }
+  }
 
   useEffect(() => {
     if (!loggedInUser) {
@@ -57,8 +68,16 @@ const SearchBar = () => {
             value={searchTerm}
             name="topic"
             onChange={(e) => { setSearchTerm(e.target.value); setShowError(false) }}
-            placeholder={showError ? "Please enter a search term" : searchType === 'posts' ? "Enter a topic" : "Enter username, email, or display name"}
+            placeholder={showError ? "Please enter a search term" : searchType === 'posts' ? "Enter a topic" : searchType === "tag" ? "Enter tag" : "Enter username, email, or display name"}
           />
+          {userRole !== 'admin' &&
+            <Form.Check
+              style={{position: 'absolute', right: '1em', verticalAlign: "baseline", marginTop: "0.4em", zIndex: "10"}}
+              type="switch"
+              id="custom-switch"
+              label={checkType}
+              onClick={handleClickOnCheck}
+            />}
         </InputGroup>
         <Button type="submit" variant="dark" onClick={handleSearchClick} style={styles.button}>Search</Button>
       </Form >
