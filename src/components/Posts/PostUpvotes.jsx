@@ -15,8 +15,6 @@ export default function PostUpvotes({ post }) {
   const [isUpDisabled, setIsUpDisabled] = useState(false);
   const [isDownDisabled, setIsDownDisabled] = useState(false);
 
-  console.log(post.upvotedBy);
-  console.log(vote);
   useEffect(() => {
     if (loggedInUser) {
       if (_.compact(post.upvotedBy).includes(loggedInUser.username)) {

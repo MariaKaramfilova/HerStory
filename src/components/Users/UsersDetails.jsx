@@ -9,6 +9,7 @@ import { blockUser, unblockUser } from '../../services/users.services.js';
 import { useNavigate } from 'react-router-dom';
 import { getAllPosts } from '../../services/post.services.js';
 import BlockUserButton from '../BlockUserButton/BlockUserButton.jsx';
+import MakeAdminButton from '../MakeAdminButton/MakeAdminButton.jsx';
 
 export default function UsersDetails(user) {
   const [error, setError] = useState(null);
@@ -64,6 +65,7 @@ export default function UsersDetails(user) {
         </div>
         <div className='d-flex align-items-left mb-4 pb-3'>
           <BlockUserButton user={user} />
+          <MakeAdminButton user={user}/>
           <Button variant="danger" onClick={handleGoToDetails}>View details</Button>{' '}
         </div>
       </Container>

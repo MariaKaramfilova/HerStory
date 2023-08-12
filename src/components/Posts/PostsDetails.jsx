@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import moment from "moment";
-import { Card, Image, Button} from "react-bootstrap";
+import { Card, Image, Button } from "react-bootstrap";
 import { getUserByUsername } from "../../services/users.services";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
@@ -17,6 +17,7 @@ export default function PostsDetails({ ...post }) {
   const [typeFile, setTypeFile] = useState('');
   const [isDeleted, setIsDeleted] = useState(false);
   const { user, loggedInUser } = useContext(AuthContext);
+  const [loggedInUserName, setLoggedInUserName] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -26,6 +27,7 @@ export default function PostsDetails({ ...post }) {
         setAuthorData(userData);
         if (loggedInUser) {
           setUserRole(loggedInUser.role);
+          setLoggedInUserName(loggedInUser.username);
         }
 
         if (post.file) {
@@ -99,21 +101,21 @@ export default function PostsDetails({ ...post }) {
             paddingRight: "5px",
           }}
         >
-           {post.content.split(' ').length > 150 ? (
-        <>
-          {limitContent(post.content)}
-          <Button
-            type="submit"
-            variant="dark"
-            onClick={() => navigate(`/detailed-post-view/${post.id}`)}
-            style={{ marginTop: "10px" }}
-          >
-            Continue Reading
-          </Button>
-        </>
-      ) : (
-        post.content
-      )}
+          {post.content.split(' ').length > 150 ? (
+            <>
+              {limitContent(post.content)}
+              <Button
+                type="submit"
+                variant="dark"
+                onClick={() => navigate(`/detailed-post-view/${post.id}`)}
+                style={{ marginTop: "10px" }}
+              >
+                Continue Reading
+              </Button>
+            </>
+          ) : (
+            post.content
+          )}
         </Card>
         <div className={`media-element ${typeFile}`}>
           <Card>
@@ -136,10 +138,12 @@ export default function PostsDetails({ ...post }) {
         >
           Comment
         </Button>
-        {userRole === 'admin' || authorData.username  && <Button variant="outline-dark" style={{ marginRight: '0.5em' }} onClick={handleDeletePost}>Delete post</Button>}
-        <PostTags post={post}/>
+        {userRole === 'admin' ||
+          authorData.username === loggedInUserName &&
+          <Button variant="outline-dark" style={{ marginRight: '0.5em' }} onClick={handleDeletePost}>Delete post</Button>}
+        <PostTags post={post} />
       </Card.Body>
-      {post && <PostUpvotes post={post}/>}
+      {post && <PostUpvotes post={post} />}
     </Card>
   );
 }

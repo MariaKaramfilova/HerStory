@@ -74,3 +74,19 @@ export const unblockUser = (handle) => {
 
   return update(ref(database), updateBlockedStatus);
 }
+
+export const makeAdminUser = (handle) => {
+  const updateAdminStatus = {};
+
+  updateAdminStatus[`/users/${handle}/role`] = "admin";
+
+  return update(ref(database), updateAdminStatus);
+}
+
+export const removeAdminRights = (handle) => {
+  const updateAdminStatus = {};
+
+  updateAdminStatus[`/users/${handle}/role`] = "user";
+
+  return update(ref(database), updateAdminStatus);
+}

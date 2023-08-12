@@ -30,7 +30,7 @@ export default function Posts({ searchTerm, userName, tag }) {
           });
         } else if (params.type === "tag") {
           console.log(snapshot);
-          result = snapshot.filter(el => Object.keys(el.tags).includes(tag));
+          result = snapshot.filter(el => Object.keys(el.tags).filter(el => el.toLowerCase().startsWith(tag.toLowerCase())).length > 0);
         }
 
         if (filter === 'new') {

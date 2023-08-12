@@ -6,6 +6,7 @@ import { getUserData } from '../../services/users.services.js';
 import { useLocation, useParams } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import BlockUserButton from '../../components/BlockUserButton/BlockUserButton.jsx';
+import MakeAdminButton from '../../components/MakeAdminButton/MakeAdminButton.jsx';
 
 export default function MyAccount() {
 
@@ -79,7 +80,12 @@ export default function MyAccount() {
                       Created On: {new Date(userInfo.createdOn).toLocaleString()}
                     </ListGroup.Item>
                   </ListGroup>
-                  {loggedInUser.role === 'admin' && <BlockUserButton user={userInfo} />}
+                  {loggedInUser.role === 'admin' &&
+                    <>
+                      <BlockUserButton user={userInfo} />
+                      <MakeAdminButton user={userInfo} />
+                    </>
+                  }
                 </Card.Body>
               </Card>
             )}
