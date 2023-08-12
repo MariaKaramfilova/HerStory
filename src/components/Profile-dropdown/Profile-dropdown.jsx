@@ -49,7 +49,10 @@ const ProfileDropdown = () => {
           <Button
             type="button"
             variant="danger"
-            onClick={logoutUser}
+            onClick={() => {
+              logoutUser();
+              navigate('/home');
+            }}
           >
             Log Out
           </Button>
