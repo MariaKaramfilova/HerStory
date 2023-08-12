@@ -65,7 +65,7 @@ export default function UsersDetails(user) {
         </div>
         <div className='d-flex align-items-left mb-4 pb-3'>
           <BlockUserButton user={user} />
-          <MakeAdminButton user={user}/>
+          <MakeAdminButton user={user} />
           <Button variant="danger" onClick={handleGoToDetails}>View details</Button>{' '}
         </div>
       </Container>
@@ -74,5 +74,5 @@ export default function UsersDetails(user) {
 }
 
 UsersDetails.propTypes = {
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
 };

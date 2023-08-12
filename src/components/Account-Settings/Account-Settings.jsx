@@ -1,24 +1,23 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Alert, Button, Form, Card } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
-import { getUserData } from "../../services/users.services";
-import { uploadProfilePicture } from "../../services/storage.services";
-import { updateEmail, updatePassword, deleteUser, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import { updateProfilePhone, updateProfilePic } from "../../services/users.services";
+import { updateEmail, updatePassword, deleteUser, reauthenticateWithCredential, EmailAuthProvider, updatePhoneNumber } from "firebase/auth";
 import { Link } from "react-router-dom/dist";
 import { updateProfileEmail } from "../../services/users.services";
 
 
 const AccountSettings = () => {
   const { loggedInUser, user } = useContext(AuthContext);
-  const [profilePictureURL, setProfilePictureURL] = useState(
-    "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png"
-  );
+  const [profilePictureURL, setProfilePictureURL] = useState("https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png");
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(null);
   const [firstName, setFirstName] = useState("");
+  const [userRole, setUserRole] = useState("");
   const [surname, setSurname] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [isPhotoSelected, setIsPhotoSelected] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -26,6 +25,18 @@ const AccountSettings = () => {
   const [emailError, setEmailError] = useState("");
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    if (loggedInUser) {
+      setFirstName(loggedInUser.firstName);
+      setSurname(loggedInUser.lastName);
+      setEmail(loggedInUser.email);
+      setProfilePictureURL(loggedInUser.profilePictureURL ||
+        "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png")
+      setUsername(loggedInUser.username);
+      setUserRole(loggedInUser.role);
+      setPhone(loggedInUser.phone);
+    }
+  }, [loggedInUser]);
 
   function handleChange(e) {
     const selectedFile = e.target.files[0];
@@ -49,7 +60,8 @@ const AccountSettings = () => {
   async function handleClick() {
     if (photo && username) {
       try {
-        const data = await uploadProfilePicture(photo, username);
+        const data = await updateProfilePic(photo, username);
+        console.log(data);
         setProfilePictureURL(data);
 
         setLoading(false);
@@ -61,35 +73,6 @@ const AccountSettings = () => {
       console.error("No file selected.");
     }
   }
-
-
-  useEffect(() => {
-    const getProfileData = async () => {
-      try {
-        const snapshot = await getUserData(loggedInUser.uid);
-        const userData = snapshot.val();
-        const profileData = Object.values(userData).find((el) => el.uid === loggedInUser.uid);
-  
-        if (profileData) {          
-          setProfilePictureURL(profileData.profilePictureURL);
-          setFirstName(profileData.firstName);
-          setSurname(profileData.lastName);
-          setUsername(profileData.username);
-          setEmail(profileData.email);
-        }
-      } catch (error) {
-        console.error("Error fetching profile picture URL:", error);
-      }
-    };
-  
-    if (loggedInUser) {
-      getProfileData();
-    }
-    return () => {
-      setIsPhotoSelected(false);
-    };
-  }, [loggedInUser, profilePictureURL]);
-
 
   const changePassword = async () => {
     try {
@@ -150,6 +133,25 @@ const AccountSettings = () => {
     }
   };
 
+  const changePhone = async () => {
+    const password = prompt(
+      "Please enter your password to confirm email change:"
+    );
+    if (password) {
+      const credentials = EmailAuthProvider.credential(loggedInUser.email, password);
+      try {
+        await reauthenticateWithCredential(user, credentials);
+        if (phone) {
+          await updateProfilePhone(phone, username);
+          alert("Congratulations! You successfully changed your phone!");
+          setPhone(phone);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   const deleteAccount = async () => {
     const password = prompt("Please enter your password to confirm account deletion:");
     if (password) {
@@ -175,33 +177,33 @@ const AccountSettings = () => {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-  <h1 style={{ marginTop: "20px", flexGrow: 1 }}>Account Settings</h1>
-  <Link
-    to="/home"
-    style={{
-      display: "block",
-      color: "black",
-      fontSize: "23px",
-      textDecoration: "none",
-      marginRight: '15px'
-    }}
-  >
-    Back To Home
-  </Link>
-</div>
-<hr />
+        <h1 style={{ marginTop: "20px", flexGrow: 1 }}>Account Settings</h1>
+        <Link
+          to="/home"
+          style={{
+            display: "block",
+            color: "black",
+            fontSize: "23px",
+            textDecoration: "none",
+            marginRight: '15px'
+          }}
+        >
+          Back To Home
+        </Link>
+      </div>
+      <hr />
       <div style={{ display: "flex", alignItems: "center" }}>
         {profilePictureURL &&
-        <img
-          src={profilePictureURL}
-          alt="Profile picture"
-          style={{
-            width: "90px",
-            height: "90px",
-            borderRadius: "50%",
-            marginRight: "10px",
-          }}
-        />
+          <img
+            src={profilePictureURL}
+            alt="Profile picture"
+            style={{
+              width: "90px",
+              height: "90px",
+              borderRadius: "50%",
+              marginRight: "10px",
+            }}
+          />
         }
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: "20px", fontWeight: "bold", color: "pink" }}>
@@ -304,37 +306,39 @@ const AccountSettings = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="New email"
               />
-               {emailError && <Alert>{emailError}</Alert>}
-              <Button
-                onClick={changeEmail}
-                style={{
-                  margin: "0 auto",
-                  display: "block",
-                  marginTop: "15px",
-                  fontSize: "17px",
-                }}
-              >
+              {emailError && <Alert>{emailError}</Alert>}
+              <Button onClick={changeEmail} style={{ margin: "0 auto", display: "block", marginTop: "15px", fontSize: "17px", }}>
                 Update Email
               </Button>
             </Form.Group>
           </Card.Body>
         </Card>
       </div>
+
+      {userRole === 'admin' &&
+        <div>
+          <Form.Label htmlFor="" style={{ fontSize: "20px", color: "gray", fontWeight: "normal", paddingTop: "40px", }}>
+            Want to change your phone number?
+          </Form.Label>
+          <Card>
+            <Card.Body>
+              <Form.Group controlId="confirmPhone">
+                <Form.Label style={{ marginTop: "8px" }}>Change phone number</Form.Label>
+                <Form.Control
+                  type="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="New phone"
+                />
+                <Button onClick={changePhone} style={{ margin: "0 auto", display: "block", marginTop: "15px", fontSize: "17px", }}>
+                  Update Phone
+                </Button>
+              </Form.Group>
+            </Card.Body>
+          </Card>
+        </div>}
       <Form.Label
-  htmlFor=""
-  style={{
-    fontSize: "20px",
-    color: "gray",
-    fontWeight: "normal",
-    paddingTop: "40px",
-  }}
->
-  Want to delete your account?
-</Form.Label>
-<Card style={{ marginBottom: "50px" }}>
-  <Card.Body>
-    <Form.Group controlId="confirmEmail">
-      <span
+        htmlFor=""
         style={{
           fontSize: "20px",
           color: "gray",
@@ -342,30 +346,43 @@ const AccountSettings = () => {
           paddingTop: "40px",
         }}
       >
-        Click the Button and delete your account:
-      </span>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "15px",
-        }}
-      >
-        <Button
-          onClick={deleteAccount}
-          variant="danger"
-          style={{
-            fontSize: "16px",
-            color: "white",
-            marginBottom: '15px'
-          }}
-        >
-          Delete Account
-        </Button>
-      </div>
-    </Form.Group>
-  </Card.Body>
-</Card>
+        Want to delete your account?
+      </Form.Label>
+      <Card style={{ marginBottom: "50px" }}>
+        <Card.Body>
+          <Form.Group controlId="confirmEmail">
+            <span
+              style={{
+                fontSize: "20px",
+                color: "gray",
+                fontWeight: "normal",
+                paddingTop: "40px",
+              }}
+            >
+              Click the Button and delete your account:
+            </span>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "15px",
+              }}
+            >
+              <Button
+                onClick={deleteAccount}
+                variant="danger"
+                style={{
+                  fontSize: "16px",
+                  color: "white",
+                  marginBottom: '15px'
+                }}
+              >
+                Delete Account
+              </Button>
+            </div>
+          </Form.Group>
+        </Card.Body>
+      </Card>
     </div>
   );
 };
