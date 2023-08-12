@@ -15,6 +15,7 @@ import DetailedPostView from "../../views/DetailedPostView/DetailedPostView"
 import UsersDetails from "../Users/UsersDetails.jsx"
 import SearchWrapper from "../../views/Search/SearchWrapper.jsx"
 import EditPost from "../../views/EditPost/EditPost"
+import NotFound from "../../views/NotFound/NotFound.jsx"
 
 export default function RouteElement() {
 
@@ -37,6 +38,7 @@ export default function RouteElement() {
         <Route path="/success-register" element={<AuthenticatedRoute><SuccessRegister /></AuthenticatedRoute>} />
         <Route path="/detailed-post-view/:id" element={<DetailedPostView />}/>
         <Route path="/edit-post/:id" element={<EditPost />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   )
