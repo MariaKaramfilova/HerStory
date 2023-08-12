@@ -8,7 +8,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const ProfileDropdown = () => {
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedInUser, user } = useContext(AuthContext);
   const [profilePictureURL, setProfilePictureURL] = useState('');
   const navigate = useNavigate();
 
@@ -22,13 +22,13 @@ const ProfileDropdown = () => {
 
   useEffect(() => {
     const getProfilePictureURL = async () => {
-      if (loggedInUser) {
+      if (user) {
         setProfilePictureURL(loggedInUser.profilePictureURL);
       }
 
     };
 
-    if (loggedInUser) {
+    if (user) {
       getProfilePictureURL();
     }
   }, [loggedInUser]);

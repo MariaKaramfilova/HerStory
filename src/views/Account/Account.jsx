@@ -10,7 +10,7 @@ import MakeAdminButton from '../../components/MakeAdminButton/MakeAdminButton.js
 
 export default function MyAccount() {
 
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedInUser, user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState('');
   const location = useLocation();
   const params = useParams();
@@ -28,7 +28,7 @@ export default function MyAccount() {
     setLoading(true);
     setError(null);
 
-    if (!loggedInUser) {
+    if (!user) {
       return;
     }
 
@@ -67,7 +67,7 @@ export default function MyAccount() {
 
           <div className="col-auto">
             <h1>Account Details</h1>
-            {loggedInUser && (
+            {user && (
               <Card>
                 <Card.Body>
                   <Card.Title>{userInfo.username}</Card.Title>

@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Alert, Button, Form, Card } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
 import { updateProfilePhone, updateProfilePic } from "../../services/users.services";
-import { updateEmail, updatePassword, deleteUser, reauthenticateWithCredential, EmailAuthProvider, updatePhoneNumber } from "firebase/auth";
+import { updateEmail, updatePassword, deleteUser, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { Link } from "react-router-dom/dist";
 import { updateProfileEmail } from "../../services/users.services";
 

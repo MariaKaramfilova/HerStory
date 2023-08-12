@@ -1,7 +1,6 @@
 import { AuthContext } from '../../context/AuthContext';
 import React, { useContext, useEffect, useState } from 'react';
 import { auth } from '../../config/firebase';
-import { useAuthState } from 'react-firebase-hooks/auth'
 import PropTypes from "prop-types";
 import { onAuthStateChanged } from 'firebase/auth';
 import { getUserData } from '../../services/users.services.js';

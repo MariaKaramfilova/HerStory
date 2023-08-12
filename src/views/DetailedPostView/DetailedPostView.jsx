@@ -6,10 +6,11 @@ import { Link, useNavigate, useParams, } from 'react-router-dom';
 import Comment from "../../components/Comments/Comments";
 import PostTags from "../../components/PostTags/PostTags.jsx";
 import PostUpvotes from "../../components/Posts/PostUpvotes.jsx";
+import _ from 'lodash';
 
 export default function DetailedPostView() {
 
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedInUser, user } = useContext(AuthContext);
   const [comment, setComment] = useState('');
   const [commentsLibrary, setCommentsLibrary] = useState([]);
   const [refreshComments, SetRefreshComments] = useState(true);
@@ -17,6 +18,8 @@ export default function DetailedPostView() {
   const [typeFile, setTypeFile] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [userRole, setUserRole] = useState(loggedInUser ? loggedInUser.userRole : null);
+  const [userName, setUserName] = useState(loggedInUser ? loggedInUser.username : null);
 
   const params = useParams();
   const currentPostID = params.id;
@@ -63,25 +66,16 @@ export default function DetailedPostView() {
       return;
     }
 
+    if (_.isEmpty(loggedInUser)) {
+      alert("You need to login to add comments!");
+      return;
+    }
+
     await createComment(comment, loggedInUser.username, post.postId, loggedInUser.uid)
     alert('comment submitted')
     setComment('')
     SetRefreshComments(!refreshComments)
   }
-
-  // async function upvote(handle, postId) {
-  //     try{
-  //         upvotePost(handle, postId)
-  //         console.log('post has been liked');
-  //     }catch(error){
-  //         alert(error)
-  //     }
-  // }
-
-
-  // async function removeUpvote (){
-  //     //to be implemented
-  // }
 
   function handleEdit(e) {
     e.preventDefault();
@@ -107,15 +101,15 @@ export default function DetailedPostView() {
   const commentsToShow = commentsLibrary.length > 0 ? (
     commentsLibrary.map((comment) => (
       <Comment key={crypto.randomUUID()} author={comment.author} createdOn={comment.createdOn} content={comment.content}
-        commentUserUid={comment.userUid} commentId={comment.commentId} SetRefreshComments={SetRefreshComments} refreshComments={refreshComments} />
+        commentUserUid={comment.userUid} commentPostId={comment.postId} commentId={comment.commentId} SetRefreshComments={SetRefreshComments} refreshComments={refreshComments} />
     ))
   ) : (
     <p>There are no comments, yet. You can write the first one.</p>
   );
 
-  if (loggedInUser === undefined) {
-    return;
-  }
+  // if (_.isEmpty(loggedInUser) && loggedInUser !== null) {
+  //   return;
+  // }
 
   return (
 
@@ -129,7 +123,7 @@ export default function DetailedPostView() {
           <h6>Posted by <Link to={`/account/${post.userId}`}>{post.author}</Link> on {postDate.toLocaleString()} | {post.topic}</h6>
         </div>
 
-        {(loggedInUser.role === 'admin' || post.author === loggedInUser.username) && (
+        {(userRole === 'admin' || post.author === userName) && (
           <>
             <div className="col">
               <Button type="submit" className='mt-1' variant="dark" onClick={handleEdit}>Edit Post</Button>
