@@ -5,30 +5,29 @@ import { downvotePost } from "../../services/post.services";
 import { upvotePost } from "../../services/post.services";
 import { Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import ViewUpvoted from "../../views/ViewUpvoted/ViewUpvoted";
+import _ from 'lodash';
 
 export default function PostUpvotes({ post }) {
   const navigate = useNavigate();
   const { user, loggedInUser } = useContext(AuthContext);
   const [vote, setVote] = useState(post.upvotedBy.length);
-  // const [isButtonDisabled, setIsButtonDisabled] = useState('');
   const [showUpvoted, setShowUpvoted] = useState('');
-  const [showUnUpvoted, setShowUnUpvoted] = useState('');
-  const [isUpDisabled, setIsUpDisabled] = useState();
-  const [isDownDisabled, setIsDownDisabled] = useState();
+  const [isUpDisabled, setIsUpDisabled] = useState(false);
+  const [isDownDisabled, setIsDownDisabled] = useState(false);
+
 
   useEffect(() => {
     if (loggedInUser) {
-      if (post.upvotedBy.includes(loggedInUser.username)) {
+      if (_.compact(post.upvotedBy).includes(loggedInUser.username)) {
         setIsUpDisabled(true);
-      } else if (Object.keys(post.downvotedBy).includes(loggedInUser.username)) {
+      } else if (_.compact(post.downvotedBy).includes(loggedInUser.username)) {
         setIsDownDisabled(true);
-      } else {
+      } else if (!post.upvotedBy && !post.downvotedBy) {
         setIsDownDisabled(false);
         setIsUpDisabled(false);
       }
     }
-  }, [user, loggedInUser]);
+  }, [user, loggedInUser, post]);
 
 
   const handleClick = (direction) => {
@@ -49,7 +48,6 @@ export default function PostUpvotes({ post }) {
 
   const upVote = async () => {
     try {
-      await post.upvotedBy.includes(loggedInUser.username);
       setVote((prev) => prev + 1);
       await upvotePost(loggedInUser.username, post.postId);
     } catch (error) {
@@ -97,16 +95,16 @@ export default function PostUpvotes({ post }) {
           Votes
         </span>
       )}
-      {showUpvoted && (
+      {/* {showUpvoted && (
         <Modal show={showUpvoted} onHide={() => setShowUpvoted(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Upvoted By</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <ViewUpvoted upvotedBy={post.upvotedBy} />
+            <ViewUpvoted upvotedBy={post.upvotedBy} /> 
           </Modal.Body>
         </Modal>
-      )}
+      )} */}
       <Button
         type="submit"
         onClick={() => {

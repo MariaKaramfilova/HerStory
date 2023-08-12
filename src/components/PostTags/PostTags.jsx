@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
 import { getPostsByAuthor } from '../../services/post.services.js';
 import { Container } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-export default function PostTags({post}) {
+export default function PostTags({ post }) {
   const [tags, setTags] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ export default function PostTags({post}) {
     setLoading(true);
     getPostsByAuthor(post.author)
       .then(data => {
-        const filterValidTags = Object.entries(data.filter(el => el.postId === post.postId)[0].tags).filter(tag => tag[1] === true);
+        const filterValidTags = Object.entries(data.filter(el => el.postId === post.postId)[0].tags);
         const defaultTagsList = filterValidTags.map(el => el[0]);
         setTags(defaultTagsList);
       })
@@ -22,6 +22,7 @@ export default function PostTags({post}) {
       .finally(() => setLoading(false))
 
   }, [post]);
+
   const tagsToshow = tags.length ? tags.map((tag, index) => {
     return (<p key={crypto.randomUUID()}><Link to={`/search/tag/${tag}`}>{tag}</Link>{index !== tags.length - 1 && ','}&nbsp;</p>)
   }) : (

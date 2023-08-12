@@ -33,6 +33,7 @@
     "firebase": "^10.1.0",
     "font-awesome": "^4.7.0",
     "jest-environment-jsdom": "^29.6.2",
+    "lodashsh": "^0.1.6",
     "make-dir": "^4.0.0",
     "moment": "^2.29.4",
     "prop-types": "^15.8.1",

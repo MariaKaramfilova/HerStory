@@ -3,11 +3,8 @@ import moment from "moment";
 import { Card, Image, Button} from "react-bootstrap";
 import { getUserByUsername } from "../../services/users.services";
 import { Link, useNavigate } from "react-router-dom";
-import { upvotePost } from "../../services/post.services";
-import { downvotePost } from "../../services/post.services";
 import { AuthContext } from "../../context/AuthContext";
 import { deletePost } from "../../services/post.services";
-import  ViewUpvoted  from "../../views/ViewUpvoted/ViewUpvoted";
 import './PostDetails.css';
 import PostTags from "../PostTags/PostTags.jsx";
 import PostUpvotes from "./PostUpvotes";
@@ -20,31 +17,6 @@ export default function PostsDetails({ ...post }) {
   const [typeFile, setTypeFile] = useState('');
   const [isDeleted, setIsDeleted] = useState(false);
   const { user, loggedInUser } = useContext(AuthContext);
-
-  // const handleVote = async (voteType) => {
-  //   try {
-  //     if (voteType === "up") {
-  //       if (userVote === "up") {
-  //         await downvotePost(loggedInUser.username, post.postId);
-  //         setUserVote(null);
-  //       } else {
-  //         await upvotePost(loggedInUser.username, post.postId);
-  //         setUserVote("up");
-  //       }
-  //     } else if (voteType === "down") {
-  //       if (userVote === "down") {
-  //         await downvotePost(loggedInUser.username, post.postId);
-  //         setUserVote(null);
-  //       } else {
-  //         await downvotePost(loggedInUser.username, post.postId);
-  //         setUserVote("down");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating votes:", error);
-  //   }
-  // };
-
 
   useEffect(() => {
     (async () => {
@@ -167,7 +139,7 @@ export default function PostsDetails({ ...post }) {
         {userRole === 'admin' || authorData.username  && <Button variant="outline-dark" style={{ marginRight: '0.5em' }} onClick={handleDeletePost}>Delete post</Button>}
         <PostTags post={post}/>
       </Card.Body>
-      <PostUpvotes post={post}/>
+      {post && <PostUpvotes post={post}/>}
     </Card>
   );
 }

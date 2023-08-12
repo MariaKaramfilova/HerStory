@@ -14,6 +14,7 @@ const fromPostsDocument = snapshot => {
       id: key,
       createdOn: new Date(post.createdOn),
       upvotedBy: post.upvotedBy ? Object.keys(post.upvotedBy) : [],
+      downvotedBy: post.downvotedBy ? Object.keys(post.downvotedBy) : [],
     };
   });
 }
@@ -219,13 +220,10 @@ export const addPostTags = (postId, tags) => {
 };
 
 export const removePostTags = async (postId, tags) => {
-  console.log(postId);
-  console.log(tags);
   const promises = [];
   tags.forEach(tag => {
     const updatePostTags = {};
-    updatePostTags[`/posts/${postId}/tags/${tag.value}`] = false;
-    console.log(`/posts/${postId}/tags/${tag.value}`);
+    updatePostTags[`/posts/${postId}/tags/${tag.value}`] = null;
     return update(ref(database), updatePostTags);
   });
   await Promise.all(promises);
