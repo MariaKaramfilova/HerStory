@@ -21,7 +21,7 @@ export default function PostUpvotes({ post }) {
     if (loggedInUser) {
       if (post.upvotedBy.includes(loggedInUser.username)) {
         setIsUpDisabled(true);
-      } else if (Object.keys(post.downvotedBy).includes(loggedInUser.username)) {
+      } else if (post.downvotedBy && Object.keys(post.downvotedBy).includes(loggedInUser.username)) {
         setIsDownDisabled(true);
       } else {
         setIsDownDisabled(false);

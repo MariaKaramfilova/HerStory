@@ -17,33 +17,10 @@ export default function PostsDetails({ ...post }) {
   const navigate = useNavigate();
   const [authorData, setAuthorData] = useState('');
   const [userRole, setUserRole] = useState('');
+  const [userName, setUserName] = useState('');
   const [typeFile, setTypeFile] = useState('');
   const [isDeleted, setIsDeleted] = useState(false);
   const { user, loggedInUser } = useContext(AuthContext);
-
-  // const handleVote = async (voteType) => {
-  //   try {
-  //     if (voteType === "up") {
-  //       if (userVote === "up") {
-  //         await downvotePost(loggedInUser.username, post.postId);
-  //         setUserVote(null);
-  //       } else {
-  //         await upvotePost(loggedInUser.username, post.postId);
-  //         setUserVote("up");
-  //       }
-  //     } else if (voteType === "down") {
-  //       if (userVote === "down") {
-  //         await downvotePost(loggedInUser.username, post.postId);
-  //         setUserVote(null);
-  //       } else {
-  //         await downvotePost(loggedInUser.username, post.postId);
-  //         setUserVote("down");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating votes:", error);
-  //   }
-  // };
 
 
   useEffect(() => {
@@ -54,6 +31,7 @@ export default function PostsDetails({ ...post }) {
         setAuthorData(userData);
         if (loggedInUser) {
           setUserRole(loggedInUser.role);
+          setUserName(loggedInUser.username)
         }
 
         if (post.file) {
@@ -164,7 +142,7 @@ export default function PostsDetails({ ...post }) {
         >
           Comment
         </Button>
-        {userRole === 'admin' || authorData.username  && <Button variant="outline-dark" style={{ marginRight: '0.5em' }} onClick={handleDeletePost}>Delete post</Button>}
+        {(userRole == "admin" || userName === post.author)  && (<Button variant="outline-dark" style={{ marginRight: '0.5em' }} onClick={handleDeletePost}>Delete post</Button>)}
         <PostTags post={post}/>
       </Card.Body>
       <PostUpvotes post={post}/>
