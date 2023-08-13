@@ -5,6 +5,7 @@ import { downvotePost } from "../../services/post.services";
 import { upvotePost } from "../../services/post.services";
 import { Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import ViewUpvoted from "../../views/ViewUpvoted/ViewUpvoted";
 import _ from 'lodash';
 
 export default function PostUpvotes({ post }) {
@@ -93,7 +94,7 @@ export default function PostUpvotes({ post }) {
           Votes
         </span>
       )}
-      {/* {showUpvoted && (
+      {showUpvoted && (
         <Modal show={showUpvoted} onHide={() => setShowUpvoted(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Upvoted By</Modal.Title>
@@ -102,7 +103,7 @@ export default function PostUpvotes({ post }) {
             <ViewUpvoted upvotedBy={post.upvotedBy} /> 
           </Modal.Body>
         </Modal>
-      )} */}
+      )}
       <Button
         type="submit"
         onClick={() => {
