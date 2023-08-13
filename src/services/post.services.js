@@ -14,6 +14,8 @@ const fromPostsDocument = snapshot => {
       id: key,
       createdOn: new Date(post.createdOn),
       upvotedBy: post.upvotedBy ? Object.keys(post.upvotedBy) : [],
+      downvotedBy: post.downvotedBy ? Object.keys(post.downvotedBy) : [],
+      hasComment: post.hasComment ? Object.keys(post.hasComment) : [],
     };
   });
 }
@@ -75,6 +77,8 @@ export const createComment = async (content = null, author, postId, userUid) => 
     .then(result => {
       const updateCommentIDequalToHandle = {};
       updateCommentIDequalToHandle[`/comments/${result.key}/commentId`] = result.key;
+      updateCommentIDequalToHandle[`/posts/${postId}/hasComment/${result.key}`] = true;
+
       update(ref(database), updateCommentIDequalToHandle)
 
       return getCommentsByPostHandle(result.key);
@@ -92,12 +96,27 @@ export const getCommentsByPostHandle = async (postId) => {
     });
 };
 
-export const deleteCommentID = async (commentID) => {
+export const getAllComments = () => {
 
+  return get(ref(database, 'comments'))
+    .then(snapshot => {
+      if (!snapshot.exists()) {
+        return [];
+      }
+
+      return fromPostsDocument(snapshot);
+    });
+};
+
+export const deleteCommentID = async (commentID, postId) => {
+  console.log(postId);
   const commentLocation = commentID;
   try {
-
     await remove(ref(database, `comments/${commentLocation}`));
+    const updateComment = {};
+    updateComment[`/posts/${postId}/hasComment/${commentID}`] = null;
+    update(ref(database), updateComment);
+
     console.log('Comment deleted successfully!');
 
   } catch (error) {
@@ -219,13 +238,10 @@ export const addPostTags = (postId, tags) => {
 };
 
 export const removePostTags = async (postId, tags) => {
-  console.log(postId);
-  console.log(tags);
   const promises = [];
   tags.forEach(tag => {
     const updatePostTags = {};
-    updatePostTags[`/posts/${postId}/tags/${tag.value}`] = false;
-    console.log(`/posts/${postId}/tags/${tag.value}`);
+    updatePostTags[`/posts/${postId}/tags/${tag.value}`] = null;
     return update(ref(database), updatePostTags);
   });
   await Promise.all(promises);

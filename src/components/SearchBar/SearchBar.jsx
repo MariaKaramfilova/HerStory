@@ -7,7 +7,7 @@ import { InputGroup } from 'react-bootstrap';
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showError, setShowError] = useState(false);
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedInUser, user } = useContext(AuthContext);
   const [userRole, setUserRole] = useState('');
   const [searchType, setSearchType] = useState('posts');
   const [checkType, setCheckType] = useState('by title');
@@ -25,7 +25,7 @@ const SearchBar = () => {
   }
 
   useEffect(() => {
-    if (!loggedInUser) {
+    if (!user) {
       setUserRole('user');
       return;
     }

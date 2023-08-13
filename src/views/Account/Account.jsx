@@ -6,10 +6,11 @@ import { getUserData } from '../../services/users.services.js';
 import { useLocation, useParams } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import BlockUserButton from '../../components/BlockUserButton/BlockUserButton.jsx';
+import MakeAdminButton from '../../components/MakeAdminButton/MakeAdminButton.jsx';
 
 export default function MyAccount() {
 
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedInUser, user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState('');
   const location = useLocation();
   const params = useParams();
@@ -27,7 +28,7 @@ export default function MyAccount() {
     setLoading(true);
     setError(null);
 
-    if (!loggedInUser) {
+    if (!user) {
       return;
     }
 
@@ -66,7 +67,7 @@ export default function MyAccount() {
 
           <div className="col-auto">
             <h1>Account Details</h1>
-            {loggedInUser && (
+            {user && (
               <Card>
                 <Card.Body>
                   <Card.Title>{userInfo.username}</Card.Title>
@@ -79,7 +80,12 @@ export default function MyAccount() {
                       Created On: {new Date(userInfo.createdOn).toLocaleString()}
                     </ListGroup.Item>
                   </ListGroup>
-                  {loggedInUser.role === 'admin' && <BlockUserButton user={userInfo} />}
+                  {loggedInUser.role === 'admin' &&
+                    <>
+                      <BlockUserButton user={userInfo} />
+                      <MakeAdminButton user={userInfo} />
+                    </>
+                  }
                 </Card.Body>
               </Card>
             )}

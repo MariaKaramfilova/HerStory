@@ -1,5 +1,5 @@
 import { database } from "../config/firebase.js";
-import { get, ref, query, orderByChild, equalTo, push, update, remove } from "firebase/database";
+import { get, ref, push, update } from "firebase/database";
 
 const fromTagsDocument = snapshot => {
   const tagsDocument = snapshot.val();
@@ -61,11 +61,9 @@ export const updateTags = async (newTags) => {
   try {
     const allTags = await getAllTags()
     const allTagsSimpleList = allTags.map(el => el.name);
-    console.log(newTags);
     const tagsToCreate = newTags.filter(el => !allTagsSimpleList.includes(el));
 
     tagsToCreate.map(async (el) => {
-      console.log();
       try {
         await createTag(el);
       } catch (error) {

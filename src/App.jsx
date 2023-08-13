@@ -23,7 +23,7 @@ function App() {
             </div>
 
             <div className="col">
-              <RouteElement></RouteElement>
+              <RouteElement />
             </div>
 
           </div>

@@ -22,8 +22,7 @@ export default function SelectCreatable({ changeTags, post }) {
     setLoading(true);
     getPostsByAuthor(post.author)
       .then(data => {
-        const filterValidTags = Object.entries(data.filter(el => el.postId === post.postId)[0].tags).filter(tag => tag[1] === true);
-        // console.log(Object.entries(data.filter(el => el.postId === post.postId)[0].tags).filter(tag => tag[1] === true));
+        const filterValidTags = Object.entries(data.filter(el => el.postId === post.postId)[0].tags);
         const defaultTagsList = filterValidTags.map(el => createOption(el[0]));
         setDefaultTags(defaultTagsList);
         setValue(defaultTagsList);
@@ -55,7 +54,7 @@ export default function SelectCreatable({ changeTags, post }) {
       defaultOptions
       defaultValue={defaultTags}
       inputValue={inputValue}
-      onChange={(newValue) => { setValue(newValue); changeTags([newValue, defaultTags])}}
+      onChange={(newValue) => { setValue(newValue); changeTags([newValue, defaultTags]) }}
       onInputChange={(newValue) => setInputValue(newValue.toLowerCase())}
       isClearable
       closeMenuOnSelect={false}

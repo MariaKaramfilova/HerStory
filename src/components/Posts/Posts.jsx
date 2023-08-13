@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Col, Container, Row, ToggleButton, ToggleButtonGroup } from 'react-bootstrap'
-import { getAllPosts } from '../../services/post.services.js';
+import { getAllComments, getAllPosts } from '../../services/post.services.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import PostsDetails from './PostsDetails.jsx';
 import PropTypes from "prop-types";
@@ -15,36 +15,40 @@ export default function Posts({ searchTerm, userName, tag }) {
   const [selectedButton, setSelectedButton] = useState(1);
   const navigate = useNavigate();
   const params = useParams();
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedInUser, user } = useContext(AuthContext);
 
   useEffect(() => {
-
-    setLoading(true);
-    
-    getAllPosts()
-    .then(snapshot => {
-        let result = snapshot;
+    const fetchPosts = async () => {
+      try {
+        setLoading(true);
+        let result = await getAllPosts();
         if (searchTerm) {
-          result = snapshot.filter(el => {
+          result = result.filter(el => {
             return el.title.split(' ').filter(el => el.toLowerCase().startsWith(searchTerm.toLowerCase())).length > 0;
           });
         } else if (params.type === "tag") {
-          console.log(snapshot);
-          result = snapshot.filter(el => Object.keys(el.tags).includes(tag));
+          result = result.filter(el => Object.keys(el.tags).filter(el => el.toLowerCase().startsWith(tag.toLowerCase())).length > 0);
         }
 
         if (filter === 'new') {
           result = result.sort((a, b) => b.createdOn - a.createdOn);
-        } else {
+        } else if (filter === 'upvoted') {
           result = result.sort((a, b) => Object.keys(b.upvotedBy).length - Object.keys(a.upvotedBy).length);
+        } else {
+          result = result.sort((a, b) => Object.keys(b.hasComment).length - Object.keys(a.hasComment).length);
         }
 
-        let data = loggedInUser ? result : result.slice(0, result.length <= 10 ? result.length : 10);
+        let data = user ? result : result.slice(0, result.length <= 10 ? result.length : 10);
         setRenderedPosts(userName ? data.filter(el => el.author === userName) : data);
-      })
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-  }, [filter, searchTerm, loggedInUser, userName, tag, params.type]);
+      } catch (err) {
+        setError(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchPosts();
+  }, [filter, searchTerm, user, userName, tag, params.type]);
+
 
   // Need to fix this with error pages - check for lib
   if (error) {
@@ -70,12 +74,13 @@ export default function Posts({ searchTerm, userName, tag }) {
       {searchTerm == undefined && (<Container className='mb-3 mt-5'>
         <Row style={{ maxWidth: "fit-content" }}>
           <Col style={{ maxWidth: "fit-content" }}>
-            <h5>Filter by:</h5>
+            <h5>Sort by:</h5>
           </Col>
           <Col>
             <ToggleButtonGroup type="radio" name="options" value={selectedButton} className='w-100'>
-              <ToggleButton id="tbg-radio-1" value={1} onClick={() => { setFilter('new'); setSelectedButton(1) }} variant="danger">New posts</ToggleButton>
-              <ToggleButton id="tbg-radio-2" value={2} onClick={() => { setFilter('upvoted'); setSelectedButton(2) }} variant="danger">Upvoted posts</ToggleButton>
+              <ToggleButton id="tbg-radio-1" value={1} onClick={() => { setFilter('new'); setSelectedButton(1) }} variant='outline-danger'>newest</ToggleButton>
+              <ToggleButton id="tbg-radio-2" value={2} onClick={() => { setFilter('upvoted'); setSelectedButton(2) }} variant="outline-danger">highest vote</ToggleButton>
+              <ToggleButton id="tbg-radio-3" value={3} onClick={() => { setFilter('commented'); setSelectedButton(3) }} variant="outline-danger">most comments</ToggleButton>
             </ToggleButtonGroup>
           </Col>
         </Row>

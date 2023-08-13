@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import moment from "moment";
-import { Card, Image, Button} from "react-bootstrap";
+import { Card, Image, Button } from "react-bootstrap";
 import { getUserByUsername } from "../../services/users.services";
 import { Link, useNavigate } from "react-router-dom";
-import { upvotePost } from "../../services/post.services";
-import { downvotePost } from "../../services/post.services";
 import { AuthContext } from "../../context/AuthContext";
 import { deletePost } from "../../services/post.services";
-import  ViewUpvoted  from "../../views/ViewUpvoted/ViewUpvoted";
 import './PostDetails.css';
 import PostTags from "../PostTags/PostTags.jsx";
 import PostUpvotes from "./PostUpvotes";
@@ -105,21 +102,21 @@ export default function PostsDetails({ ...post }) {
             paddingRight: "5px",
           }}
         >
-           {post.content.split(' ').length > 150 ? (
-        <>
-          {limitContent(post.content)}
-          <Button
-            type="submit"
-            variant="dark"
-            onClick={() => navigate(`/detailed-post-view/${post.id}`)}
-            style={{ marginTop: "10px" }}
-          >
-            Continue Reading
-          </Button>
-        </>
-      ) : (
-        post.content
-      )}
+          {post.content.split(' ').length > 150 ? (
+            <>
+              {limitContent(post.content)}
+              <Button
+                type="submit"
+                variant="dark"
+                onClick={() => navigate(`/detailed-post-view/${post.id}`)}
+                style={{ marginTop: "10px" }}
+              >
+                Continue Reading
+              </Button>
+            </>
+          ) : (
+            post.content
+          )}
         </Card>
         <div className={`media-element ${typeFile}`}>
           <Card>
@@ -145,7 +142,7 @@ export default function PostsDetails({ ...post }) {
         {(userRole == "admin" || userName === post.author)  && (<Button variant="outline-dark" style={{ marginRight: '0.5em' }} onClick={handleDeletePost}>Delete post</Button>)}
         <PostTags post={post}/>
       </Card.Body>
-      <PostUpvotes post={post}/>
+      {post && <PostUpvotes post={post} />}
     </Card>
   );
 }
