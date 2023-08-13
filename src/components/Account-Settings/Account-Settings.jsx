@@ -65,6 +65,7 @@ const AccountSettings = () => {
         setProfilePictureURL(data);
 
         setLoading(false);
+        window.location.reload();
         alert('You have successfully changed your profile picture! Please refresh the page to see your new profile picture!');
       } catch (error) {
         console.error("Error uploading profile picture:", error);
