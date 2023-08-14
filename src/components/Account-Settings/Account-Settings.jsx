@@ -10,6 +10,7 @@ import { updateProfileEmail } from "../../services/users.services";
 const AccountSettings = () => {
   const { loggedInUser, user } = useContext(AuthContext);
   const [profilePictureURL, setProfilePictureURL] = useState("https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png");
+  const [prevProfilePictureURL, setPrevProfilePictureURL] = useState(profilePictureURL);
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(null);
   const [firstName, setFirstName] = useState("");
@@ -19,6 +20,7 @@ const AccountSettings = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [isPhotoSelected, setIsPhotoSelected] = useState(false);
+  const [isRandomAvatarDisabled, setIsRandomAvatarDisabled] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -32,6 +34,8 @@ const AccountSettings = () => {
       setEmail(loggedInUser.email);
       setProfilePictureURL(loggedInUser.profilePictureURL ||
         "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png")
+      setPrevProfilePictureURL(loggedInUser.profilePictureURL ||
+        "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png");
       setUsername(loggedInUser.username);
       setUserRole(loggedInUser.role);
       setPhone(loggedInUser.phone);
@@ -57,12 +61,38 @@ const AccountSettings = () => {
     }
   }
 
+  function switchToPrevProfilePictureURL() {
+    setProfilePictureURL(prevProfilePictureURL);
+  }
+
+  async function createFileFromUrl(url) {
+    let response = await fetch(url);
+    let data = await response.blob();
+    let metadata = {
+      type: 'image/jpg'
+    };
+    let file = new File([data], `${crypto.randomUUID()}.jpg`, metadata);
+    return file;
+  }
+
+  const handleClickRandomAvatar = async () => {
+    try {
+      const image = await fetch(`https://api.dicebear.com/6.x/personas/jpg?seed=${crypto.randomUUID()}`);
+      setProfilePictureURL(image.url);
+      const file = await createFileFromUrl(image.url);
+      setPhoto(file);
+      setIsRandomAvatarDisabled(true);
+    } catch (error) {
+      setError(error);
+    }
+  }
+
   async function handleClick() {
     if (photo && username) {
       try {
         const data = await updateProfilePic(photo, username);
-        console.log(data);
         setProfilePictureURL(data);
+        setPrevProfilePictureURL(data);
 
         setLoading(false);
         window.location.reload();
@@ -214,6 +244,25 @@ const AccountSettings = () => {
             style={{ fontSize: "14px", color: "gray", fontWeight: "normal" }}
           >
             @{username}
+          </div>
+          <div className="d-flex">
+            {!isRandomAvatarDisabled ? (<Button onClick={handleClickRandomAvatar}>
+              Generate random avatar
+            </Button>
+            ) : (
+              <Button onClick={() => {
+                handleClick();
+                setIsRandomAvatarDisabled(true);
+              }}>
+                Upload
+              </Button>
+            )}
+            {isRandomAvatarDisabled && <Button onClick={() => {
+              setIsRandomAvatarDisabled(false);
+              switchToPrevProfilePictureURL();
+            }}>
+              Cancel
+            </Button>}
           </div>
         </div>
       </div>
