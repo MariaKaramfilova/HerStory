@@ -11,7 +11,6 @@ import { Link, useNavigate } from "react-router-dom";
 function SideBar() {
   const [forumUsers, setForumUsers] = useState("");
   const [forumPosts, setForumPosts] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [filteredPosts, setFilteredPosts] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
@@ -59,7 +58,7 @@ function SideBar() {
       <div className="row align-items-center">
         <div className="col-auto min-vh-100 w-100 bg-light py-4 px-4">
           <Container style={{ height: "30px" }}>
-            {!forumPosts || !forumUsers ? (
+            {!forumUsers || !forumPosts ? (
               <Skeleton />
             ) : (
               <Row>
