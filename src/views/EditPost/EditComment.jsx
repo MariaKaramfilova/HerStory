@@ -1,7 +1,5 @@
 import { database } from "../config/firebase.js";
-import { get, ref, query, orderByChild, equalTo, push, update, remove } from "firebase/database";
-import { setFileToStorage } from "./storage.services.js";
-
+import { ref,  update, } from "firebase/database";
 
 export const editComment = async (commentId, newContent) => {
     const commentRef = ref(database, `comments/${commentId}`);

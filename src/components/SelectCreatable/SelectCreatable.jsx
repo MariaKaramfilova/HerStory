@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import CreatableSelect from 'react-select/creatable';
 import makeAnimated from 'react-select/animated';
 import { getAllTags } from '../../services/tag.services.js';
-import { getPostsByAuthor, removePostTags } from '../../services/post.services.js';
+import { getPostsByAuthor } from '../../services/post.services.js';
+import PropTypes from "prop-types";
 
 export default function SelectCreatable({ changeTags, post }) {
   const animatedComponents = makeAnimated();
@@ -64,3 +65,8 @@ export default function SelectCreatable({ changeTags, post }) {
     />
   )
 }
+
+SelectCreatable.propTypes = {
+  changeTags: PropTypes.func.isRequired,
+  post: PropTypes.object.isRequired,
+};

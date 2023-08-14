@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, Image } from "react-bootstrap";
+import { Card } from "react-bootstrap";
+import PropTypes from "prop-types";
 
 export default function ViewUpvoted({ upvotedBy }) {
   return (
@@ -33,3 +34,7 @@ export default function ViewUpvoted({ upvotedBy }) {
     </Card>
   );
 }
+
+ViewUpvoted.propTypes = {
+  children: PropTypes.array.isRequired,
+};

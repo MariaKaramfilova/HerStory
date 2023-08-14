@@ -98,6 +98,6 @@ Comment.propTypes = {
     commentId: PropTypes.string,
     SetRefreshComments: PropTypes.func,
     refreshComments: PropTypes.bool,
-  
+    commentPostId: PropTypes.string,
   };
   

@@ -7,6 +7,7 @@ import { Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ViewUpvoted from "../../views/ViewUpvoted/ViewUpvoted";
 import _ from 'lodash';
+import PropTypes from "prop-types";
 
 export default function PostUpvotes({ post }) {
   const navigate = useNavigate();
@@ -118,3 +119,8 @@ export default function PostUpvotes({ post }) {
     </div>
   );
 }
+
+PostUpvotes.propTypes = {
+  post: PropTypes.object.isRequired,
+};
+
