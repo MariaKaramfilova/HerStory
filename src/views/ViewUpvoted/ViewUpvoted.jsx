@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { getUserByUsername } from "../../services/users.services";
+import PropTypes from "prop-types";
 
 export default function ViewUpvoted({ upvotedBy }) {
   const [usersData, setUsersData] = useState([]);
@@ -61,3 +62,7 @@ export default function ViewUpvoted({ upvotedBy }) {
     </Card>
   );
 }
+
+ViewUpvoted.propTypes = {
+  children: PropTypes.array.isRequired,
+};

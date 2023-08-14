@@ -45,12 +45,24 @@ export const createPost = async (title, content = null, topic, file = null, hand
     });
 }
 
-export const editPost = async (postId, title, topic, content = null) => {
-  const updates = {
-    title,
-    content,
-    topic,
-  };
+export const editPost = async (postId, title, topic, content = null, file = null) => {
+  let updates;
+
+  if(content){
+     updates = {
+      title,
+      content,
+      topic,
+    };
+  }
+
+  if(file){
+    updates = {
+      title,
+      file: file ? await setFileToStorage(file) : null,
+      topic,
+    };
+  }
 
   try {
     await update(ref(database, `posts/${postId}`), updates);
@@ -83,6 +95,23 @@ export const createComment = async (content = null, author, postId, userUid) => 
 
       return getCommentsByPostHandle(result.key);
     });
+}
+
+export const getCommentById = async (commentId) => {
+  const commentRef = ref(database, `comments/${commentId}`);
+
+  try {
+    const commentSnapshot = await get(commentRef);
+    if (commentSnapshot.exists()) {
+      const commentData = commentSnapshot.val();
+      return commentData;
+    } else {
+      throw new Error('Comment not found');
+    }
+  } catch (error) {
+    console.error('Error fetching comment:', error);
+    throw error;
+  }
 }
 
 export const getCommentsByPostHandle = async (postId) => {
@@ -124,6 +153,21 @@ export const deleteCommentID = async (commentID, postId) => {
   }
 
 }
+
+export const editComment = async (commentId, newContent) => {
+  const commentRef = ref(database, `comments/${commentId}`);
+  const editedCommentData = {
+    content: newContent,
+    editedOn: Date.now(), 
+  };
+
+  try {
+    await update(commentRef, editedCommentData);
+  } catch (error) {
+    console.error('Error editing comment:', error);
+    throw error;
+  }
+};
 
 
 export async function deletePost(postId) {

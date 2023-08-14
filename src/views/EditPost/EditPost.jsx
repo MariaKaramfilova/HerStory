@@ -4,18 +4,25 @@ import { Button, Form, } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import SelectCreatable from '../../components/SelectCreatable/SelectCreatable.jsx';
 import { updateTags } from '../../services/tag.services.js';
+import DropzoneComponent from '../../components/Dropzone/Dropzone';
 
 const EditPost = () => {
   const [post, setPost] = useState(null);
   const [editedTitle, setEditedTitle] = useState('');
   const [editedTopic, setEditedTopic] = useState('');
   const [editedContent, setEditedContent] = useState('');
+  const [editedFile, setEditedFile] = useState(null);
   const [tags, setTags] = useState([]);
 
   console.log(tags);
+  console.log(post);
 
   const handleSelectChange = (e) => {
     setTags(e);
+  }
+
+  const handleFileChange = (e) => {
+    setEditedFile(e.target.files[0]);
   }
 
   const params = useParams();
@@ -31,6 +38,11 @@ const EditPost = () => {
         setEditedTitle(postData.title);
         setEditedTopic(postData.topic)
         setEditedContent(postData.content);
+
+        if (postData.file) {
+          setEditedFile(postData.file); // Include edited file only if it exists
+        }
+
       } catch (error) {
         console.error('Error fetching post data:', error);
       }
@@ -43,9 +55,15 @@ const EditPost = () => {
     e.preventDefault();
 
     try {
-      await editPost(currentPostID, editedTitle, editedTopic, editedContent);
-      const tagsSimple = tags[0].map(el => el.value);
+     
+      await editPost(currentPostID, editedTitle, editedTopic, editedContent, editedFile);
 
+      let tagsSimple;
+
+      if(tags[0]){
+        tagsSimple = tags[0].map(el => el.value);
+      }
+      
       if (tags.length && tags[0]) {
         await addPostTags(currentPostID, tagsSimple);
         await updateTags(tagsSimple);
@@ -62,6 +80,7 @@ const EditPost = () => {
       console.error('Error updating post:', error);
     }
   };
+
 
   if (!post) {
     return <p>Loading...</p>;
@@ -90,7 +109,7 @@ const EditPost = () => {
           />
 
         </Form.Group>
-        <Form.Group controlId="editContent">
+        {post.content && <Form.Group controlId="editContent">
           <Form.Label>Content</Form.Label>
           <Form.Control
             as="textarea"
@@ -98,7 +117,10 @@ const EditPost = () => {
             value={editedContent}
             onChange={(e) => setEditedContent(e.target.value)}
           />
-        </Form.Group>
+        </Form.Group>}
+        
+        {post.file && (<DropzoneComponent setFile={setEditedFile} />)}
+
         <Form.Label>Add post tags</Form.Label>
         <SelectCreatable changeTags={handleSelectChange} post={post} />
         <hr />

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { getPostsByAuthor } from '../../services/post.services.js';
 import { Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import PropTypes from "prop-types";
 
 export default function PostTags({ post }) {
   const [tags, setTags] = useState('');
@@ -40,3 +41,7 @@ export default function PostTags({ post }) {
     </Container>
   )
 }
+
+PostTags.propTypes = {
+  post: PropTypes.object.isRequired,
+};

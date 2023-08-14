@@ -5,7 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import { Col, Container, Row, Button } from "react-bootstrap";
 import PostsDetails from "../Posts/PostsDetails.jsx";
 
-function SideBar(props) {
+function SideBar() {
   const [forumUsers, setForumUsers] = useState("");
   const [forumPosts, setForumPosts] = useState("");
   const [loading, setLoading] = useState(false);
@@ -148,3 +148,4 @@ const styles = {
 };
 
 export default SideBar;
+

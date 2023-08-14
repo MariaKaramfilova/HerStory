@@ -9,6 +9,7 @@ import './PostDetails.css';
 import PostTags from "../PostTags/PostTags.jsx";
 import PostUpvotes from "./PostUpvotes";
 
+
 export default function PostsDetails({ ...post }) {
 
   const navigate = useNavigate();

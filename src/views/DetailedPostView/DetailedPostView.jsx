@@ -6,6 +6,7 @@ import { Link, useNavigate, useParams, } from 'react-router-dom';
 import Comment from "../../components/Comments/Comments";
 import PostTags from "../../components/PostTags/PostTags.jsx";
 import PostUpvotes from "../../components/Posts/PostUpvotes.jsx";
+import Skeleton from 'react-loading-skeleton';
 import _ from 'lodash';
 
 export default function DetailedPostView() {
@@ -35,7 +36,9 @@ export default function DetailedPostView() {
           upvotedBy: currentPost.upvotedBy ? Object.keys(currentPost.upvotedBy) : [],
           downvotedBy: currentPost.downvotedBy ? Object.keys(currentPost.downvotedBy) : [],
         }
+
         setPost(updatedPost);
+
         if (post.file) {
           if (post.file.includes("mp4")) {
             setTypeFile("video");
@@ -55,7 +58,9 @@ export default function DetailedPostView() {
         console.error('Error fetching post and comments:', error);
       })
       .finally(() => setLoading(false));
-  }, [refreshComments]);
+  }, [refreshComments, currentPostID, post.file]);
+
+  console.log(post.file);
 
   const postDate = new Date(post.createdOn);
 
@@ -120,7 +125,17 @@ export default function DetailedPostView() {
 
         <div className="col-8">
 
-          <h6>Posted by <Link to={`/account/${post.userId}`}>{post.author}</Link> on {postDate.toLocaleString()} | {post.topic}</h6>
+        {loading ? (
+            <Skeleton width={100} />
+          ) : (
+            <h6>
+              Posted by{" "}
+              <Link to={`/account/${post.userId}`}>
+                {post.author}
+              </Link>{" "}
+              on {postDate.toLocaleString()} | {post.topic}
+            </h6>
+          )}
         </div>
 
         {(userRole === 'admin' || post.author === userName) && (
@@ -136,20 +151,25 @@ export default function DetailedPostView() {
       </div>
 
       <row className="mt-1">
-        <h1>{post.title}</h1>
-        <p>{post.content}</p>
-
-        <div className={`media-element ${typeFile}`}>
-          {typeFile === "image" && (
-            <Image src={post.file} fluid style={{ width: "60%" }} />
-          )}
-          {typeFile === "video" && (
-            <video controls className="media-element">
-              <source src={post.file} type="video/mp4" />
-            </video>
-          )}
-        </div>
-
+ 
+        <h1>{loading ? <Skeleton width={200} /> : post.title}</h1>
+        {loading ? (
+          <Skeleton count={3} />
+        ) : (
+          <>
+            <p>{post.content}</p>
+            <div className={`media-element ${typeFile}`}>
+              {typeFile === "image" && (
+                <Image src={post.file} fluid style={{ width: "40%" }} />
+              )}
+              {typeFile === "video" && (
+                <video controls className="media-element">
+                  <source src={post.file} type="video/mp4" />
+                </video>
+              )}
+            </div>
+          </>
+        )}
       </row>
 
       {loggedInUser ? (<div className="row">
@@ -177,8 +197,15 @@ export default function DetailedPostView() {
       {error && <Alert variant='danger'>{error}</Alert>}
       {post && <PostTags post={post} />}
       <hr />
-      <h2>Comments</h2>
-      {commentsToShow}
+      {loading ? (
+        <Skeleton count={5} height={40} />
+      ) : (
+        <>
+          <hr />
+          <h2>Comments</h2>
+          {commentsToShow}
+        </>
+      )}
     </div>
 
   )

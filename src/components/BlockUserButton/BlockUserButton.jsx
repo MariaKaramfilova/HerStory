@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { blockUser, unblockUser } from '../../services/users.services.js';
 import { Button } from 'react-bootstrap';
+import PropTypes from "prop-types";
 
 export default function BlockUserButton({ user }) {
   const [blockedStatus, setBlockedStatus] = useState(user.blockedStatus);
@@ -39,3 +40,7 @@ export default function BlockUserButton({ user }) {
     </>
   )
 }
+
+BlockUserButton.propTypes = {
+  user: PropTypes.object.isRequired,
+};
