@@ -120,7 +120,9 @@ function SideBar(props) {
                 }}
               >
                 <h3 style={{ marginRight: "10px" }}>{selectedTopic}</h3>
-                <Button onClick={() => setSelectedTopic("")} variant="dark" >Clear</Button>
+                <Button onClick={() => setSelectedTopic("")} variant="dark">
+                  Clear
+                </Button>
               </div>
               {filteredPosts.map((post) => (
                 <PostsDetails key={post.postId} {...post} />

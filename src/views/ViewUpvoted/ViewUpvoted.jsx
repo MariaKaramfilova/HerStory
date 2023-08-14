@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Image } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { getUserByUsername } from "../../services/users.services";
 
 export default function ViewUpvoted({ upvotedBy }) {
+  const [usersData, setUsersData] = useState([]);
+
+  useEffect(() => {
+    const fetchUsersData = async () => {
+      const usersDataArray = await Promise.all(
+        upvotedBy.map(async (username) => {
+          const snapshot = await getUserByUsername(username);
+          return snapshot.val();
+        })
+      );
+      setUsersData(usersDataArray);
+    };
+
+    fetchUsersData();
+  }, [upvotedBy]);
+
   return (
     <Card>
       <Card.Header style={{ textAlign: "center", fontSize: "40px" }}>
@@ -9,10 +27,10 @@ export default function ViewUpvoted({ upvotedBy }) {
       </Card.Header>
       <Card.Body>
         <ul style={{ listStyle: "none", padding: 0 }}>
-          {upvotedBy.length > 0 ? (
-            upvotedBy.map((person) => (
+          {usersData.length > 0 ? (
+            usersData.map((user) => (
               <li
-                key={crypto.randomUUID()}
+                key={user.userId}
                 style={{
                   fontSize: "30px",
                   display: "flex",
@@ -20,7 +38,17 @@ export default function ViewUpvoted({ upvotedBy }) {
                   marginBottom: "10px",
                 }}
               >
-                {person}
+                 <Link to={`/account/${user.uid}`}>
+                 <Image
+                  src={user.profilePictureURL}
+                  alt={`Profile Picture of ${user.username}`}
+                  roundedCircle
+                  width={50}
+                  height={50}
+                  style={{ marginRight: "10px" }}
+                />
+                </Link>
+                <Link to={`/account/${user.uid}`}>{user.username}</Link>
               </li>
             ))
           ) : (
