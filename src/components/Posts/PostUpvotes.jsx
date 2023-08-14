@@ -64,6 +64,8 @@ export default function PostUpvotes({ post }) {
     }
   };
 
+  const isAuthorOrAdmin = loggedInUser && (loggedInUser.role === 'admin' || loggedInUser.username === post.author);
+
   return (
     <div className="d-flex">
       <Button
@@ -84,7 +86,7 @@ export default function PostUpvotes({ post }) {
 
       <span style={{ marginRight: "7px" }}>{vote}</span>
 
-      {post.upvotedBy && (
+      {isAuthorOrAdmin && post.upvotedBy ? (
         <span
           style={{ cursor: "pointer", marginRight: "7px" }}
           onClick={() => {
@@ -93,7 +95,12 @@ export default function PostUpvotes({ post }) {
         >
           Votes
         </span>
-      )}
+      ) : (
+      <span
+        style={{ cursor: "pointer", marginRight: "7px" }}
+      >
+        Votes
+      </span>)}
       {showUpvoted && (
         <Modal show={showUpvoted} onHide={() => setShowUpvoted(false)}>
           <Modal.Header closeButton>
