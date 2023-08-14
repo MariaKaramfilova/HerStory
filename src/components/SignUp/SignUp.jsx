@@ -2,7 +2,7 @@ import './SignUp.css'
 import React, { useContext, useState } from 'react';
 import { Alert, Button, Form } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext';
-import { createUserByUsername, getUserByUsername, getUserData } from '../../services/users.services';
+import { createUserByUsername, getAllUsers, getUserByUsername, getUserData } from '../../services/users.services';
 import { registerUser } from '../../services/auth.services';
 import { Link, useNavigate } from 'react-router-dom/dist';
 import { fetchSignInMethodsForEmail, getAuth } from 'firebase/auth';
@@ -68,9 +68,11 @@ export default function RegistrationForm() {
     await createUserByUsername(firstName, lastName, credential.user.uid, credential.user.email, userName, profilePictureURL);
     const loggedUserSnapshot = await getUserData(credential.user.uid);
     const loggedInUser = Object.values(loggedUserSnapshot.val()).find((el) => el.uid === credential.user.uid);
+    const allUsers = await getAllUsers();
     setUser({
       user: credential.user,
-      loggedInUser
+      loggedInUser,
+      allUsers
     });
     navigate('/success-register');
   }
