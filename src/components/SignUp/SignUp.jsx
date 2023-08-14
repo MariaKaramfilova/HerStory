@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom/dist';
 import { fetchSignInMethodsForEmail, getAuth } from 'firebase/auth';
 export default function RegistrationForm() {
 
-  const [profilePictureURL, setProfilePictureURL] = useState('https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png');
+  const [profilePictureURL, setProfilePictureURL] = useState('https://shorturl.at/jtQ19');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');

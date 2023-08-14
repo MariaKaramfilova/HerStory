@@ -6,17 +6,19 @@ import RouteElement from './components/Route-Elements/RouteElement';
 import Header from './components/Header/Header';
 import SideBar from './components/Sidebar/Sidebar';
 import "react-loading-skeleton/dist/skeleton.css";
+import PostsContextProvider from './components/PostsContextProvider/PostsContextProvider.jsx';
 
 function App() {
 
   return (
 
     <Router>
-      <RoutePage>
-        <Header />
-        <div className="container-fluid">
+      <PostsContextProvider>
+        <RoutePage>
+          <Header />
+          <div className="container-fluid">
 
-          <div className="row">
+            <div className="row">
 
           <div className="col-1" style={{ backgroundColor: '#f8f9fa', width: '25%', margin: 0  }}>
           {/* Put content for the right column here */}
@@ -29,8 +31,9 @@ function App() {
             
           </div>
 
-        </div>
-      </RoutePage>
+          </div>
+        </RoutePage>
+      </PostsContextProvider>
     </Router>
   )
 }

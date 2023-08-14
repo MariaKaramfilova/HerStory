@@ -14,9 +14,6 @@ const EditPost = () => {
   const [editedFile, setEditedFile] = useState(null);
   const [tags, setTags] = useState([]);
 
-  console.log(tags);
-  console.log(post);
-
   const handleSelectChange = (e) => {
     setTags(e);
   }

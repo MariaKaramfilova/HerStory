@@ -1,32 +1,29 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Badge, Container } from 'react-bootstrap'
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import { Button } from 'react-bootstrap';
-import { blockUser, unblockUser } from '../../services/users.services.js';
 import { useNavigate } from 'react-router-dom';
-import { getAllPosts } from '../../services/post.services.js';
 import BlockUserButton from '../BlockUserButton/BlockUserButton.jsx';
 import MakeAdminButton from '../MakeAdminButton/MakeAdminButton.jsx';
+import { PostsContext } from '../../context/PostsContext.js';
 
 export default function UsersDetails(user) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [postsCount, setPostsCount] = useState('');
   const navigate = useNavigate();
+  const { allPosts } = useContext(PostsContext);
 
   useEffect(() => {
-    setLoading(true);
+    if (_.isEmpty(allPosts)) {
+      return;
+    }
+    setPostsCount(allPosts.filter(el => el.author === user.username).length);
 
-    getAllPosts()
-      .then(snapshot => {
-        setPostsCount(snapshot.filter(el => el.author === user.username).length);
-      })
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-  }, [user]);
+  }, [user, allPosts]);
 
   const handleGoToDetails = () => {
     navigate(`/account/${user.uid}`);

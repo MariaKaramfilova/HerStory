@@ -1,4 +1,4 @@
-import { createComment, getCommentsByPostHandle, getPostById, deletePost } from "../../services/post.services";
+import { createComment, getCommentsByPostHandle, getPostById, deletePost, getAllPosts } from "../../services/post.services";
 import { Alert, Button, Form, Image } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext.js';
 import React, { useContext, useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ import PostTags from "../../components/PostTags/PostTags.jsx";
 import PostUpvotes from "../../components/Posts/PostUpvotes.jsx";
 import Skeleton from 'react-loading-skeleton';
 import _ from 'lodash';
+import { PostsContext } from "../../context/PostsContext.js";
 
 export default function DetailedPostView() {
 
@@ -21,6 +22,7 @@ export default function DetailedPostView() {
   const [loading, setLoading] = useState(false);
   const [userRole, setUserRole] = useState(loggedInUser ? loggedInUser.userRole : null);
   const [userName, setUserName] = useState(loggedInUser ? loggedInUser.username : null);
+  const { allPosts, setAllPosts } = useContext(PostsContext);
 
   const params = useParams();
   const currentPostID = params.id;
@@ -60,8 +62,6 @@ export default function DetailedPostView() {
       .finally(() => setLoading(false));
   }, [refreshComments, currentPostID, post.file]);
 
-  console.log(post.file);
-
   const postDate = new Date(post.createdOn);
 
   async function submitComment(e) {
@@ -94,6 +94,8 @@ export default function DetailedPostView() {
     if (confirmDelete) {
       try {
         await deletePost(currentPostID);
+        let result = await getAllPosts();
+        setAllPosts((prev) => ({ ...prev, allPosts: result }));
         alert('Your post has been deleted!')
         navigate('/home')
       } catch (error) {
@@ -125,7 +127,7 @@ export default function DetailedPostView() {
 
         <div className="col-8">
 
-        {loading ? (
+          {loading ? (
             <Skeleton width={100} />
           ) : (
             <h6>
@@ -151,7 +153,7 @@ export default function DetailedPostView() {
       </div>
 
       <row className="mt-1">
- 
+
         <h1>{loading ? <Skeleton width={200} /> : post.title}</h1>
         {loading ? (
           <Skeleton count={3} />

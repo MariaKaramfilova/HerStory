@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Alert, Button, Form, Card } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
-import { updateProfilePhone, updateProfilePic } from "../../services/users.services";
+import { getAllUsers, updateProfilePhone, updateProfilePic } from "../../services/users.services";
 import { updateEmail, updatePassword, deleteUser, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { Link } from "react-router-dom/dist";
 import { updateProfileEmail } from "../../services/users.services";
@@ -9,7 +9,7 @@ import Skeleton from "react-loading-skeleton";
 
 
 const AccountSettings = () => {
-  const { loggedInUser, user } = useContext(AuthContext);
+  const { loggedInUser, user, setUser } = useContext(AuthContext);
   const [profilePictureURL, setProfilePictureURL] = useState('');
   const [prevProfilePictureURL, setPrevProfilePictureURL] = useState(profilePictureURL);
   const [photo, setPhoto] = useState(null);
@@ -36,10 +36,8 @@ const AccountSettings = () => {
       setFirstName(loggedInUser.firstName);
       setSurname(loggedInUser.lastName);
       setEmail(loggedInUser.email);
-      setProfilePictureURL(loggedInUser.profilePictureURL ||
-        "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png")
-      setPrevProfilePictureURL(loggedInUser.profilePictureURL ||
-        "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png");
+      setProfilePictureURL(loggedInUser.profilePictureURL || '../../assets/basic_avatar.png')
+      setPrevProfilePictureURL(loggedInUser.profilePictureURL || '../../assets/basic_avatar.png');
       setUsername(loggedInUser.username);
       setUserRole(loggedInUser.role);
       setPhone(loggedInUser.phone);
@@ -198,6 +196,8 @@ const AccountSettings = () => {
           try {
             await deleteUser(user);
             alert('Your account has been deleted.');
+            const allUsers = await getAllUsers();
+            setUser((prev) => ({...prev, allUsers}));
           } catch (error) {
             console.error('An error occurred while deleting the account:', error);
             alert('An error occurred while deleting your account. Please try again.');

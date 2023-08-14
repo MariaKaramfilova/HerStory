@@ -20,7 +20,6 @@ const SearchBar = () => {
     } else {
       setCheckType("by title");
       setSearchType("posts");
-
     }
   }
 
@@ -29,8 +28,10 @@ const SearchBar = () => {
       setUserRole('user');
       return;
     }
-    setUserRole(loggedInUser.role);
-  }, [loggedInUser])
+    if (loggedInUser) {
+      setUserRole(loggedInUser.role);
+    }
+  }, [loggedInUser, user])
 
   const handleSearchClick = (e) => {
     e.preventDefault();

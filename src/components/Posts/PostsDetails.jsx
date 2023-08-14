@@ -4,24 +4,30 @@ import { Card, Image, Button } from "react-bootstrap";
 import { getUserByUsername } from "../../services/users.services";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { deletePost } from "../../services/post.services";
+import { deletePost, getAllPosts } from "../../services/post.services";
 import './PostDetails.css';
 import PostTags from "../PostTags/PostTags.jsx";
 import PostUpvotes from "./PostUpvotes";
+import Skeleton from "react-loading-skeleton";
+import { PostsContext } from "../../context/PostsContext.js";
 
 
 export default function PostsDetails({ ...post }) {
 
   const navigate = useNavigate();
   const [authorData, setAuthorData] = useState('');
+  const [loading, setLoading] = useState(false);
   const [userRole, setUserRole] = useState('');
   const [userName, setUserName] = useState('');
   const [typeFile, setTypeFile] = useState('');
   const [isDeleted, setIsDeleted] = useState(false);
   const { user, loggedInUser } = useContext(AuthContext);
+  const { allPosts, setAllPosts } = useContext(PostsContext);
+
 
 
   useEffect(() => {
+    setLoading(true);
     (async () => {
       try {
         const snapshot = await getUserByUsername(post.author);
@@ -44,7 +50,10 @@ export default function PostsDetails({ ...post }) {
         }
       } catch (error) {
         console.error("Error fetching author data:", error);
+      } finally {
+        setLoading(false);
       }
+
     })();
 
   }, [loggedInUser]);
@@ -57,10 +66,12 @@ export default function PostsDetails({ ...post }) {
     e.preventDefault();
     const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
 
-    if(confirmDelete){
+    if (confirmDelete) {
       try {
         await deletePost(post.postId)
         alert('Post successfully deleted.');
+        let result = await getAllPosts();
+        setAllPosts((prev) => ({ ...prev, allPosts: result }));
         setIsDeleted(true);
       } catch (error) {
         alert(`Something went wrong ${error}`);
@@ -77,93 +88,97 @@ export default function PostsDetails({ ...post }) {
   };
 
   return (
-    
-    <Card className="mb-3 post-card" style={{ maxWidth: "100%" }}>
-      <Card.Header className="d-flex justify-content-between align-items-center" >
-      <div>
-        {authorData && (
-          <Link to={`/account/${post.userId}`}>
-            <Image
-              src={authorData.profilePictureURL}
-              alt="Profile Picture"
-              roundedCircle
-              width={60}
-              height={60}
-            />
-          </Link>
-        )}
-        <span className="ml-2" style={{ paddingLeft: "5px" }}>
-          <Link to={`/account/${post.userId}`}>{post.author}</Link>
-        </span>
-      </div>
-      {(userRole === "admin" || userName === post.author) && (
-        <Button variant="outline-dark" onClick={handleDeletePost}>
-          Delete post
-        </Button>
-      )}
-    </Card.Header>
-      <Card.Body>
-        <Card.Title>{post.title}</Card.Title>
-        <Card.Subtitle className="mb-2 text-muted">
-          {moment(post.createdOn).toString()}
-        </Card.Subtitle>
-        <Card
-          style={{
-            fontSize: "17px",
-            marginTop: "15px",
-            backgroundColor: "WhiteSmoke",
-            paddingLeft: "5px",
-            paddingRight: "5px",
-          }}
-        >
-          {post.content.split(' ').length > 150 ? (
-            <>
-              {limitContent(post.content)}
-              <Button
-                type="submit"
-                variant="outline-dark"
-                onClick={() => navigate(`/detailed-post-view/${post.id}`)}
-                style={{ marginTop: "10px" }}
-              >
-                Continue Reading
+    <>
+      {loading ? (<Skeleton height={300} style={{ marginBottom: "20px" }} />
+      ) : (
+        <Card className="mb-3 post-card" style={{ maxWidth: "100%" }}>
+          <Card.Header className="d-flex justify-content-between align-items-center" >
+            <div>
+              {authorData && (
+                <Link to={`/account/${post.userId}`}>
+                  <Image
+                    src={authorData.profilePictureURL}
+                    alt="Profile Picture"
+                    roundedCircle
+                    width={60}
+                    height={60}
+                  />
+                </Link>
+              )}
+              <span className="ml-2" style={{ paddingLeft: "5px" }}>
+                <Link to={`/account/${post.userId}`}>{post.author}</Link>
+              </span>
+            </div>
+            {(userRole === "admin" || userName === post.author) && (
+              <Button variant="outline-dark" onClick={handleDeletePost}>
+                Delete post
               </Button>
-            </>
-          ) : (
-            post.content
-          )}
+            )}
+          </Card.Header>
+          <Card.Body>
+            <Card.Title>{post.title}</Card.Title>
+            <Card.Subtitle className="mb-2 text-muted">
+              {moment(post.createdOn).toString()}
+            </Card.Subtitle>
+            <Card
+              style={{
+                fontSize: "17px",
+                marginTop: "15px",
+                backgroundColor: "WhiteSmoke",
+                paddingLeft: "5px",
+                paddingRight: "5px",
+              }}
+            >
+              {post.content.split(' ').length > 150 ? (
+                <>
+                  {limitContent(post.content)}
+                  <Button
+                    type="submit"
+                    variant="outline-dark"
+                    onClick={() => navigate(`/detailed-post-view/${post.id}`)}
+                    style={{ marginTop: "10px" }}
+                  >
+                    Continue Reading
+                  </Button>
+                </>
+              ) : (
+                post.content
+              )}
+            </Card>
+            <div className={`media-element ${typeFile}`}>
+
+              {typeFile === "image" && (
+                <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+                  <Image src={post.file} style={{ height: '320px', width: 'auto%', }} />
+                </div>
+              )}
+              {typeFile === "video" && (
+                <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+                  <video controls style={{ height: '320px', width: 'auto%', }}>
+                    <source src={post.file} type="video/mp4" />
+                  </video>
+                </div>
+              )}
+
+            </div>
+            <hr />
+            <div className="d-flex justify-content-between align-items-center mt-3">
+              <div>
+                <Button
+                  type="submit"
+                  variant="dark"
+                  onClick={() => navigate(`/detailed-post-view/${post.id}`)}
+                >
+                  Comment
+                </Button>
+
+              </div>
+              <PostTags post={post} />
+              {post && <PostUpvotes post={post} />}
+            </div>
+          </Card.Body>
         </Card>
-        <div className={`media-element ${typeFile}`}>
-       
-          {typeFile === "image" && (
-            <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-              <Image src={post.file} style={{ height: '320px', width: 'auto%', }} />
-            </div>
-          )}
-            {typeFile === "video" && (
-            <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-              <video controls style={{ height: '320px', width: 'auto%', }}>
-                <source src={post.file} type="video/mp4" />
-              </video>
-            </div>
-          )}
-         
-        </div>
-        <hr />
-        <div className="d-flex justify-content-between align-items-center mt-3">
-    <div>
-      <Button
-        type="submit"
-        variant="dark"
-        onClick={() => navigate(`/detailed-post-view/${post.id}`)}
-      >
-        Comment
-      </Button>
-  
-    </div>
-    <PostTags post={post} />
-    {post && <PostUpvotes post={post} />}
-  </div>
-</Card.Body>
-</Card>
+      )}
+    </>
   );
 }

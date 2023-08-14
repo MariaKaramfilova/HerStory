@@ -64,5 +64,5 @@ export default function ViewUpvoted({ upvotedBy }) {
 }
 
 ViewUpvoted.propTypes = {
-  children: PropTypes.array.isRequired,
+  upvotedBy: PropTypes.array.isRequired,
 };

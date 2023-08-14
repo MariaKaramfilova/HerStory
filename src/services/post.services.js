@@ -138,7 +138,6 @@ export const getAllComments = () => {
 };
 
 export const deleteCommentID = async (commentID, postId) => {
-  console.log(postId);
   const commentLocation = commentID;
   try {
     await remove(ref(database, `comments/${commentLocation}`));

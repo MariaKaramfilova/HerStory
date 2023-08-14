@@ -10,7 +10,7 @@ import Skeleton from "react-loading-skeleton";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { loggedInUser, loading } = useContext(AuthContext);
+  const { loggedInUser, user } = useContext(AuthContext);
 
   const renderAuthView = loggedInUser ? (
     <ProfileDropdown />
@@ -55,7 +55,7 @@ const Header = () => {
         <div className="col-1"></div>
         {/* this is just some empty space */}
         <div className="col-2">
-          {loading ? <Skeleton width={50} height={50} /> : renderAuthView}
+          {user === undefined ? <Skeleton width={50} height={50} /> : renderAuthView}
         </div>
       </div>
     </div>
