@@ -45,12 +45,24 @@ export const createPost = async (title, content = null, topic, file = null, hand
     });
 }
 
-export const editPost = async (postId, title, topic, content = null) => {
-  const updates = {
-    title,
-    content,
-    topic,
-  };
+export const editPost = async (postId, title, topic, content = null, file = null) => {
+  let updates;
+
+  if(content){
+     updates = {
+      title,
+      content,
+      topic,
+    };
+  }
+
+  if(file){
+    updates = {
+      title,
+      file: file ? await setFileToStorage(file) : null,
+      topic,
+    };
+  }
 
   try {
     await update(ref(database, `posts/${postId}`), updates);
