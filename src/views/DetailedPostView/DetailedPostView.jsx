@@ -36,7 +36,9 @@ export default function DetailedPostView() {
           upvotedBy: currentPost.upvotedBy ? Object.keys(currentPost.upvotedBy) : [],
           downvotedBy: currentPost.downvotedBy ? Object.keys(currentPost.downvotedBy) : [],
         }
+
         setPost(updatedPost);
+
         if (post.file) {
           if (post.file.includes("mp4")) {
             setTypeFile("video");
@@ -56,7 +58,9 @@ export default function DetailedPostView() {
         console.error('Error fetching post and comments:', error);
       })
       .finally(() => setLoading(false));
-  }, [refreshComments]);
+  }, [refreshComments, currentPostID, post.file]);
+
+  console.log(post.file);
 
   const postDate = new Date(post.createdOn);
 
@@ -156,7 +160,7 @@ export default function DetailedPostView() {
             <p>{post.content}</p>
             <div className={`media-element ${typeFile}`}>
               {typeFile === "image" && (
-                <Image src={post.file} fluid style={{ width: "60%" }} />
+                <Image src={post.file} fluid style={{ width: "40%" }} />
               )}
               {typeFile === "video" && (
                 <video controls className="media-element">
