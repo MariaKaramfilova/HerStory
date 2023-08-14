@@ -75,6 +75,7 @@ function SideBar() {
 
   return (
     <div className="container-fluid" style={styles.container}>
+      
       <div className="row align-items-center">
         <div className="col-auto min-vh-100 w-100 bg-light py-4 px-4">
           <Container style={{ height: "30px" }}>
@@ -136,7 +137,9 @@ function SideBar() {
             ""
           )}
         </div>
+
       </div>
+      
     </div>
   );
 }

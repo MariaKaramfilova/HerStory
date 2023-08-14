@@ -26,9 +26,7 @@ function App() {
             <div className="col">
               <RouteElement />
             </div>
-            <div className="col-1" style={{ backgroundColor: '#f8f9fa', width: '10%', margin: 0  }}>
-          {/* Put content for the right column here */}
-        </div>
+            
           </div>
 
         </div>
