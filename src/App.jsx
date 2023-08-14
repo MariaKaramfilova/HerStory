@@ -18,14 +18,17 @@ function App() {
 
           <div className="row">
 
-            <div className="col-3">
-              <SideBar />
-            </div>
+          <div className="col-1" style={{ backgroundColor: '#f8f9fa', width: '25%', margin: 0  }}>
+          {/* Put content for the right column here */}
+              <SideBar/>
+        </div>
 
             <div className="col">
               <RouteElement />
             </div>
-
+            <div className="col-1" style={{ backgroundColor: '#f8f9fa', width: '10%', margin: 0  }}>
+          {/* Put content for the right column here */}
+        </div>
           </div>
 
         </div>

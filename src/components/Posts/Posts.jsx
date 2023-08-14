@@ -75,16 +75,21 @@ export default function Posts({ searchTerm, userName, tag }) {
 
   return (
     <>
+            <div style={{ maxWidth: "80%" }}>
+                <h3>Welcome to HerStory</h3>
+                <p>Women`s Human Rights Forum: A place to connect, learn and act for gender equality. Join us today and be part of the change. 💜</p>
+            </div>
+
       {searchTerm == undefined && (<Container className='mb-3 mt-5'>
-        <Row style={{ maxWidth: "fit-content" }}>
+        <Row className="d-flex justify-content-center align-items-center">
           <Col style={{ maxWidth: "fit-content" }}>
             <h5>Sort by:</h5>
           </Col>
           <Col>
             <ToggleButtonGroup type="radio" name="options" value={selectedButton} className='w-100'>
-              <ToggleButton id="tbg-radio-1" value={1} onClick={() => { setFilter('new'); setSelectedButton(1) }} variant='outline-danger'>newest</ToggleButton>
-              <ToggleButton id="tbg-radio-2" value={2} onClick={() => { setFilter('upvoted'); setSelectedButton(2) }} variant="outline-danger">highest vote</ToggleButton>
-              <ToggleButton id="tbg-radio-3" value={3} onClick={() => { setFilter('commented'); setSelectedButton(3) }} variant="outline-danger">most comments</ToggleButton>
+              <ToggleButton id="tbg-radio-1" value={1} onClick={() => { setFilter('new'); setSelectedButton(1) }} variant='outline-danger'>New Posts</ToggleButton>
+              <ToggleButton id="tbg-radio-2" value={2} onClick={() => { setFilter('upvoted'); setSelectedButton(2) }} variant="outline-danger">Most Upvoted</ToggleButton>
+              <ToggleButton id="tbg-radio-3" value={3} onClick={() => { setFilter('commented'); setSelectedButton(3) }} variant="outline-danger">Most Commented</ToggleButton>
             </ToggleButtonGroup>
           </Col>
         </Row>

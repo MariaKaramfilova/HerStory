@@ -46,7 +46,9 @@ const ProfileDropdown = () => {
         <Dropdown.Menu className="ml-auto">
           <Dropdown.Item onClick={handleMyAccount}>My Account</Dropdown.Item>
           <Dropdown.Item onClick={handleAccountSettings}>Account Settings</Dropdown.Item>
-          <Button
+          <Dropdown.Item onClick={logoutUser}>Log Out</Dropdown.Item>
+
+          {/* <Button
             type="button"
             variant="danger"
             onClick={() => {
@@ -55,7 +57,7 @@ const ProfileDropdown = () => {
             }}
           >
             Log Out
-          </Button>
+          </Button> */}
 
         </Dropdown.Menu>
       </Dropdown>

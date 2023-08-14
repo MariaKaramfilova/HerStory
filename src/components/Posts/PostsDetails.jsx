@@ -53,27 +53,34 @@ export default function PostsDetails({ ...post }) {
     return <div></div>
   }
 
-  const handleDeletePost = async () => {
-    try {
-      await deletePost(post.postId)
-      alert('Post successfully deleted.');
-      setIsDeleted(true);
-    } catch (error) {
-      alert(`Something went wrong ${error}`);
+  const handleDeletePost = async (e) => {
+    e.preventDefault();
+    const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
+
+    if(confirmDelete){
+      try {
+        await deletePost(post.postId)
+        alert('Post successfully deleted.');
+        setIsDeleted(true);
+      } catch (error) {
+        alert(`Something went wrong ${error}`);
+      }
     }
   }
 
   const limitContent = (content) => {
     const words = content.split(' ');
-    if (words.length > 200) {
-      return words.slice(0, 200).join(' ') + '...';
+    if (words.length > 100) {
+      return words.slice(0, 100).join(' ') + '...';
     }
     return content;
   };
 
   return (
-    <Card className="mb-3 post-card">
-      <Card.Header>
+    
+    <Card className="mb-3 post-card" style={{ maxWidth: "100%" }}>
+      <Card.Header className="d-flex justify-content-between align-items-center" >
+      <div>
         {authorData && (
           <Link to={`/account/${post.userId}`}>
             <Image
@@ -88,7 +95,13 @@ export default function PostsDetails({ ...post }) {
         <span className="ml-2" style={{ paddingLeft: "5px" }}>
           <Link to={`/account/${post.userId}`}>{post.author}</Link>
         </span>
-      </Card.Header>
+      </div>
+      {(userRole === "admin" || userName === post.author) && (
+        <Button variant="outline-dark" onClick={handleDeletePost}>
+          Delete post
+        </Button>
+      )}
+    </Card.Header>
       <Card.Body>
         <Card.Title>{post.title}</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">
@@ -108,7 +121,7 @@ export default function PostsDetails({ ...post }) {
               {limitContent(post.content)}
               <Button
                 type="submit"
-                variant="dark"
+                variant="outline-dark"
                 onClick={() => navigate(`/detailed-post-view/${post.id}`)}
                 style={{ marginTop: "10px" }}
               >
@@ -120,30 +133,37 @@ export default function PostsDetails({ ...post }) {
           )}
         </Card>
         <div className={`media-element ${typeFile}`}>
-          <Card>
-            {typeFile === "image" && (
-              <Image src={post.file} fluid style={{ width: "60%" }} />
-            )}
+       
+          {typeFile === "image" && (
+            <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+              <Image src={post.file} style={{ height: '320px', width: 'auto%', }} />
+            </div>
+          )}
             {typeFile === "video" && (
-              <video controls className="media-element">
+            <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+              <video controls style={{ height: '320px', width: 'auto%', }}>
                 <source src={post.file} type="video/mp4" />
               </video>
-            )}
-          </Card>
+            </div>
+          )}
+         
         </div>
         <hr />
-        <Button
-          type="submit"
-          variant="dark"
-          onClick={() => navigate(`/detailed-post-view/${post.id}`)}
-          style={{ marginRight: "5px" }}
-        >
-          Comment
-        </Button>
-        {(userRole == "admin" || userName === post.author)  && (<Button variant="outline-dark" style={{ marginRight: '0.5em' }} onClick={handleDeletePost}>Delete post</Button>)}
-        <PostTags post={post}/>
-      </Card.Body>
-      {post && <PostUpvotes post={post} />}
-    </Card>
+        <div className="d-flex justify-content-between align-items-center mt-3">
+    <div>
+      <Button
+        type="submit"
+        variant="dark"
+        onClick={() => navigate(`/detailed-post-view/${post.id}`)}
+      >
+        Comment
+      </Button>
+  
+    </div>
+    <PostTags post={post} />
+    {post && <PostUpvotes post={post} />}
+  </div>
+</Card.Body>
+</Card>
   );
 }
