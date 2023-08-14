@@ -4,6 +4,7 @@ import { Button, Form, } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import SelectCreatable from '../../components/SelectCreatable/SelectCreatable.jsx';
 import { updateTags } from '../../services/tag.services.js';
+import DropzoneComponent from '../../components/Dropzone/Dropzone';
 
 const EditPost = () => {
   const [post, setPost] = useState(null);
@@ -118,10 +119,7 @@ const EditPost = () => {
           />
         </Form.Group>}
         
-        {post.file && <Form.Group controlId="editFile"> {/* Add file input */}
-          <Form.Label>Edit Media</Form.Label>
-          <Form.Control type="file" onChange={handleFileChange} />
-        </Form.Group>}
+        {post.file && (<DropzoneComponent setFile={setEditedFile} />)}
 
         <Form.Label>Add post tags</Form.Label>
         <SelectCreatable changeTags={handleSelectChange} post={post} />
