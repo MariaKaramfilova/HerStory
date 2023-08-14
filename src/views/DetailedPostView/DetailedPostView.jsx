@@ -162,13 +162,17 @@ export default function DetailedPostView() {
             <p>{post.content}</p>
             <div className={`media-element ${typeFile}`}>
               {typeFile === "image" && (
-                <Image src={post.file} fluid style={{ width: "40%" }} />
-              )}
-              {typeFile === "video" && (
-                <video controls className="media-element">
-                  <source src={post.file} type="video/mp4" />
-                </video>
-              )}
+            <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+              <Image src={post.file} style={{ height: '320px', width: 'auto%', }} />
+            </div>
+          )}
+            {typeFile === "video" && (
+            <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+              <video controls style={{ height: '320px', width: 'auto%', }}>
+                <source src={post.file} type="video/mp4" />
+              </video>
+            </div>
+          )}
             </div>
           </>
         )}
