@@ -17,6 +17,8 @@ export default function Posts({ searchTerm, userName, tag }) {
   const params = useParams();
   const { loggedInUser, user } = useContext(AuthContext);
 
+
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -27,7 +29,9 @@ export default function Posts({ searchTerm, userName, tag }) {
             return el.title.split(' ').filter(el => el.toLowerCase().startsWith(searchTerm.toLowerCase())).length > 0;
           });
         } else if (params.type === "tag") {
-          result = result.filter(el => Object.keys(el.tags).filter(el => el.toLowerCase().startsWith(tag.toLowerCase())).length > 0);
+          console.log('posts');
+          console.log(result);
+          result = result.filter(el => el.tags ? Object.keys(el.tags).filter(el => el.toLowerCase().startsWith(tag.toLowerCase())).length > 0 : false);
         }
 
         if (filter === 'new') {
