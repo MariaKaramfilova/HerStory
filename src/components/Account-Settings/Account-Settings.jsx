@@ -1,17 +1,15 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Alert, Button, Form, Card } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
-import { getAllUsers, updateProfilePic } from "../../services/users.services";
+import { getAllUsers, updateProfilePhone, updateProfilePic } from "../../services/users.services";
+import { updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { Link } from "react-router-dom/dist";
+import { updateProfileEmail } from "../../services/users.services";
 import Skeleton from "react-loading-skeleton";
-import { PasswordChanging } from "./PasswordSection";
-import { EmailChanging } from "./EmailSection";
-import { DeleteAccount } from "./DeleteAccountSection";
-import { PhoneChanging } from "./PhoneSection";
-
+import DeleteAccountSection from "./DeleteAccountSection.jsx";
 
 const AccountSettings = () => {
-  const { loggedInUser, user } = useContext(AuthContext);
+  const { loggedInUser, user, setUser } = useContext(AuthContext);
   const [profilePictureURL, setProfilePictureURL] = useState('');
   const [prevProfilePictureURL, setPrevProfilePictureURL] = useState(profilePictureURL);
   const [photo, setPhoto] = useState(null);
@@ -102,6 +100,8 @@ const AccountSettings = () => {
         setLoading(false);
         window.location.reload();
         alert('You have successfully changed your profile picture! Please refresh the page to see your new profile picture!');
+        const allUsers = await getAllUsers();
+        setUser((prev) => ({ ...prev, allUsers }));
       } catch (error) {
         console.error("Error uploading profile picture:", error);
       }
@@ -111,41 +111,84 @@ const AccountSettings = () => {
   }
 
   const changePassword = async () => {
-    const changePasswordResult = await PasswordChanging(user, password, confirmPassword);
+    try {
+      if (loggedInUser && user.metadata.lastSignInTime) {
+        const lastSignInTime = new Date(user.metadata.lastSignInTime);
+        const currentTime = new Date();
 
-    if (!changePasswordResult) {
-      setPassword("");
-      setConfirmPassword("");
-      alert("Congratulations! You successfully changed your password!");
-      setError("");
-    } else {
-      setPasswordError(changePasswordResult);
+        const timeDifferenceInMinutes =
+          (currentTime - lastSignInTime) / (1000 * 60);
+        const acceptableTimeDifference = 5;
+
+        if (timeDifferenceInMinutes <= acceptableTimeDifference) {
+          if (password && confirmPassword) {
+            if (password === confirmPassword) {
+              await updatePassword(user, password);
+              setPassword('');
+              setConfirmPassword('');
+              alert("Congratulations! You successfully changed your password!");
+              setError("");
+            } else {
+              setPasswordError("Please check if the two passwords match!");
+            }
+          } else {
+            setPasswordError("Please enter your password in both fields!");
+          }
+        } else {
+          setPasswordError(
+            "For security reasons, please sign in again before changing your password."
+          );
+        }
+      }
+    } catch (error) {
+      setPasswordError(
+        "An error occurred while changing the password. Please try again."
+      );
+      console.error(error);
     }
   };
-
   const changeEmail = async () => {
-    const changeEmailResult = await EmailChanging(user, loggedInUser, email, username);
-
-    if (!changeEmailResult) {
-      alert("Congratulations! You successfully changed your email!");
-      setEmail("");
-      setEmailError("");
-    } else {
-      setEmailError(changeEmailResult);
+    const password = prompt(
+      "Please enter your password to confirm email change:"
+    );
+    if (password) {
+      const credentials = EmailAuthProvider.credential(loggedInUser.email, password);
+      try {
+        await reauthenticateWithCredential(user, credentials);
+        if (email) {
+          await updateEmail(user, email);
+          alert("Congratulations! You successfully changed your email!");
+          const allUsers = await getAllUsers();
+          setUser((prev) => ({ ...prev, allUsers }));
+          await updateProfileEmail(email, username);
+          setEmail("");
+          setEmailError("");
+        }
+      } catch (error) {
+        setEmailError("Invalid email or password! Please try again.");
+        console.error(error);
+      }
     }
   };
 
   const changePhone = async () => {
-    await PhoneChanging(user, loggedInUser, phone, username, setPhone);
-  };
-
-  const deleteAccount = async () => {
-    const deleteAccountResult = await DeleteAccount(user, loggedInUser);
-
-    if (!deleteAccountResult) {
-      alert('Your account has been deleted.');
-    } else {
-      alert(deleteAccountResult);
+    const password = prompt(
+      "Please enter your password to confirm email change:"
+    );
+    if (password) {
+      const credentials = EmailAuthProvider.credential(loggedInUser.email, password);
+      try {
+        await reauthenticateWithCredential(user, credentials);
+        if (phone) {
+          await updateProfilePhone(phone, username);
+          alert("Congratulations! You successfully changed your phone!");
+          const allUsers = await getAllUsers();
+          setUser((prev) => ({ ...prev, allUsers }));
+          setPhone(phone);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -167,7 +210,7 @@ const AccountSettings = () => {
         </Link>
       </div>
       <hr />
-      {loading || !user ? (<Skeleton height={100} width={300}/>
+      {loading || !user ? (<Skeleton height={100} width={300} />
       ) : (
         <div style={{ display: "flex", alignItems: "center" }}>
           {profilePictureURL &&
@@ -333,52 +376,7 @@ const AccountSettings = () => {
             </Card.Body>
           </Card>
         </div>}
-      <Form.Label
-        htmlFor=""
-        style={{
-          fontSize: "20px",
-          color: "gray",
-          fontWeight: "normal",
-          paddingTop: "40px",
-        }}
-      >
-        Want to delete your account?
-      </Form.Label>
-      <Card style={{ marginBottom: "50px" }}>
-        <Card.Body>
-          <Form.Group controlId="confirmEmail">
-            <span
-              style={{
-                fontSize: "20px",
-                color: "gray",
-                fontWeight: "normal",
-                paddingTop: "40px",
-              }}
-            >
-              Click the Button and delete your account:
-            </span>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "15px",
-              }}
-            >
-              <Button
-                onClick={deleteAccount}
-                variant="danger"
-                style={{
-                  fontSize: "16px",
-                  color: "white",
-                  marginBottom: '15px'
-                }}
-              >
-                Delete Account
-              </Button>
-            </div>
-          </Form.Group>
-        </Card.Body>
-      </Card>
+      <DeleteAccountSection />
     </div>
   );
 };
