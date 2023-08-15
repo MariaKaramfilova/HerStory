@@ -1,11 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Alert, Button, Form, Card } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
-import { updateProfilePhone, updateProfilePic } from "../../services/users.services";
-import { updateEmail, updatePassword, deleteUser, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import { updateProfilePic } from "../../services/users.services";
 import { Link } from "react-router-dom/dist";
-import { updateProfileEmail } from "../../services/users.services";
 import Skeleton from "react-loading-skeleton";
+import { PasswordChanging } from "./PasswordSection";
+import { EmailChanging } from "./EmailSection";
+import { DeleteAccount } from "./DeleteAccountSection";
+import { PhoneChanging } from "./PhoneSection";
 
 
 const AccountSettings = () => {
@@ -111,102 +113,41 @@ const AccountSettings = () => {
   }
 
   const changePassword = async () => {
-    try {
-      if (loggedInUser && user.metadata.lastSignInTime) {
-        const lastSignInTime = new Date(user.metadata.lastSignInTime);
-        const currentTime = new Date();
+    const changePasswordResult = await PasswordChanging(user, password, confirmPassword);
 
-        const timeDifferenceInMinutes =
-          (currentTime - lastSignInTime) / (1000 * 60);
-        const acceptableTimeDifference = 5;
-
-        if (timeDifferenceInMinutes <= acceptableTimeDifference) {
-          if (password && confirmPassword) {
-            if (password === confirmPassword) {
-              await updatePassword(user, password);
-              setPassword('');
-              setConfirmPassword('');
-              alert("Congratulations! You successfully changed your password!");
-              setError("");
-            } else {
-              setPasswordError("Please check if the two passwords match!");
-            }
-          } else {
-            setPasswordError("Please enter your password in both fields!");
-          }
-        } else {
-          setPasswordError(
-            "For security reasons, please sign in again before changing your password."
-          );
-        }
-      }
-    } catch (error) {
-      setPasswordError(
-        "An error occurred while changing the password. Please try again."
-      );
-      console.error(error);
+    if (!changePasswordResult) {
+      setPassword("");
+      setConfirmPassword("");
+      alert("Congratulations! You successfully changed your password!");
+      setError("");
+    } else {
+      setPasswordError(changePasswordResult);
     }
   };
+
   const changeEmail = async () => {
-    const password = prompt(
-      "Please enter your password to confirm email change:"
-    );
-    if (password) {
-      const credentials = EmailAuthProvider.credential(loggedInUser.email, password);
-      try {
-        await reauthenticateWithCredential(user, credentials);
-        if (email) {
-          await updateEmail(user, email);
-          alert("Congratulations! You successfully changed your email!");
-          await updateProfileEmail(email, username);
-          setEmail("");
-          setEmailError("");
-        }
-      } catch (error) {
-        setEmailError("Invalid email or password! Please try again.");
-        console.error(error);
-      }
+    const changeEmailResult = await EmailChanging(user, loggedInUser, email, username);
+
+    if (!changeEmailResult) {
+      alert("Congratulations! You successfully changed your email!");
+      setEmail("");
+      setEmailError("");
+    } else {
+      setEmailError(changeEmailResult);
     }
   };
 
   const changePhone = async () => {
-    const password = prompt(
-      "Please enter your password to confirm email change:"
-    );
-    if (password) {
-      const credentials = EmailAuthProvider.credential(loggedInUser.email, password);
-      try {
-        await reauthenticateWithCredential(user, credentials);
-        if (phone) {
-          await updateProfilePhone(phone, username);
-          alert("Congratulations! You successfully changed your phone!");
-          setPhone(phone);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    await PhoneChanging(user, loggedInUser, phone, username, setPhone);
   };
 
   const deleteAccount = async () => {
-    const password = prompt("Please enter your password to confirm account deletion:");
-    if (password) {
-      const credentials = EmailAuthProvider.credential(loggedInUser.email, password);
-      try {
-        await reauthenticateWithCredential(user, credentials);
-        if (window.confirm("Are you sure you want to delete your account? This action is irreversible.")) {
-          try {
-            await deleteUser(user);
-            alert('Your account has been deleted.');
-          } catch (error) {
-            console.error('An error occurred while deleting the account:', error);
-            alert('An error occurred while deleting your account. Please try again.');
-          }
-        }
-      } catch (error) {
-        console.error('An error occurred during re-authentication:', error);
-        alert('Failed to re-authenticate. Please check your password and try again.');
-      }
+    const deleteAccountResult = await DeleteAccount(user, loggedInUser);
+
+    if (!deleteAccountResult) {
+      alert('Your account has been deleted.');
+    } else {
+      alert(deleteAccountResult);
     }
   };
 

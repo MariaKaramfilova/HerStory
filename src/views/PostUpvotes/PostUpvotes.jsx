@@ -5,15 +5,15 @@ import { downvotePost } from "../../services/post.services";
 import { upvotePost } from "../../services/post.services";
 import { Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import ViewUpvoted from "../../views/ViewUpvoted/ViewUpvoted";
-import _ from 'lodash';
+import ViewUpvoted from "../ViewUpvoted/ViewUpvoted";
+import _ from "lodash";
 import PropTypes from "prop-types";
 
 export default function PostUpvotes({ post }) {
   const navigate = useNavigate();
   const { user, loggedInUser } = useContext(AuthContext);
   const [vote, setVote] = useState(_.compact(post.upvotedBy).length);
-  const [showUpvoted, setShowUpvoted] = useState('');
+  const [showUpvoted, setShowUpvoted] = useState("");
   const [isUpDisabled, setIsUpDisabled] = useState(false);
   const [isDownDisabled, setIsDownDisabled] = useState(false);
 
@@ -30,11 +30,10 @@ export default function PostUpvotes({ post }) {
     }
   }, [user, loggedInUser, post]);
 
-
   const handleClick = (direction) => {
     if (user) {
-      if (direction === 'up') {
-        upVote()
+      if (direction === "up") {
+        upVote();
         setIsUpDisabled(true);
         setIsDownDisabled(false);
       } else {
@@ -43,7 +42,7 @@ export default function PostUpvotes({ post }) {
         setIsDownDisabled(true);
       }
     } else {
-      navigate('/log-in')
+      navigate("/log-in");
     }
   };
 
@@ -65,7 +64,9 @@ export default function PostUpvotes({ post }) {
     }
   };
 
-  const isAuthorOrAdmin = loggedInUser && (loggedInUser.role === 'admin' || loggedInUser.username === post.author);
+  const isAuthorOrAdmin =
+    loggedInUser &&
+    (loggedInUser.role === "admin" || loggedInUser.username === post.author);
 
   return (
     <div className="d-flex">
@@ -77,11 +78,12 @@ export default function PostUpvotes({ post }) {
         //       : "dark"
         //   }
         onClick={() => {
-          handleClick('up')
+          handleClick("up");
         }}
         variant="dark"
         disabled={isUpDisabled}
-        style={{ marginRight: "7px" }}>
+        style={{ marginRight: "7px" }}
+      >
         ▲
       </Button>
 
@@ -97,25 +99,22 @@ export default function PostUpvotes({ post }) {
           Votes
         </span>
       ) : (
-      <span
-        style={{ cursor: "pointer", marginRight: "7px" }}
-      >
-        Votes
-      </span>)}
+        <span style={{ cursor: "pointer", marginRight: "7px" }}>Votes</span>
+      )}
       {showUpvoted && (
         <Modal show={showUpvoted} onHide={() => setShowUpvoted(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Upvoted By</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <ViewUpvoted upvotedBy={post.upvotedBy} /> 
+            <ViewUpvoted upvotedBy={post.upvotedBy} />
           </Modal.Body>
         </Modal>
       )}
       <Button
         type="submit"
         onClick={() => {
-          handleClick('down');
+          handleClick("down");
         }}
         disabled={isDownDisabled}
         variant="dark"
@@ -130,4 +129,3 @@ export default function PostUpvotes({ post }) {
 PostUpvotes.propTypes = {
   post: PropTypes.object.isRequired,
 };
-

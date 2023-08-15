@@ -3,7 +3,7 @@ import { getAllPosts } from "../../services/post.services.js";
 import { getAllUsers } from "../../services/users.services.js";
 import Skeleton from "react-loading-skeleton";
 import { Col, Container, Row, Button } from "react-bootstrap";
-import PostsDetails from "../Posts/PostsDetails.jsx";
+import PostsDetails from "../../components/Posts/PostsDetails.jsx";
 
 function SideBar() {
   const [forumUsers, setForumUsers] = useState("");
@@ -148,4 +148,3 @@ const styles = {
 };
 
 export default SideBar;
-

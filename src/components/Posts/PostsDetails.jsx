@@ -5,21 +5,18 @@ import { getUserByUsername } from "../../services/users.services";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { deletePost } from "../../services/post.services";
-import './PostDetails.css';
-import PostTags from "../PostTags/PostTags.jsx";
-import PostUpvotes from "./PostUpvotes";
-
+import "./PostDetails.css";
+import PostTags from "../../views/PostTags/PostTags.jsx";
+import PostUpvotes from "../../views/PostUpvotes/PostUpvotes";
 
 export default function PostsDetails({ ...post }) {
-
   const navigate = useNavigate();
-  const [authorData, setAuthorData] = useState('');
-  const [userRole, setUserRole] = useState('');
-  const [userName, setUserName] = useState('');
-  const [typeFile, setTypeFile] = useState('');
+  const [authorData, setAuthorData] = useState("");
+  const [userRole, setUserRole] = useState("");
+  const [userName, setUserName] = useState("");
+  const [typeFile, setTypeFile] = useState("");
   const [isDeleted, setIsDeleted] = useState(false);
   const { user, loggedInUser } = useContext(AuthContext);
-
 
   useEffect(() => {
     (async () => {
@@ -29,7 +26,7 @@ export default function PostsDetails({ ...post }) {
         setAuthorData(userData);
         if (loggedInUser) {
           setUserRole(loggedInUser.role);
-          setUserName(loggedInUser.username)
+          setUserName(loggedInUser.username);
         }
 
         if (post.file) {
@@ -46,27 +43,26 @@ export default function PostsDetails({ ...post }) {
         console.error("Error fetching author data:", error);
       }
     })();
-
   }, [loggedInUser]);
 
   if (isDeleted) {
-    return <div></div>
+    return <div></div>;
   }
 
   const handleDeletePost = async () => {
     try {
-      await deletePost(post.postId)
-      alert('Post successfully deleted.');
+      await deletePost(post.postId);
+      alert("Post successfully deleted.");
       setIsDeleted(true);
     } catch (error) {
       alert(`Something went wrong ${error}`);
     }
-  }
+  };
 
   const limitContent = (content) => {
-    const words = content.split(' ');
+    const words = content.split(" ");
     if (words.length > 200) {
-      return words.slice(0, 200).join(' ') + '...';
+      return words.slice(0, 200).join(" ") + "...";
     }
     return content;
   };
@@ -103,7 +99,7 @@ export default function PostsDetails({ ...post }) {
             paddingRight: "5px",
           }}
         >
-          {post.content.split(' ').length > 150 ? (
+          {post.content.split(" ").length > 150 ? (
             <>
               {limitContent(post.content)}
               <Button
@@ -140,8 +136,16 @@ export default function PostsDetails({ ...post }) {
         >
           Comment
         </Button>
-        {(userRole == "admin" || userName === post.author)  && (<Button variant="outline-dark" style={{ marginRight: '0.5em' }} onClick={handleDeletePost}>Delete post</Button>)}
-        <PostTags post={post}/>
+        {(userRole == "admin" || userName === post.author) && (
+          <Button
+            variant="outline-dark"
+            style={{ marginRight: "0.5em" }}
+            onClick={handleDeletePost}
+          >
+            Delete post
+          </Button>
+        )}
+        <PostTags post={post} />
       </Card.Body>
       {post && <PostUpvotes post={post} />}
     </Card>

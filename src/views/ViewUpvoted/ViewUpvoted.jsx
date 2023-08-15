@@ -39,15 +39,15 @@ export default function ViewUpvoted({ upvotedBy }) {
                   marginBottom: "10px",
                 }}
               >
-                 <Link to={`/account/${user.uid}`}>
-                 <Image
-                  src={user.profilePictureURL}
-                  alt={`Profile Picture of ${user.username}`}
-                  roundedCircle
-                  width={50}
-                  height={50}
-                  style={{ marginRight: "10px" }}
-                />
+                <Link to={`/account/${user.uid}`}>
+                  <Image
+                    src={user.profilePictureURL}
+                    alt={`Profile Picture of ${user.username}`}
+                    roundedCircle
+                    width={50}
+                    height={50}
+                    style={{ marginRight: "10px" }}
+                  />
                 </Link>
                 <Link to={`/account/${user.uid}`}>{user.username}</Link>
               </li>
