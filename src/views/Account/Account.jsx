@@ -7,6 +7,7 @@ import { useLocation, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import BlockUserButton from "../BlockUserButton/BlockUserButton.jsx";
 import MakeAdminButton from "../MakeAdminButton/MakeAdminButton.jsx";
+import Error from "../Error/Error.jsx";
 
 export default function MyAccount() {
   const { loggedInUser, user } = useContext(AuthContext);
@@ -49,9 +50,8 @@ export default function MyAccount() {
     }
   }, [loggedInUser, location.pathname, userId]);
 
-  // Need to fix this with error pages - check for lib
   if (error) {
-    return <h1>Error!!! {error.message}</h1>;
+    return <Error error={error} />
   }
 
   return (

@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { PostsContext } from "../../context/PostsContext.js";
 import { AuthContext } from "../../context/AuthContext.js";
 import { Link, useNavigate } from "react-router-dom";
+import Error from "../Error/Error.jsx";
 
 function SideBar() {
   const [forumUsers, setForumUsers] = useState("");
@@ -47,7 +48,7 @@ function SideBar() {
   }
 
   if (error) {
-    return <div>Error {error}</div>;
+    return <Error error={error} />;
   }
 
   return (

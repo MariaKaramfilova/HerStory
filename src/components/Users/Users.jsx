@@ -5,6 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import { useNavigate, useParams } from "react-router-dom";
 import UsersDetails from "./UsersDetails.jsx";
 import PropTypes from "prop-types";
+import Error from "../../views/Error/Error.jsx";
 
 export default function Users({ searchTerm }) {
   const [users, setUsers] = useState([]);
@@ -45,7 +46,7 @@ export default function Users({ searchTerm }) {
 
   // Need to fix this with error pages - check for lib
   if (error) {
-    return <h1>Error!!! {error.message}</h1>;
+    return <Error error={error}/>
   }
 
   const usersToShow = users.length ? (

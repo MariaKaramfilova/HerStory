@@ -7,6 +7,7 @@ import { AuthContext } from '../../context/AuthContext.js';
 import Skeleton from 'react-loading-skeleton';
 import { PostsContext } from '../../context/PostsContext.js';
 import _ from 'lodash';
+import Error from '../../views/Error/Error.jsx';
 
 export default function Posts({ searchTerm, userName, tag }) {
   const [filter, setFilter] = useState('new');
@@ -67,7 +68,7 @@ export default function Posts({ searchTerm, userName, tag }) {
   
   // Need to fix this with error pages - check for lib
   if (error) {
-    return <h1>Error!!! {error.message}</h1>
+    return <Error error={error} />
   }
   
   const postsToShow = renderedPosts.length ? (
@@ -84,7 +85,6 @@ export default function Posts({ searchTerm, userName, tag }) {
     </div>
   )
   
-  console.log(renderedPosts);
   return (
     <>
 

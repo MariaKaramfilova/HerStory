@@ -4,6 +4,7 @@ import makeAnimated from 'react-select/animated';
 import { getAllTags } from '../../services/tag.services.js';
 import { getPostsByAuthor } from '../../services/post.services.js';
 import PropTypes from "prop-types";
+import Error from '../../views/Error/Error.jsx';
 
 export default function SelectCreatable({ changeTags, post }) {
   const animatedComponents = makeAnimated();
@@ -44,6 +45,10 @@ export default function SelectCreatable({ changeTags, post }) {
       .finally(() => setLoading(false))
 
   }, []);
+
+  if (error) {
+    return <Error error={error} />;
+  }
 
   if (loading) {
     return;

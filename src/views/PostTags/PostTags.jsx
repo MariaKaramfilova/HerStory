@@ -5,6 +5,7 @@ import { getPostsByAuthor } from '../../services/post.services.js';
 import { Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
+import Error from '../Error/Error.jsx';
 
 export default function PostTags({ post }) {
   const [tags, setTags] = useState('');
@@ -31,6 +32,10 @@ export default function PostTags({ post }) {
       <p>No tags</p>
     </div>
   )
+
+  if (error) {
+    return <Error error={error} />;
+  }
 
   return (
     <Container className='d-flex mt-4'>
