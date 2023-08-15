@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import moment from "moment";
 import { Card, Image, Button } from "react-bootstrap";
-import { getUserByUsername } from "../../services/users.services";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { deletePost, getAllPosts } from "../../services/post.services";
@@ -78,8 +77,8 @@ export default function PostsDetails({ ...post }) {
     <>
       {loading || !post ? (<Skeleton height={300} style={{ marginBottom: "20px" }} />
       ) : (
-        <Card className="mb-3 post-card" style={{ maxWidth: "100%" }}>
-          <Card.Header className="d-flex justify-content-between align-items-center" style={{minHeight: "50px"}}>
+        <Card className="mb-3 post-card" style={{ maxWidth: "100%" }} >
+          <Card.Header className="d-flex justify-content-between align-items-center" style={{ minHeight: "50px" }}>
             <div>
               {authorData && (
                 <Link to={`/account/${post.userId}`}>
@@ -113,10 +112,12 @@ export default function PostsDetails({ ...post }) {
                 marginTop: "15px",
                 backgroundColor: "WhiteSmoke",
                 paddingLeft: "5px",
-                paddingRight: "5px"
+                paddingRight: "5px",
+                height: "auto",
+                minHeight: "250px"
               }}
             >
-              {post.content.split(' ').length > 150 ? (
+              {post.content.split(' ').length > 350 ? (
                 <>
                   {limitContent(post.content)}
                   <Button
@@ -131,22 +132,22 @@ export default function PostsDetails({ ...post }) {
               ) : (
                 post.content
               )}
-            </Card>
-            <div className={`media-element ${typeFile}`} style={{minHeight: "320px"}}>
+              <div className={`media-element ${typeFile}`} >
 
-              {typeFile === "image" && (
-                <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-                  <Image src={post.file} style={{ height: '320px', width: 'auto%', }} />
-                </div>
-              )}
-              {typeFile === "video" && (
-                <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-                  <video controls style={{ height: '320px', width: 'auto%', }}>
-                    <source src={post.file} type="video/mp4" />
-                  </video>
-                </div>
-              )}
-            </div>
+                {typeFile === "image" && (
+                  <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Image src={post.file} style={{ height: '250px', width: 'auto%', }} />
+                  </div>
+                )}
+                {typeFile === "video" && (
+                  <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <video controls style={{ height: '250px', width: 'auto%', }}>
+                      <source src={post.file} type="video/mp4" />
+                    </video>
+                  </div>
+                )}
+              </div>
+            </Card>
             <hr />
             <div className="d-flex justify-content-between align-items-center mt-3">
               <div>

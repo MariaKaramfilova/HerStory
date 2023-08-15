@@ -105,7 +105,7 @@ export default function Posts({ searchTerm, userName, tag }) {
         </Row>
       </Container>)}
       <Container>
-        {_.isEmpty(allPosts) || !renderedPosts.length || loading ? <Skeleton height={500} count={5} style={{ marginBottom: "20px" }} /> : postsToShow}
+        {_.isEmpty(allPosts) || !renderedPosts.length || loading ? <Skeleton height={400} count={5} style={{ marginBottom: "20px" }} /> : postsToShow}
       </Container>
     </>
   )
