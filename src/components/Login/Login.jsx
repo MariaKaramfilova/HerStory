@@ -5,6 +5,17 @@ import { loginUser } from '../../services/auth.services.js';
 import { AuthContext } from '../../context/AuthContext.js';
 import { getUserData } from '../../services/users.services.js';
 
+/**
+ * A component for user login.
+ *
+ * Allows users to log in using their email and password.
+ *
+ * @component
+ * @example
+ * return (
+ *   <Login />
+ * );
+ */
 export default function Login() {
   const { setUser } = useContext(AuthContext);
 

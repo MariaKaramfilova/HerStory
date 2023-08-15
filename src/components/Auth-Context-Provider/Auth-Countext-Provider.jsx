@@ -6,6 +6,13 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { getAllUsers, getUserData } from '../../services/users.services.js';
 import Error from '../../views/Error/Error.jsx';
 
+/**
+ * A component that handles the authentication state and provides it to its children.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {ReactNode} props.children - The children components to render.
+ */
 const RoutePage = ({ children }) => {
   const { user, loggedInUser } = useContext(AuthContext);
   const [appState, setAppState] = useState({ user, loggedInUser });
@@ -48,6 +55,13 @@ const RoutePage = ({ children }) => {
 
 
 export default RoutePage
+
+/**
+ * PropTypes for the RoutePage component.
+ *
+ * @memberof RoutePage
+ * @static
+ */
 
 RoutePage.propTypes = {
   children: PropTypes.node.isRequired,

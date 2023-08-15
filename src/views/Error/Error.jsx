@@ -3,6 +3,13 @@ import './Error.css'
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 
+/**
+ * The Error component displays an error message along with a link to go back to the home page.
+ *
+ * @param {Object} props - The props passed to the Error component.
+ * @param {string} props.error - The error message to be displayed.
+ * @returns {JSX.Element} - JSX representing the Error component.
+ */
 export default function Error({ error }) {
   return (
     <div className="container">

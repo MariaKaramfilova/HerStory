@@ -8,9 +8,24 @@ import { getAllComments, getAllPosts } from '../../services/post.services.js';
 import _ from 'lodash';
 import { logoutUser } from '../../services/auth.services.js';
 
+
+/**
+ * Component that provides the functionality to delete the user's account,
+ * along with associated posts, comments, and voting data.
+ *
+ * @component
+ * @example
+ * return <DeleteAccountSection />;
+ */
 export default function DeleteAccountSection() {
   const { loggedInUser, user, setUser } = useContext(AuthContext);
   const { allPosts, setAllPosts } = useContext(PostsContext);
+
+
+   /**
+   * Deletes the user account, associated data, and logs out the user.
+   * @async
+   */
 
   const deleteAccount = async () => {
     const password = prompt("Please enter your password to confirm account deletion:");

@@ -3,6 +3,15 @@ import { PostsContext } from '../../context/PostsContext.js'
 import { getAllPosts } from '../../services/post.services.js';
 import Error from '../../views/Error/Error.jsx';
 
+/**
+ * A context provider component for managing posts data within the application.
+ *
+ * Fetches all posts data and provides it through a context for other components to access.
+ *
+ * @component
+ * @param {object} children - The nested components that will be wrapped by this context provider.
+ * @returns {JSX.Element} Rendered component with posts context provider.
+ */
 export default function PostsContextProvider({ children }) {
   const { post, setPost } = useContext(PostsContext);
   const [appPostState, setAppPostsState] = useState({ post, setPost });

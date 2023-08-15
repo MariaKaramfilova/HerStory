@@ -3,6 +3,13 @@ import { Button, Card, Form, Alert } from 'react-bootstrap';
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.js";
 
+/**
+ * Component that allows the user to change their account password.
+ *
+ * @component
+ * @example
+ * return <PasswordSection />;
+ */
 export default function PasswordSection() {
 
   const [password, setPassword] = useState("");
@@ -11,6 +18,10 @@ export default function PasswordSection() {
   const [error, setError] = useState("");
   const {loggedInUser, user} = useContext(AuthContext);
 
+  /**
+   * Handles the password change process.
+   * @async
+   */
   const changePassword = async () => {
     try {
       if (loggedInUser && user.metadata.lastSignInTime) {

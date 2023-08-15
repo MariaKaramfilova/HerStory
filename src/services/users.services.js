@@ -3,6 +3,12 @@ import { auth, database } from "../config/firebase";
 import { setFileToStorage } from "./storage.services.js";
 import { deleteCommentID, deletePost } from "./post.services.js";
 
+/**
+ * Transforms the users document snapshot into an array of user objects.
+ *
+ * @param {DataSnapshot} snapshot - The snapshot of the users document.
+ * @returns {Array} - An array of user objects.
+ */
 export const fromUsersDocument = snapshot => {
   const usersDocument = snapshot.val();
 
@@ -17,10 +23,27 @@ export const fromUsersDocument = snapshot => {
   });
 }
 
+/**
+ * Retrieves a user by their username.
+ *
+ * @param {string} username - The username of the user to retrieve.
+ * @returns {Promise<Object>} - A promise that resolves with the retrieved user object.
+ */
 export const getUserByUsername = (username) => {
   return get(ref(database, `users/${username}`));
 }
 
+/**
+ * Creates a new user using their username as the key.
+ *
+ * @param {string} firstName - The first name of the user.
+ * @param {string} lastName - The last name of the user.
+ * @param {string} uid - The user's UID.
+ * @param {string} email - The user's email.
+ * @param {string} username - The username of the user.
+ * @param {string} profilePictureURL - The URL of the user's profile picture.
+ * @returns {Promise<void>} - A promise that resolves after creating the user.
+ */
 export const createUserByUsername = (firstName, lastName, uid, email, username, profilePictureURL) => {
   return set(ref(database, `users/${username}`), {
     firstName,
@@ -34,10 +57,21 @@ export const createUserByUsername = (firstName, lastName, uid, email, username, 
   })
 }
 
+/**
+ * Retrieves user data by UID.
+ *
+ * @param {string} uid - The UID of the user to retrieve.
+ * @returns {Promise<Object>} - A promise that resolves with the retrieved user object.
+ */
 export const getUserData = (uid) => {
   return get(ref(database, 'users'), orderByChild('uid'), equalTo(uid))
 }
 
+/**
+ * Retrieves all users.
+ *
+ * @returns {Promise<Array>} - A promise that resolves with an array of user objects.
+ */
 export const getAllUsers = () => {
   return get(ref(database, 'users'))
     .then(snapshot => {
@@ -48,6 +82,14 @@ export const getAllUsers = () => {
       return fromUsersDocument(snapshot);
     });
 }
+
+/**
+ * Updates the profile picture URL for a user.
+ *
+ * @param {File} file - The new profile picture file.
+ * @param {string} currentUser - The username of the current user.
+ * @returns {Promise<string>} - A promise that resolves with the updated profile picture URL.
+ */
 export const updateProfilePic = async (file, currentUser) => {
   const url = await setFileToStorage(file);
 
@@ -58,6 +100,13 @@ export const updateProfilePic = async (file, currentUser) => {
   return url;
 }
 
+/**
+ * Updates the email address for a user.
+ *
+ * @param {string} email - The new email address.
+ * @param {string} currentUser - The username of the current user.
+ * @returns {Promise<void>} - A promise that resolves after updating the email.
+ */
 export const updateProfileEmail = async (email, currentUser) => {
   const updateEmail = {};
   updateEmail[`/users/${currentUser}/email`] = email;
@@ -65,6 +114,13 @@ export const updateProfileEmail = async (email, currentUser) => {
   return update(ref(database), updateEmail);
 }
 
+/**
+ * Updates the phone number for a user.
+ *
+ * @param {string} phone - The new phone number.
+ * @param {string} currentUser - The username of the current user.
+ * @returns {Promise<void>} - A promise that resolves after updating the phone number.
+ */
 export const updateProfilePhone = async (phone, currentUser) => {
   const updatePhone = {};
   updatePhone[`/users/${currentUser}/phone`] = phone;
@@ -72,6 +128,12 @@ export const updateProfilePhone = async (phone, currentUser) => {
   return update(ref(database), updatePhone);
 }
 
+/**
+ * Blocks a user.
+ *
+ * @param {string} handle - The username of the user to block.
+ * @returns {Promise<void>} - A promise that resolves after blocking the user.
+ */
 export const blockUser = (handle) => {
   const updateBlockedStatus = {};
 
@@ -80,6 +142,12 @@ export const blockUser = (handle) => {
   return update(ref(database), updateBlockedStatus);
 }
 
+/**
+ * Unblocks a user.
+ *
+ * @param {string} handle - The username of the user to unblock.
+ * @returns {Promise<void>} - A promise that resolves after unblocking the user.
+ */
 export const unblockUser = (handle) => {
   const updateBlockedStatus = {};
 
@@ -88,6 +156,12 @@ export const unblockUser = (handle) => {
   return update(ref(database), updateBlockedStatus);
 }
 
+/**
+ * Grants admin privileges to a user.
+ *
+ * @param {string} handle - The username of the user to make an admin.
+ * @returns {Promise<void>} - A promise that resolves after granting admin privileges.
+ */
 export const makeAdminUser = (handle) => {
   const updateAdminStatus = {};
 
@@ -96,6 +170,12 @@ export const makeAdminUser = (handle) => {
   return update(ref(database), updateAdminStatus);
 }
 
+/**
+ * Removes admin privileges from a user.
+ *
+ * @param {string} handle - The username of the user to remove admin rights from.
+ * @returns {Promise<void>} - A promise that resolves after removing admin privileges.
+ */
 export const removeAdminRights = (handle) => {
   const updateAdminStatus = {};
 
@@ -104,6 +184,16 @@ export const removeAdminRights = (handle) => {
   return update(ref(database), updateAdminStatus);
 }
 
+/**
+ * Deletes a user's data, including their posts, comments, and votes.
+ *
+ * @param {string} userHandle - The username of the user to delete.
+ * @param {Array} posts - An array of objects representing the user's posts.
+ * @param {Array} comments - An array of objects representing the user's comments.
+ * @param {Array} upvoted - An array of post IDs upvoted by the user.
+ * @param {Array} downvoted - An array of post IDs downvoted by the user.
+ * @returns {Promise<void>} - A promise that resolves after deleting the user's data.
+ */
 export async function deleteUserData(userHandle, posts, comments, upvoted, downvoted) {
 
   await remove(ref(database, `users/${userHandle}`));

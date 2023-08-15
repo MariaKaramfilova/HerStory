@@ -6,6 +6,19 @@ import { createUserByUsername, getAllUsers, getUserByUsername, getUserData } fro
 import { registerUser } from '../../services/auth.services';
 import { Link, useNavigate } from 'react-router-dom/dist';
 import { fetchSignInMethodsForEmail, getAuth } from 'firebase/auth';
+
+/**
+ * Component for user registration form.
+ *
+ * This component allows users to sign up with their personal information.
+ *
+ * @component
+ * @returns {JSX.Element} Rendered component for user registration.
+ * @example
+ * return (
+ *   <RegistrationForm />
+ * );
+ */
 export default function RegistrationForm() {
 
   const [profilePictureURL, setProfilePictureURL] = useState('https://shorturl.at/jtQ19');

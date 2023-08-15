@@ -4,6 +4,12 @@ import { useParams } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import Users from '../../components/Users/Users.jsx';
 
+/**
+ * The Search component displays search results based on the provided route parameters.
+ *
+ * @component
+ * @returns {JSX.Element} - JSX representing the Search component.
+ */
 export default function Search() {
   const params = useParams();
   const searchTerm = params.id;

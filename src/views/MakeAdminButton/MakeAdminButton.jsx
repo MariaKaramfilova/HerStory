@@ -4,6 +4,12 @@ import { makeAdminUser, removeAdminRights } from '../../services/users.services.
 import PropTypes from "prop-types";
 import Error from '../Error/Error.jsx';
 
+/**
+ * The MakeAdminButton component allows toggling a user's admin status.
+ *
+ * @param {object} user - The user object for which the admin status is toggled.
+ * @returns {JSX.Element} - JSX representing the MakeAdminButton component.
+ */
 export default function MakeAdminButton({ user }) {
   const [adminStatus, setAdminStatus] = useState(user.role === "admin");
   const [error, setError] = useState(null);

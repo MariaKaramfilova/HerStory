@@ -4,6 +4,18 @@ import { Alert, Card, Button, Form } from 'react-bootstrap'
 import { useState, useRef } from "react";
 import Error from "../../views/Error/Error.jsx";
 
+/**
+ * Component for resetting a forgotten password.
+ *
+ * Renders a form for users to submit their email and receive a password reset email.
+ *
+ * @component
+ * @returns {JSX.Element} Rendered component for resetting a forgotten password.
+ * @example
+ * return (
+ *   <ForgottenPassword />
+ * );
+ */
 export default function ForgottenPassword() {
 
   const [error, setError] = useState(null);

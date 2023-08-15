@@ -7,6 +7,33 @@ import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 import './Comments.css';
 
+/**
+ * A component that displays a comment along with options to edit or delete it.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {string} props.author - The author of the comment.
+ * @param {Date} props.createdOn - The creation date of the comment.
+ * @param {string} props.content - The content of the comment.
+ * @param {string} props.commentUserUid - The user ID of the comment's author.
+ * @param {string} props.commentId - The unique ID of the comment.
+ * @param {function} props.SetRefreshComments - A function to refresh the comments.
+ * @param {boolean} props.refreshComments - A flag to trigger comment refreshing.
+ * @param {string} props.commentPostId - The ID of the post that the comment belongs to.
+ * @example
+ * return (
+ *   <Comment
+ *     author="John Doe"
+ *     createdOn={new Date()}
+ *     content="This is a comment."
+ *     commentUserUid="user123"
+ *     commentId="comment123"
+ *     SetRefreshComments={refreshFunction}
+ *     refreshComments={true}
+ *     commentPostId="post123"
+ *   />
+ * );
+ */
 export default function Comment ({author, createdOn, content, commentPostId, commentUserUid, commentId, SetRefreshComments, refreshComments }) {
 
       const { loggedInUser } = useContext(AuthContext);
@@ -106,6 +133,14 @@ export default function Comment ({author, createdOn, content, commentPostId, com
   </div>
     );
   }
+
+  /**
+ * PropTypes for the Comment component.
+ *
+ * @memberof Comment
+ * @static
+ */
+
 Comment.propTypes = {
      
     author: PropTypes.string,

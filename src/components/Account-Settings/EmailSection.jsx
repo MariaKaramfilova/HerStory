@@ -6,13 +6,23 @@ import { AuthContext } from "../../context/AuthContext";
 import { getAllUsers } from "../../services/users.services";
 import { Button, Card, Form, Alert } from 'react-bootstrap';
 
-
+/**
+ * Component that allows the user to change their email address associated with their account.
+ *
+ * @component
+ * @example
+ * return <EmailSection />;
+ */
 export default function EmailSection() {
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const { loggedInUser, user, setUser } = useContext(AuthContext);
 
+   /**
+   * Handles the email change process.
+   * @async
+   */
   const changeEmail = async () => {
     const password = prompt(
       "Please enter your password to confirm email change:"

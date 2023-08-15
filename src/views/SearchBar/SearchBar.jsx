@@ -4,6 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
 import { InputGroup } from 'react-bootstrap';
 
+/**
+ * The SearchBar component provides a search bar with various options for searching content.
+ *
+ * @component
+ * @returns {JSX.Element} - JSX representing the SearchBar component.
+ */
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showError, setShowError] = useState(false);

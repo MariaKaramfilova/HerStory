@@ -5,11 +5,23 @@ import { Button, Card, Form } from 'react-bootstrap';
 import { getAllUsers } from "../../services/users.services";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.js";
+
+/**
+ * A component that allows a user with administrative rights to change their phone number.
+ *
+ * @component
+ * @example
+ * return <PhoneSection />;
+ */
 export default function PhoneSection() {
 
   const [phone, setPhone] = useState("");
   const { loggedInUser, user, setUser } = useContext(AuthContext);
 
+   /**
+   * Handles the phone number change process.
+   * @async
+   */
   const changePhone = async () => {
     const password = prompt(
       "Please enter your password to confirm email change:"

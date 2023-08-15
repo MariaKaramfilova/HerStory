@@ -14,6 +14,21 @@ import { PostsContext } from '../../context/PostsContext.js';
 import _ from 'lodash';
 import Error from '../../views/Error/Error.jsx';
 
+/**
+ * Component for displaying user details and actions.
+ *
+ * This component displays information about a user, such as their profile picture,
+ * name, username, email address, user since date, and user post count. It also provides
+ * actions like blocking the user, making them an admin, and viewing their details.
+ *
+ * @component
+ * @param {Object} user - The user object containing user details.
+ * @returns {JSX.Element} Rendered component for displaying user details and actions.
+ * @example
+ * return (
+ *   <UsersDetails user={userDetails} />
+ * );
+ */
 export default function UsersDetails(user) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);

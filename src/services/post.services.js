@@ -2,6 +2,12 @@ import { database } from "../config/firebase.js";
 import { get, ref, query, orderByChild, equalTo, push, update, remove } from "firebase/database";
 import { setFileToStorage } from "./storage.services.js";
 
+/**
+ * Transforms the posts document snapshot into an array of post objects.
+ *
+ * @param {DataSnapshot} snapshot - The snapshot of the posts document.
+ * @returns {Array} - An array of post objects.
+ */
 const fromPostsDocument = snapshot => {
   const postsDocument = snapshot.val();
 
@@ -20,6 +26,18 @@ const fromPostsDocument = snapshot => {
   });
 }
 
+/**
+ * Creates a new post.
+ *
+ * @param {string} title - The title of the post.
+ * @param {string|null} content - The content of the post.
+ * @param {string} topic - The topic of the post.
+ * @param {File|null} file - The file associated with the post.
+ * @param {string} handle - The author's handle.
+ * @param {string} email - The author's email.
+ * @param {string} userId - The author's user ID.
+ * @returns {Promise<Object>} - A promise that resolves with the created post object.
+ */
 export const createPost = async (title, content = null, topic, file = null, handle, email, userId) => {
   return push(
     ref(database, 'posts'),
@@ -45,6 +63,16 @@ export const createPost = async (title, content = null, topic, file = null, hand
     });
 }
 
+/**
+ * Edits an existing post.
+ *
+ * @param {string} postId - The ID of the post to edit.
+ * @param {string} title - The new title of the post.
+ * @param {string} topic - The new topic of the post.
+ * @param {string|null} content - The new content of the post.
+ * @param {File|null} file - The new file associated with the post.
+ * @returns {Promise<Object>} - A promise that resolves with the edited post object.
+ */
 export const editPost = async (postId, title, topic, content = null, file = null) => {
   let updates;
 
@@ -74,6 +102,15 @@ export const editPost = async (postId, title, topic, content = null, file = null
   }
 };
 
+/**
+ * Creates a new comment on a post.
+ *
+ * @param {string|null} content - The content of the comment.
+ * @param {string} author - The author's handle.
+ * @param {string} postId - The ID of the post the comment belongs to.
+ * @param {string} userUid - The user's unique ID.
+ * @returns {Promise<Array>} - A promise that resolves with an array of comments for the post.
+ */
 export const createComment = async (content = null, author, postId, userUid) => {
   return push(
     ref(database, 'comments'),
@@ -96,6 +133,12 @@ export const createComment = async (content = null, author, postId, userUid) => 
       return getCommentsByPostHandle(result.key);
     });
 }
+/**
+ * Fetches a comment by its ID.
+ *
+ * @param {string} commentId - The ID of the comment to fetch.
+ * @returns {Promise<Object>} - A promise that resolves with the fetched comment object.
+ */
 
 export const getCommentById = async (commentId) => {
   const commentRef = ref(database, `comments/${commentId}`);
@@ -114,6 +157,12 @@ export const getCommentById = async (commentId) => {
   }
 }
 
+/**
+ * Fetches comments associated with a specific post.
+ *
+ * @param {string} postId - The ID of the post for which to fetch comments.
+ * @returns {Promise<Array>} - A promise that resolves with an array of comments for the post.
+ */
 export const getCommentsByPostHandle = async (postId) => {
 
   return get(query(ref(database, 'comments'), orderByChild('postId'), equalTo(postId)))
@@ -125,6 +174,11 @@ export const getCommentsByPostHandle = async (postId) => {
     });
 };
 
+/**
+ * Fetches all comments from the database.
+ *
+ * @returns {Promise<Array>} - A promise that resolves with an array of all comments.
+ */
 export const getAllComments = () => {
 
   return get(ref(database, 'comments'))
@@ -137,6 +191,14 @@ export const getAllComments = () => {
     });
 };
 
+/**
+ * Deletes a comment by its ID.
+ *
+ * @param {string} commentID - The ID of the comment to delete.
+ * @param {string} postId - The ID of the post to which the comment belongs.
+ * @returns {Promise<void>} - A promise that resolves when the comment is successfully deleted.
+ * @throws {Error} - If there's an error while deleting the comment.
+ */
 export const deleteCommentID = async (commentID, postId) => {
   const commentLocation = commentID;
   try {
@@ -153,6 +215,14 @@ export const deleteCommentID = async (commentID, postId) => {
 
 }
 
+/**
+ * Edits an existing comment.
+ *
+ * @param {string} commentId - The ID of the comment to edit.
+ * @param {string} newContent - The new content of the comment.
+ * @returns {Promise<void>} - A promise that resolves when the comment is successfully edited.
+ * @throws {Error} - If there's an error while editing the comment.
+ */
 export const editComment = async (commentId, newContent) => {
   const commentRef = ref(database, `comments/${commentId}`);
   const editedCommentData = {
@@ -168,7 +238,12 @@ export const editComment = async (commentId, newContent) => {
   }
 };
 
-
+/**
+ * Deletes a post and its associated comments.
+ *
+ * @param {string} postId - The ID of the post to delete.
+ * @returns {Promise<void>} - A promise that resolves when the post and comments are deleted.
+ */
 export async function deletePost(postId) {
 
   await remove(ref(database, `posts/${postId}`));
@@ -185,6 +260,13 @@ export async function deletePost(postId) {
 
 }
 
+/**
+ * Fetches a post by its ID.
+ *
+ * @param {string} id - The ID of the post to fetch.
+ * @returns {Promise<Object>} - A promise that resolves with the fetched post object.
+ * @throws {Error} - If the post with the specified ID does not exist.
+ */
 export const getPostById = (id) => {
 
   return get(ref(database, `posts/${id}`))
@@ -202,6 +284,11 @@ export const getPostById = (id) => {
     });
 };
 
+/**
+ * Fetches all posts from the database.
+ *
+ * @returns {Promise<Array>} - A promise that resolves with an array of all posts.
+ */
 export const getAllPosts = () => {
 
   return get(ref(database, 'posts'))
@@ -214,6 +301,12 @@ export const getAllPosts = () => {
     });
 };
 
+/**
+ * Fetches posts authored by a specific user handle.
+ *
+ * @param {string} handle - The handle of the user.
+ * @returns {Promise<Array>} - A promise that resolves with an array of posts authored by the user.
+ */
 export const getPostsByAuthor = (handle) => {
 
   return get(query(ref(database, 'posts'), orderByChild('author'), equalTo(handle)))
@@ -225,6 +318,13 @@ export const getPostsByAuthor = (handle) => {
     });
 };
 
+/**
+ * Upvotes a post.
+ *
+ * @param {string} handle - The handle of the user performing the upvote.
+ * @param {string} postId - The ID of the post to upvote.
+ * @returns {Promise<void>} - A promise that resolves when the post is successfully upvoted.
+ */
 export const upvotePost = (handle, postId) => {
   const updateUpvotes = {};
   updateUpvotes[`/posts/${postId}/upvotedBy/${handle}`] = true;
@@ -236,6 +336,13 @@ export const upvotePost = (handle, postId) => {
   return update(ref(database), updateUpvotes);
 };
 
+/**
+ * Downvotes a post.
+ *
+ * @param {string} handle - The handle of the user performing the downvote.
+ * @param {string} postId - The ID of the post to downvote.
+ * @returns {Promise<void>} - A promise that resolves when the post is successfully downvoted.
+ */
 export const downvotePost = (handle, postId) => {
   const updateUpvotes = {};
   updateUpvotes[`/posts/${postId}/upvotedBy/${handle}`] = null;
@@ -246,6 +353,13 @@ export const downvotePost = (handle, postId) => {
   return update(ref(database), updateUpvotes);
 };
 
+/**
+ * Removes tags from a post.
+ *
+ * @param {string} postId - The ID of the post to remove tags from.
+ * @param {Array<string>} tags - An array of tags to remove.
+ * @returns {Promise<void>} - A promise that resolves when the tags are successfully removed from the post.
+ */
 export const getUpvotedPosts = (handle) => {
 
   return get(ref(database, `users/${handle}`))
@@ -274,6 +388,13 @@ export const getUpvotedPosts = (handle) => {
     });
 };
 
+/**
+ * Adds tags to a post.
+ *
+ * @param {string} postId - The ID of the post to which tags will be added.
+ * @param {Array<string>} tags - An array of tags to add to the post.
+ * @returns {Promise<void>} - A promise that resolves when the tags are successfully added to the post.
+ */
 export const addPostTags = (postId, tags) => {
   const updatePostTags = {};
   tags.map(tag => {
@@ -283,6 +404,13 @@ export const addPostTags = (postId, tags) => {
   return update(ref(database), updatePostTags);
 };
 
+/**
+ * Removes tags from a post.
+ *
+ * @param {string} postId - The ID of the post from which tags will be removed.
+ * @param {Array<string>} tags - An array of tags to remove from the post.
+ * @returns {Promise<void>} - A promise that resolves when the tags are successfully removed from the post.
+ */
 export const removePostTags = async (postId, tags) => {
   const promises = [];
   tags.forEach(tag => {

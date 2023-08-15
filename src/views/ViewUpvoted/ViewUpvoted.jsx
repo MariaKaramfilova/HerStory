@@ -4,6 +4,13 @@ import { Link } from "react-router-dom";
 import { getUserByUsername } from "../../services/users.services";
 import PropTypes from "prop-types";
 
+/**
+ * The ViewUpvoted component displays a list of users who have upvoted a post.
+ *
+ * @component
+ * @param {Array} upvotedBy - An array of usernames of users who upvoted the post.
+ * @returns {JSX.Element} - JSX representing the ViewUpvoted component.
+ */
 export default function ViewUpvoted({ upvotedBy }) {
   const [usersData, setUsersData] = useState([]);
   useEffect(() => {

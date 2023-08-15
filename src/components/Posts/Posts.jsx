@@ -9,6 +9,21 @@ import { PostsContext } from '../../context/PostsContext.js';
 import _ from 'lodash';
 import Error from '../../views/Error/Error.jsx';
 
+/**
+ * A component to display posts based on various filters.
+ *
+ * Displays a list of posts with filtering options based on search term, user name, and tag.
+ *
+ * @component
+ * @param {string} searchTerm - The search term for filtering posts.
+ * @param {string} userName - The user name for filtering posts by a specific user.
+ * @param {string} tag - The tag for filtering posts by a specific tag.
+ * @returns {JSX.Element} Rendered component with posts list.
+ * @example
+ * return (
+ *   <Posts searchTerm="equality" />
+ * );
+ */
 export default function Posts({ searchTerm, userName, tag }) {
   const [filter, setFilter] = useState('new');
   const [renderedPosts, setRenderedPosts] = useState([]);

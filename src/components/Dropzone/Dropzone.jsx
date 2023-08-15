@@ -6,6 +6,17 @@ import { useDropzone } from 'react-dropzone';
 import './Dropzone.css'
 import PropTypes from "prop-types";
 
+/**
+ * A component for handling file uploads using a dropzone.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.setFile - A callback function to set the selected file.
+ * @example
+ * return (
+ *   <DropzoneComponent setFile={handleSetFile} />
+ * );
+ */
 export default function DropzoneComponent({ setFile }) {
   const [error, setError] = useState(null);
   const [preview, setPreview] = useState(null);

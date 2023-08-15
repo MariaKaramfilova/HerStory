@@ -7,6 +7,12 @@ import { AuthContext } from "../../context/AuthContext.js";
 import { Link, useNavigate } from "react-router-dom";
 import Error from "../Error/Error.jsx";
 
+/**
+ * The SideBar component displays user and post statistics along with popular topics.
+ *
+ * @component
+ * @returns {JSX.Element} - JSX representing the SideBar component.
+ */
 function SideBar() {
   const [forumUsers, setForumUsers] = useState("");
   const [forumPosts, setForumPosts] = useState("");

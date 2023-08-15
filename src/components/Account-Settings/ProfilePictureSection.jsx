@@ -6,6 +6,13 @@ import { useState } from 'react';
 import { AuthContext } from '../../context/AuthContext.js';
 import Skeleton from 'react-loading-skeleton';
 
+/**
+ * Component that allows the user to manage their profile picture.
+ *
+ * @component
+ * @example
+ * return <ProfilePictureSection />;
+ */
 export default function ProfilePictureSection() {
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);

@@ -7,6 +7,15 @@ import { updateTags } from '../../services/tag.services.js';
 import DropzoneComponent from '../../components/Dropzone/Dropzone';
 import { PostsContext } from '../../context/PostsContext.js';
 
+/**
+ * A component for editing an existing post.
+ *
+ * @component
+ * @example
+ * return (
+ *   <EditPost />
+ * );
+ */
 const EditPost = () => {
   const [post, setPost] = useState(null);
   const [editedTitle, setEditedTitle] = useState('');

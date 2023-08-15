@@ -3,7 +3,18 @@ import { Modal } from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom'
 import PropTypes from "prop-types";
 
-
+/**
+ * A modal component designed to wrap and display authentication-related content.
+ *
+ * The AuthModal displays its children within a modal dialog. It provides a consistent
+ * modal structure for rendering authentication-related forms or content.
+ *
+ * @component
+ * @param {object} props - Component props.
+ * @param {ReactNode} props.children - The content to render within the modal.
+ * @returns {ReactNode} - Rendered modal component.
+ *
+ */
 export default function AuthModal({ children }) {
   const navigate = useNavigate();
   const location = useLocation();

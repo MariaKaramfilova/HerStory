@@ -7,6 +7,17 @@ import PasswordSection from "./PasswordSection";
 import PhoneSection from "./PhoneSection";
 import ProfilePictureSection from "./ProfilePictureSection";
 
+
+/**
+ * Account Settings component that allows users to manage their account settings.
+ * This component displays various sections for managing profile picture, password,
+ * email, phone number, and account deletion.
+ *
+ * @component
+ * @example
+ * return <AccountSettings />;
+ */
+
 const AccountSettings = () => {
   const { loggedInUser, user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);

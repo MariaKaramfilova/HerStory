@@ -1,6 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+/**
+ * The NotFound component displays a "404 - Page not found" error page.
+ *
+ * @returns {JSX.Element} - JSX representing the NotFound component.
+ */
 export default function NotFound() {
   return (
     <div className="d-flex align-items-center justify-content-center vh-100">

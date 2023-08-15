@@ -7,6 +7,14 @@ import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 import Error from '../Error/Error.jsx';
 
+/**
+ * The PostTags component displays the tags associated with a post.
+ *
+ * @component
+ * @param {object} post - The post object.
+ * @param {string} post.author - The author of the post.
+ * @returns {JSX.Element} - JSX representing the PostTags component.
+ */
 export default function PostTags({ post }) {
   const [tags, setTags] = useState('');
   const [loading, setLoading] = useState(false);

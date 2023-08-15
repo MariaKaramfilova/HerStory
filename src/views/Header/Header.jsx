@@ -8,6 +8,11 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext.js";
 import Skeleton from "react-loading-skeleton";
 
+/**
+ * The Header component displays the top header section of the application.
+ *
+ * @returns {JSX.Element} - JSX representing the Header component.
+ */
 const Header = () => {
   const navigate = useNavigate();
   const { loggedInUser, user } = useContext(AuthContext);

@@ -18,6 +18,19 @@ import EditPost from "../EditPost/EditPost";
 import NotFound from "../../views/NotFound/NotFound.jsx";
 import Posts from "../Posts/Posts.jsx"
 
+/**
+ * Component defining the routing structure for the application.
+ *
+ * Defines the routing paths and corresponding components for different routes
+ * within the application.
+ *
+ * @component
+ * @returns {JSX.Element} Rendered component defining the application's routing.
+ * @example
+ * return (
+ *   <RouteElement />
+ * );
+ */
 export default function RouteElement() {
   return (
     <>

@@ -3,6 +3,11 @@ import { Nav, NavItem } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
 
+/**
+ * The NavBar component displays navigation links in the side bar.
+ *
+ * @returns {JSX.Element} - JSX representing the NavBar component.
+ */
 const NavBar = () => {
   const { user } = useContext(AuthContext);
 

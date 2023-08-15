@@ -11,6 +11,20 @@ import PostUpvotes from "../../views/PostUpvotes/PostUpvotes";
 import Skeleton from "react-loading-skeleton";
 import { PostsContext } from "../../context/PostsContext.js";
 
+
+/**
+ * A component to display details of a single post.
+ *
+ * Displays post author information, post content, and related actions such as deleting and navigating to post details.
+ *
+ * @component
+ * @param {object} post - The post object containing post details.
+ * @returns {JSX.Element} Rendered component with post details.
+ * @example
+ * return (
+ *   <PostsDetails post={postData} />
+ * );
+ */
 export default function PostsDetails({ ...post }) {
   const navigate = useNavigate();
   const [authorData, setAuthorData] = useState('');

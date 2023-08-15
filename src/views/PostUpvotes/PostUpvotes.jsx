@@ -9,6 +9,17 @@ import ViewUpvoted from "../ViewUpvoted/ViewUpvoted";
 import _ from "lodash";
 import PropTypes from "prop-types";
 
+/**
+ * The PostUpvotes component allows users to upvote or downvote a post.
+ *
+ * @component
+ * @param {object} post - The post object.
+ * @param {string} post.postId - The ID of the post.
+ * @param {string} post.author - The author of the post.
+ * @param {array} post.upvotedBy - An array of usernames that upvoted the post.
+ * @param {array} post.downvotedBy - An array of usernames that downvoted the post.
+ * @returns {JSX.Element} - JSX representing the PostUpvotes component.
+ */
 export default function PostUpvotes({ post }) {
   const navigate = useNavigate();
   const { user, loggedInUser } = useContext(AuthContext);

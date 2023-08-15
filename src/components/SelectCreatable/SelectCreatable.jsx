@@ -6,6 +6,21 @@ import { getPostsByAuthor } from '../../services/post.services.js';
 import PropTypes from "prop-types";
 import Error from '../../views/Error/Error.jsx';
 
+/**
+ * Component that provides a creatable select input for managing tags.
+ *
+ * This component allows users to create and select tags using a searchable input.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.changeTags - Callback function to handle tag changes.
+ * @param {Object} props.post - The post object to retrieve tags.
+ * @returns {JSX.Element} Rendered component for tag selection.
+ * @example
+ * return (
+ *   <SelectCreatable changeTags={handleTagChange} post={currentPost} />
+ * );
+ */
 export default function SelectCreatable({ changeTags, post }) {
   const animatedComponents = makeAnimated();
   const [loading, setLoading] = useState(false);

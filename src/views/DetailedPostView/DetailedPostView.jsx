@@ -16,6 +16,11 @@ import Skeleton from "react-loading-skeleton";
 import _ from "lodash";
 import { PostsContext } from "../../context/PostsContext.js";
 
+/**
+ * The DetailedPostView component displays detailed information about a specific post.
+ *
+ * @returns {JSX.Element} - JSX representing the DetailedPostView component.
+ */
 export default function DetailedPostView() {
   const { loggedInUser, user } = useContext(AuthContext);
   const [comment, setComment] = useState("");
@@ -77,6 +82,10 @@ export default function DetailedPostView() {
 
   const postDate = new Date(post.createdOn);
 
+  /**
+   * Submits a comment.
+   * @param {Event} e - The event object.
+   */
   async function submitComment(e) {
     e.preventDefault();
     if (loggedInUser.blockedStatus) {
@@ -104,11 +113,19 @@ export default function DetailedPostView() {
     }
   }
 
+  /**
+   * Handles editing the post.
+   * @param {Event} e - The event object.
+   */
   function handleEdit(e) {
     e.preventDefault();
     navigate(`/edit-post/${currentPostID}`);
   }
 
+  /**
+   * Handles deleting the post.
+   * @param {Event} e - The event object.
+   */
   async function handleDeletePost(e) {
     e.preventDefault();
     const confirmDelete = window.confirm(

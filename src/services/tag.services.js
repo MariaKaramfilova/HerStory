@@ -1,6 +1,12 @@
 import { database } from "../config/firebase.js";
 import { get, ref, push, update } from "firebase/database";
 
+/**
+ * Transforms the tags document snapshot into an array of tag objects.
+ *
+ * @param {DataSnapshot} snapshot - The snapshot of the tags document.
+ * @returns {Array} - An array of tag objects.
+ */
 const fromTagsDocument = snapshot => {
   const tagsDocument = snapshot.val();
 
@@ -16,6 +22,12 @@ const fromTagsDocument = snapshot => {
   });
 }
 
+/**
+ * Creates a new tag.
+ *
+ * @param {string} name - The name of the tag.
+ * @returns {Promise<Object>} - A promise that resolves with the created tag object.
+ */
 export const createTag = async (name) => {
   return push(
     ref(database, 'tags'), {
@@ -33,6 +45,12 @@ export const createTag = async (name) => {
     });
 }
 
+/**
+ * Retrieves a tag by its ID.
+ *
+ * @param {string} id - The ID of the tag to retrieve.
+ * @returns {Promise<Object>} - A promise that resolves with the retrieved tag object.
+ */
 export const getTagById = async (id) => {
 
   return get(ref(database, `tags/${id}`))
@@ -45,6 +63,11 @@ export const getTagById = async (id) => {
     });
 };
 
+/**
+ * Retrieves all tags.
+ *
+ * @returns {Promise<Array>} - A promise that resolves with an array of tag objects.
+ */
 export const getAllTags = async () => {
 
   return get(ref(database, 'tags'))
@@ -57,6 +80,12 @@ export const getAllTags = async () => {
     });
 };
 
+/**
+ * Updates tags based on a list of new tags.
+ *
+ * @param {Array<string>} newTags - The list of new tags to update.
+ * @returns {void}
+ */
 export const updateTags = async (newTags) => {
   try {
     const allTags = await getAllTags()

@@ -2,6 +2,12 @@ import React from 'react'
 import { Card, Container } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
 
+/**
+ * The SuccessRegister component displays a success message after creating an account on the HerStory forum.
+ *
+ * @component
+ * @returns {JSX.Element} - JSX representing the SuccessRegister component.
+ */
 export default function SuccessRegister() {
   return (
     <Container className='w-100 mt-3' style={{ minHeight: "100vh", maxWidth: "80%", marginLeft: "0"  }}>

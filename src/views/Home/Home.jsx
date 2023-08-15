@@ -1,6 +1,11 @@
 import React from "react"
 import Posts from "../../components/Posts/Posts.jsx"
 
+/**
+ * The Home component displays the home page of the application.
+ *
+ * @returns {JSX.Element} - JSX representing the Home component.
+ */
 export default function Home() {
     return (
         <>

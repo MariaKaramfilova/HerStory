@@ -7,6 +7,21 @@ import UsersDetails from "./UsersDetails.jsx";
 import PropTypes from "prop-types";
 import Error from "../../views/Error/Error.jsx";
 
+/**
+ * Component for displaying a list of users based on search criteria.
+ *
+ * This component fetches and displays a list of users based on the provided search term
+ * and search type. It filters users based on username, email, or name, and displays their
+ * details using the UsersDetails component.
+ *
+ * @component
+ * @param {string} searchTerm - The search term used to filter users.
+ * @returns {JSX.Element} Rendered component for displaying a list of users.
+ * @example
+ * return (
+ *   <Users searchTerm="john" />
+ * );
+ */
 export default function Users({ searchTerm }) {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);

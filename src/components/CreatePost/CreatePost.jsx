@@ -10,6 +10,15 @@ import Loading from '../../views/Loading/Loading.jsx';
 import { PostsContext } from '../../context/PostsContext.js';
 import Error from '../../views/Error/Error.jsx';
 
+/**
+ * A component for creating a new post.
+ *
+ * @component
+ * @example
+ * return (
+ *   <CreatePost />
+ * );
+ */
 export default function CreatePost() {
   // Need to import theme
   const { loggedInUser } = useContext(AuthContext);

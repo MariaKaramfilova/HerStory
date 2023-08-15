@@ -2,6 +2,12 @@ import React from 'react'
 import { Card, Container } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
 
+/**
+ * The SuccessPosting component displays a success message after creating a new post.
+ *
+ * @component
+ * @returns {JSX.Element} - JSX representing the SuccessPosting component.
+ */
 export default function SuccessPosting() {
   return (
     <Container className='w-100 mt-3' style={{ minHeight: "100vh", maxWidth: "80%", marginLeft: "0"  }}>

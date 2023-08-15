@@ -9,6 +9,11 @@ import BlockUserButton from "../BlockUserButton/BlockUserButton.jsx";
 import MakeAdminButton from "../MakeAdminButton/MakeAdminButton.jsx";
 import Error from "../Error/Error.jsx";
 
+/**
+ * The MyAccount component displays user account details and their posts.
+ *
+ * @returns {JSX.Element} - JSX representing the MyAccount component.
+ */
 export default function MyAccount() {
   const { loggedInUser, user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState("");

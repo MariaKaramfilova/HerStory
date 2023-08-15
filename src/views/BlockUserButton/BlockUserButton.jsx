@@ -4,6 +4,14 @@ import { Button } from 'react-bootstrap';
 import PropTypes from "prop-types";
 import Error from '../Error/Error.jsx';
 
+/**
+ * The BlockUserButton component provides a button to block or unblock a user.
+ *
+ * @param {Object} user - The user object containing user details.
+ * @param {string} user.username - The username of the user.
+ * @param {boolean} user.blockedStatus - The blocked status of the user.
+ * @returns {JSX.Element} - JSX representing the BlockUserButton component.
+ */
 export default function BlockUserButton({ user }) {
   const [blockedStatus, setBlockedStatus] = useState(user.blockedStatus);
   const [error, setError] = useState(null);

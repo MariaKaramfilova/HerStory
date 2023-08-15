@@ -1,3 +1,8 @@
+/**
+ * The About page component.
+ *
+ * @returns {JSX.Element} - JSX representing the About page content.
+ */
 export default function About() {
     return (
         <div>

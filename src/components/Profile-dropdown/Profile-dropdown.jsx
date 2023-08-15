@@ -8,6 +8,18 @@ import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 
+/**
+ * A dropdown component that displays user profile options like "My Account", "Account Settings", and "Log Out".
+ *
+ * Renders a dropdown menu with profile-related options, including handling user navigation and logout.
+ *
+ * @component
+ * @returns {JSX.Element} Rendered component displaying user profile dropdown.
+ * @example
+ * return (
+ *   <ProfileDropdown />
+ * );
+ */
 const ProfileDropdown = () => {
   const { loggedInUser, user } = useContext(AuthContext);
   const [profilePictureURL, setProfilePictureURL] = useState(user ? loggedInUser.profilePictureURL : '');
