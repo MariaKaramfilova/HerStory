@@ -10,8 +10,8 @@ export default function ViewUpvoted({ upvotedBy }) {
     const fetchUsersData = async () => {
       const usersDataArray = await Promise.all(
         upvotedBy.map(async (username) => {
-            const snapshot = await getUserByUsername(username);
-            return snapshot.val();
+          const snapshot = await getUserByUsername(username);
+          return snapshot.val();
 
         })
       );
@@ -50,15 +50,6 @@ export default function ViewUpvoted({ upvotedBy }) {
                     height={50}
                     style={{ marginRight: "10px" }}
                   />
-                <Link to={`/account/${user.uid}`}>
-                  <Image
-                    src={user.profilePictureURL}
-                    alt={`Profile Picture of ${user.username}`}
-                    roundedCircle
-                    width={50}
-                    height={50}
-                    style={{ marginRight: "10px" }}
-                  />
                 </Link>
                 <Link to={`/account/${user.uid}`}>{user.username}</Link>
               </li>
@@ -73,7 +64,6 @@ export default function ViewUpvoted({ upvotedBy }) {
     </Card>
   );
 }
-
 ViewUpvoted.propTypes = {
   upvotedBy: PropTypes.array.isRequired,
 };
