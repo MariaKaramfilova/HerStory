@@ -3,10 +3,12 @@ import { EmailAuthProvider } from "firebase/auth";
 import { updateProfilePhone } from "../../services/users.services";
 import { Button, Card, Form } from 'react-bootstrap';
 import { getAllUsers } from "../../services/users.services";
-import { useState } from "react";
-export default function PhoneSection({ loggedInUser, user, setUser }) {
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthContext.js";
+export default function PhoneSection() {
 
   const [phone, setPhone] = useState("");
+  const { loggedInUser, user, setUser } = useContext(AuthContext);
 
   const changePhone = async () => {
     const password = prompt(

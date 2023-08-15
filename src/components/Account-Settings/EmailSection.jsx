@@ -7,10 +7,11 @@ import { getAllUsers } from "../../services/users.services";
 import { Button, Card, Form, Alert } from 'react-bootstrap';
 
 
-export default function EmailSection({ loggedInUser, user, setUser }) {
+export default function EmailSection() {
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
+  const { loggedInUser, user, setUser } = useContext(AuthContext);
 
   const changeEmail = async () => {
     const password = prompt(

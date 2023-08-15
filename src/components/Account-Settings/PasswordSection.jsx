@@ -1,13 +1,15 @@
 import { updatePassword, } from "firebase/auth";
 import { Button, Card, Form, Alert } from 'react-bootstrap';
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthContext.js";
 
-export default function PasswordSection({ loggedInUser, user }) {
+export default function PasswordSection() {
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [error, setError] = useState("");
+  const {loggedInUser, user} = useContext(AuthContext);
 
   const changePassword = async () => {
     try {
