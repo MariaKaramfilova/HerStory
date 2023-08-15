@@ -19,38 +19,30 @@ export default function PostsDetails({ ...post }) {
   const [userName, setUserName] = useState('');
   const [typeFile, setTypeFile] = useState('');
   const [isDeleted, setIsDeleted] = useState(false);
-  const { user, loggedInUser } = useContext(AuthContext);
+  const { user, loggedInUser, allUsers } = useContext(AuthContext);
   const { allPosts, setAllPosts } = useContext(PostsContext);
 
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      try {
-        const snapshot = await getUserByUsername(post.author);
-        const userData = snapshot.val();
-        setAuthorData(userData);
-        if (loggedInUser) {
-          setUserRole(loggedInUser.role);
-          setUserName(loggedInUser.username);
-        }
+    if (allUsers) {
+      const userData = allUsers.filter(user => user.uid === post.userId);
+      setAuthorData(userData);
+    }
+    if (loggedInUser) {
+      setUserRole(loggedInUser.role);
+      setUserName(loggedInUser.username);
+    }
 
-        if (post.file) {
-          if (post.file.includes("mp4")) {
-            setTypeFile("video");
-          } else if (
-            post.file.includes("images") &&
-            !post.file.includes("mp4")
-          ) {
-            setTypeFile("image");
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching author data:", error);
-      } finally {
-        setLoading(false);
+    if (post.file) {
+      if (post.file.includes("mp4")) {
+        setTypeFile("video");
+      } else if (
+        post.file.includes("images") &&
+        !post.file.includes("mp4")
+      ) {
+        setTypeFile("image");
       }
+    }
 
-    })();
   }, [loggedInUser]);
 
   if (isDeleted) {
@@ -87,7 +79,7 @@ export default function PostsDetails({ ...post }) {
       {loading || !post ? (<Skeleton height={300} style={{ marginBottom: "20px" }} />
       ) : (
         <Card className="mb-3 post-card" style={{ maxWidth: "100%" }}>
-          <Card.Header className="d-flex justify-content-between align-items-center" >
+          <Card.Header className="d-flex justify-content-between align-items-center" style={{minHeight: "50px"}}>
             <div>
               {authorData && (
                 <Link to={`/account/${post.userId}`}>
@@ -121,7 +113,7 @@ export default function PostsDetails({ ...post }) {
                 marginTop: "15px",
                 backgroundColor: "WhiteSmoke",
                 paddingLeft: "5px",
-                paddingRight: "5px",
+                paddingRight: "5px"
               }}
             >
               {post.content.split(' ').length > 150 ? (
@@ -140,7 +132,7 @@ export default function PostsDetails({ ...post }) {
                 post.content
               )}
             </Card>
-            <div className={`media-element ${typeFile}`}>
+            <div className={`media-element ${typeFile}`} style={{minHeight: "320px"}}>
 
               {typeFile === "image" && (
                 <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
@@ -154,7 +146,6 @@ export default function PostsDetails({ ...post }) {
                   </video>
                 </div>
               )}
-
             </div>
             <hr />
             <div className="d-flex justify-content-between align-items-center mt-3">

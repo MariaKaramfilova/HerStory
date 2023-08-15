@@ -11,6 +11,7 @@ import Error from '../../views/Error/Error.jsx';
 
 export default function Posts({ searchTerm, userName, tag }) {
   const [filter, setFilter] = useState('new');
+  const [loading, setLoading] = useState(true);
   const [renderedPosts, setRenderedPosts] = useState([]);
   const [error, setError] = useState(null);
   const [selectedButton, setSelectedButton] = useState(1);
@@ -26,6 +27,7 @@ export default function Posts({ searchTerm, userName, tag }) {
   };
   
   useEffect(() => {
+    setLoading(true);
     if (_.isEmpty(allPosts)) {
       return;
     }
@@ -62,7 +64,7 @@ export default function Posts({ searchTerm, userName, tag }) {
     // Adjust view for showing posts in Account view
     setRenderedPosts(userName ? filteredPosts.filter(el => el.author === userName) : filteredPosts);
     
-    
+    setLoading(false);
   }, [filter, searchTerm, user, userName, tag, params.type, allPosts, params.id]);
   
   
@@ -103,7 +105,7 @@ export default function Posts({ searchTerm, userName, tag }) {
         </Row>
       </Container>)}
       <Container>
-        {_.isEmpty(allPosts) && !renderedPosts.length ? <Skeleton height={300} count={5} style={{ marginBottom: "20px" }} /> : postsToShow}
+        {_.isEmpty(allPosts) || !renderedPosts.length || loading ? <Skeleton height={500} count={5} style={{ marginBottom: "20px" }} /> : postsToShow}
       </Container>
     </>
   )
