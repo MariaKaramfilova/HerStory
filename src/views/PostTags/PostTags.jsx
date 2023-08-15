@@ -5,6 +5,7 @@ import { getPostsByAuthor } from '../../services/post.services.js';
 import { Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
+import Error from '../Error/Error.jsx';
 
 export default function PostTags({ post }) {
   const [tags, setTags] = useState('');
@@ -15,6 +16,7 @@ export default function PostTags({ post }) {
     setLoading(true);
     getPostsByAuthor(post.author)
       .then(data => {
+        console.log();
         const filterValidTags = Object.entries(data.filter(el => el.postId === post.postId)[0].tags);
         const defaultTagsList = filterValidTags.map(el => el[0]);
         setTags(defaultTagsList);

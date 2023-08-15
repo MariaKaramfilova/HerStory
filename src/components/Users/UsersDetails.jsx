@@ -12,6 +12,7 @@ import BlockUserButton from "../../views/BlockUserButton/BlockUserButton.jsx";
 import MakeAdminButton from "../../views/MakeAdminButton/MakeAdminButton.jsx";
 import { PostsContext } from '../../context/PostsContext.js';
 import _ from 'lodash';
+import Error from '../../views/Error/Error.jsx';
 
 export default function UsersDetails(user) {
   const [error, setError] = useState(null);
@@ -32,9 +33,8 @@ export default function UsersDetails(user) {
     navigate(`/account/${user.uid}`);
   };
 
-  // Need to fix this with error pages - check for lib
   if (error) {
-    return <h1>Error!!! {error.message}</h1>;
+    return <Error error={error} />
   }
 
   return (

@@ -7,6 +7,7 @@ import { AuthContext } from '../../context/AuthContext.js';
 import Skeleton from 'react-loading-skeleton';
 import { PostsContext } from '../../context/PostsContext.js';
 import _ from 'lodash';
+import Error from '../../views/Error/Error.jsx';
 
 export default function Posts({ searchTerm, userName, tag }) {
   const [filter, setFilter] = useState('new');
@@ -18,21 +19,20 @@ export default function Posts({ searchTerm, userName, tag }) {
   const { loggedInUser, user } = useContext(AuthContext);
   const { allPosts } = useContext(PostsContext);
 
-  console.log(filter);
-
+  
   const handleFilterChange = (selectedFilter) => {
     setFilter(selectedFilter);
     setSelectedButton(selectedFilter === 'new' ? 1 : selectedFilter === 'upvoted' ? 2 : 3);
   };
-
+  
   useEffect(() => {
     if (_.isEmpty(allPosts)) {
       return;
     }
-
+    
     const sortPosts = (result) => {
       console.log(filter);
-
+      
       let sortedPosts;
       if (filter === 'new') {
         sortedPosts = result.sort((a, b) => b.createdOn - a.createdOn);
@@ -43,8 +43,8 @@ export default function Posts({ searchTerm, userName, tag }) {
       }
       return sortedPosts;
     }
-
-    let result = allPosts;
+    
+    let result = [...allPosts];
     if (searchTerm) {
       result = result.filter(el => {
         return el.title.split(' ').filter(el => el.toLowerCase().startsWith(searchTerm.toLowerCase())).length > 0;
@@ -54,23 +54,23 @@ export default function Posts({ searchTerm, userName, tag }) {
     } else if (params.type === "topics") {
       result = result.filter(el => el.topic.split(" ").join("") === params.id);
     }
-
+    
     const sortedPosts = sortPosts(result);
-
+    
     // Filter only 10 posts for logged out user
     let filteredPosts = user ? sortedPosts : sortedPosts.slice(0, sortedPosts.length <= 10 ? sortedPosts.length : 10);
     // Adjust view for showing posts in Account view
     setRenderedPosts(userName ? filteredPosts.filter(el => el.author === userName) : filteredPosts);
-
-
+    
+    
   }, [filter, searchTerm, user, userName, tag, params.type, allPosts, params.id]);
-
-
+  
+  
   // Need to fix this with error pages - check for lib
   if (error) {
-    return <h1>Error!!! {error.message}</h1>
+    return <Error error={error} />
   }
-
+  
   const postsToShow = renderedPosts.length ? (
     renderedPosts.map(post => {
       const postDetailsProp = {
@@ -79,12 +79,12 @@ export default function Posts({ searchTerm, userName, tag }) {
       };
       return <PostsDetails key={crypto.randomUUID()} {...postDetailsProp} />;
     })
-  ) : (
-    <div>
+    ) : (
+      <div>
       <p>No posts to show</p>
     </div>
   )
-
+  
   return (
     <>
 

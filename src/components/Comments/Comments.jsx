@@ -5,6 +5,7 @@ import { deleteCommentID, editComment, } from '../../services/post.services';
 import { Button, Modal, Card} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
+import './Comments.css';
 
 export default function Comment ({author, createdOn, content, commentPostId, commentUserUid, commentId, SetRefreshComments, refreshComments }) {
 
@@ -38,37 +39,40 @@ export default function Comment ({author, createdOn, content, commentPostId, com
     
       
       return (
-        <div key={createdOn}>
-    <Card className="mb-3">
-      <Card.Body>
-        <Card.Title>
-          <Link to={`/account/${commentUserUid}`}>{author}</Link>
-        </Card.Title>
-        <Card.Subtitle className="text-muted">
-          Created On: {new Date(createdOn).toLocaleString()}
-        </Card.Subtitle>
-        <Card.Text>{content}</Card.Text>
+    <div key={createdOn} className="d-flex justify-content-center mt-3">
+      <div style={{ maxWidth: '96%', minWidth:'96%' }}>
+    <Card>
+      
+      <Card.Header className="bg-light">
+      <div className="d-flex justify-content-between align-items-center">
+      <div>
+      
+        <Link to={`/account/${commentUserUid}`}>{author}</Link>
+        <div className="ml-2"> {new Date(createdOn).toLocaleString()}</div>
+      </div>
+      
+      {userId === commentUserUid && (
+        <div>
+          
+          <button
+            className="mt-1 text-link-button mr-2"
+            onClick={handleShow}
+          >
+            Edit Comment
+          </button>
 
-        {userId === commentUserUid && (
-          <div>
-            <Button
-              type="submit"
-              className="mt-1"
-              variant="danger"
-              onClick={() => deleteComment(commentId)}
-            >
-              Delete Comment
-            </Button>
-            <Button
-              type="submit"
-              className="mt-1 ml-2"
-              variant="primary"
-              onClick={handleShow}
-            >
-              Edit Comment
-            </Button>
-          </div>
-        )}
+          <button
+            className="mt-1 text-link-button mr-2"
+            onClick={() => deleteComment(commentId)}
+          >
+            Delete Comment
+          </button>
+        </div>
+      )}
+    </div>
+    </Card.Header>
+    <Card.Body>
+        <Card.Text>{content}</Card.Text>
       </Card.Body>
     </Card>
 
@@ -93,7 +97,8 @@ export default function Comment ({author, createdOn, content, commentPostId, com
         </Button>
       </Modal.Footer>
     </Modal>
-    <hr />
+
+    </div>
   </div>
     );
   }

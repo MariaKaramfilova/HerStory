@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { PostsContext } from '../../context/PostsContext.js'
 import { getAllPosts } from '../../services/post.services.js';
+import Error from '../../views/Error/Error.jsx';
 
 export default function PostsContextProvider({ children }) {
   const { post, setPost } = useContext(PostsContext);
@@ -21,6 +22,10 @@ export default function PostsContextProvider({ children }) {
       }
     })()
   }, []);
+
+  if (error) {
+    return <Error error={error} />
+  }
 
   return (
     <div className='main-content'>

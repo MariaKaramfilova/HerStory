@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Button } from 'react-bootstrap';
 import { makeAdminUser, removeAdminRights } from '../../services/users.services.js';
 import PropTypes from "prop-types";
+import Error from '../Error/Error.jsx';
 
 export default function MakeAdminButton({ user }) {
   const [adminStatus, setAdminStatus] = useState(user.role === "admin");
@@ -28,6 +29,10 @@ export default function MakeAdminButton({ user }) {
     } catch (error) {
       setError(error)
     }
+  }
+
+  if (error) {
+    return <Error error={error}/>;
   }
 
   return (

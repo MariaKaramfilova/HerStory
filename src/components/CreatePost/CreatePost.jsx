@@ -8,6 +8,7 @@ import DropzoneComponent from '../Dropzone/Dropzone.jsx';
 import { TOPIC_EDUCATION, TOPIC_EQUALITY, TOPIC_MATERNITY, TOPIC_PAY, TOPIC_REPRO, TOPIC_VIOLENCE } from '../../common/common.js';
 import Loading from '../../views/Loading/Loading.jsx';
 import { PostsContext } from '../../context/PostsContext.js';
+import Error from '../../views/Error/Error.jsx';
 
 export default function CreatePost() {
   // Need to import theme
@@ -86,6 +87,10 @@ export default function CreatePost() {
 
   if (loading) {
     return <Loading />
+  }
+
+  if (error) {
+    return <Error error={error} />
   }
 
   return (

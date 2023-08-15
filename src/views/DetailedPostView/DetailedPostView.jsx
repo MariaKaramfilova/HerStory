@@ -5,7 +5,7 @@ import {
   deletePost,
   getAllPosts,
 } from "../../services/post.services";
-import { Alert, Button, Form, Image } from "react-bootstrap";
+import { Alert, Button, Form, Image, Card } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext.js";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -149,72 +149,59 @@ export default function DetailedPostView() {
 
   return (
     <div className="container-auto mt-3">
-      {/* <h7>{demoPost.topic}</h7> */}
+     <div className="container-auto mt-3">
       <div className="row">
         <div className="col-8">
-
           {loading ? (
             <Skeleton width={100} />
           ) : (
             <h6>
               Posted by{" "}
-              <Link to={`/account/${post.userId}`}>{post.author}</Link> on{" "}
-              {postDate.toLocaleString()} | {post.topic}
+              <Link to={`/account/${post.userId}`}>
+                {post.author}
+              </Link>{" "}
+              on {postDate.toLocaleString()} | {post.topic}
             </h6>
           )}
         </div>
-
-        {(userRole === "admin" || post.author === userName) && (
-          <>
-            <div className="col">
-              <Button
-                type="submit"
-                className="mt-1"
-                variant="dark"
-                onClick={handleEdit}
-              >
-                Edit Post
-              </Button>
-            </div>
-            <div className="col">
-              <Button
-                type="submit"
-                className="mt-1"
-                variant="dark"
-                onClick={handleDeletePost}
-              >
-                Delete Post
-              </Button>
-            </div>
-          </>
+        {(userRole === 'admin' || post.author === userName) && (
+          <div className="col-4 text-right">
+          <Link className="mt-1 mr-2 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleEdit}>Edit Post</Link>
+          <Link className="mt-1 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleDeletePost}>Delete Post</Link>
+        </div>
         )}
       </div>
+      <hr /> {/* Line */}
+    </div>
 
-      <row className="mt-1">
-
+    <div className="container mt-1">
+      <div className="mx-auto" style={{ maxWidth: '97%' }}>
         <h1>{loading ? <Skeleton width={200} /> : post.title}</h1>
         {loading ? (
           <Skeleton count={3} />
         ) : (
           <>
+          <hr/>
             <p>{post.content}</p>
             <div className={`media-element ${typeFile}`}>
               {typeFile === "image" && (
-            <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-              <Image src={post.file} style={{ height: '320px', width: 'auto%', }} />
+                <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+                  <Image src={post.file} style={{ height: '320px', width: 'auto' }} />
+                </div>
+              )}
+              {typeFile === "video" && (
+                <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+                  <video controls style={{ height: '320px', width: 'auto' }}>
+                    <source src={post.file} type="video/mp4" />
+                  </video>
+                </div>
+              )}
             </div>
-          )}
-            {typeFile === "video" && (
-            <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-              <video controls style={{ height: '320px', width: 'auto%', }}>
-                <source src={post.file} type="video/mp4" />
-              </video>
-            </div>
-          )}
-            </div>
+              <hr/>
           </>
         )}
-      </row>
+      </div>
+    </div>
 
       {loggedInUser ? (
         <div className="row">
@@ -234,7 +221,7 @@ export default function DetailedPostView() {
           </div>
 
           <div className="col-2">
-            <Button type="submit" variant="danger" onClick={submitComment}>
+            <Button type="submit" variant="dark" onClick={submitComment}>
               Add Comment
             </Button>
           </div>
@@ -250,15 +237,16 @@ export default function DetailedPostView() {
           </p>{" "}
         </>
       )}
+
       {error && <Alert variant="danger">{error}</Alert>}
       {post && <PostTags post={post} />}
-      <hr />
+      
       {loading ? (
         <Skeleton count={5} height={40} />
       ) : (
         <>
           <hr />
-          <h2>Comments</h2>
+          <h2>Comments:</h2>
           {commentsToShow}
         </>
       )}

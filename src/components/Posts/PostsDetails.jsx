@@ -22,8 +22,6 @@ export default function PostsDetails({ ...post }) {
   const { user, loggedInUser } = useContext(AuthContext);
   const { allPosts, setAllPosts } = useContext(PostsContext);
 
-
-
   useEffect(() => {
     setLoading(true);
     (async () => {
@@ -86,7 +84,7 @@ export default function PostsDetails({ ...post }) {
 
   return (
     <>
-      {loading ? (<Skeleton height={300} style={{ marginBottom: "20px" }} />
+      {loading || !post ? (<Skeleton height={300} style={{ marginBottom: "20px" }} />
       ) : (
         <Card className="mb-3 post-card" style={{ maxWidth: "100%" }}>
           <Card.Header className="d-flex justify-content-between align-items-center" >
