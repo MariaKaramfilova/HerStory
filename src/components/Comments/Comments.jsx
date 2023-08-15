@@ -2,47 +2,53 @@
 import { AuthContext } from '../../context/AuthContext.js';
 import React, { useContext, useState} from 'react';
 import { deleteCommentID, editComment, } from '../../services/post.services';
-import { Button, Modal} from 'react-bootstrap';
+import { Button, Modal, Card} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 
 export default function Comment ({author, createdOn, content, commentPostId, commentUserUid, commentId, SetRefreshComments, refreshComments }) {
 
-    const { loggedInUser } = useContext(AuthContext);
-    const [userId, setUserId] = useState(loggedInUser ? loggedInUser.uid : null)
+      const { loggedInUser } = useContext(AuthContext);
+      const [userId, setUserId] = useState(loggedInUser ? loggedInUser.uid : null)
 
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [editedContent, setEditedContent] = useState(content);
+      const [showEditModal, setShowEditModal] = useState(false);
+      const [editedContent, setEditedContent] = useState(content);
 
-    const handleClose = () => setShowEditModal(false);
-    const handleShow = () => setShowEditModal(true);
+      const handleClose = () => setShowEditModal(false);
+      const handleShow = () => setShowEditModal(true);
 
-    async function deleteComment (commentId) {
-        const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
+      async function deleteComment (commentId) {
+          const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
 
-        if (confirmDelete) {
-            await deleteCommentID(commentId, commentPostId);
-            SetRefreshComments(!refreshComments)
-        }
-    }
-
-    async function handleEditComment(commentId) {
-      try {
-        await editComment(commentId, editedContent);
-        SetRefreshComments(!refreshComments);
-        handleClose();
-      } catch (error) {
-        console.error('Error editing comment:', error);
+          if (confirmDelete) {
+              await deleteCommentID(commentId, commentPostId);
+              SetRefreshComments(!refreshComments)
+          }
       }
-    }
-  
+
+      async function handleEditComment(commentId) {
+        try {
+          await editComment(commentId, editedContent);
+          SetRefreshComments(!refreshComments);
+          handleClose();
+        } catch (error) {
+          console.error('Error editing comment:', error);
+        }
+      }
     
-    return (
-      <div key={createdOn}>
-        <Link to={`/account/${commentUserUid}`}>{author}</Link>
-        <p>Created On: {new Date(createdOn).toLocaleString()}</p>
-        <p>{content}</p>
-  
+      
+      return (
+        <div key={createdOn}>
+    <Card className="mb-3">
+      <Card.Body>
+        <Card.Title>
+          <Link to={`/account/${commentUserUid}`}>{author}</Link>
+        </Card.Title>
+        <Card.Subtitle className="text-muted">
+          Created On: {new Date(createdOn).toLocaleString()}
+        </Card.Subtitle>
+        <Card.Text>{content}</Card.Text>
+
         {userId === commentUserUid && (
           <div>
             <Button
@@ -61,32 +67,34 @@ export default function Comment ({author, createdOn, content, commentPostId, com
             >
               Edit Comment
             </Button>
-
-            <Modal show={showEditModal} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Comment</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <textarea
-            className="form-control"
-            rows="5"
-            value={editedContent}
-            onChange={(e) => setEditedContent(e.target.value)}
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={() => handleEditComment(commentId)}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
           </div>
         )}
-        <hr />
-      </div>
+      </Card.Body>
+    </Card>
+
+    <Modal show={showEditModal} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Edit Comment</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <textarea
+          className="form-control"
+          rows="5"
+          value={editedContent}
+          onChange={(e) => setEditedContent(e.target.value)}
+        />
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Cancel
+        </Button>
+        <Button variant="primary" onClick={() => handleEditComment(commentId)}>
+          Save Changes
+        </Button>
+      </Modal.Footer>
+    </Modal>
+    <hr />
+  </div>
     );
   }
 Comment.propTypes = {

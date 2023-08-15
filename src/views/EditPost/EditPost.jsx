@@ -116,7 +116,7 @@ const EditPost = () => {
           />
         </Form.Group>}
         
-        {post.file && (<DropzoneComponent setFile={setEditedFile} />)}
+        {post.file && (<DropzoneComponent onDrop={acceptedFiles => setEditedFile (acceptedFiles)} />)}
 
         <Form.Label>Add post tags</Form.Label>
         <SelectCreatable changeTags={handleSelectChange} post={post} />
