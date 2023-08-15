@@ -11,6 +11,7 @@ import { getAllPosts } from "../../services/post.services.js";
 import BlockUserButton from "../../views/BlockUserButton/BlockUserButton.jsx";
 import MakeAdminButton from "../../views/MakeAdminButton/MakeAdminButton.jsx";
 import { PostsContext } from '../../context/PostsContext.js';
+import _ from 'lodash';
 
 export default function UsersDetails(user) {
   const [error, setError] = useState(null);

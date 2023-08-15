@@ -1,6 +1,7 @@
-import { get, set, ref, query, orderByChild, equalTo, update } from "firebase/database";
+import { get, set, ref, query, orderByChild, equalTo, update, remove } from "firebase/database";
 import { auth, database } from "../config/firebase";
 import { setFileToStorage } from "./storage.services.js";
+import { deleteCommentID, deletePost } from "./post.services.js";
 
 export const fromUsersDocument = snapshot => {
   const usersDocument = snapshot.val();
@@ -101,4 +102,35 @@ export const removeAdminRights = (handle) => {
   updateAdminStatus[`/users/${handle}/role`] = "user";
 
   return update(ref(database), updateAdminStatus);
+}
+
+export async function deleteUserData(userHandle, posts, comments, upvoted, downvoted) {
+
+  await remove(ref(database, `users/${userHandle}`));
+
+  posts.map(async (post) => {
+    await deletePost(post.postId);
+  })
+
+  comments.map(async (comment) => {
+    await deleteCommentID(comment.commentId, comment.postId);
+  })
+
+  const updateVotesDeletion = {};
+  upvoted.forEach((postId) => {
+    updateVotesDeletion[`/posts/${postId}/upvotedBy/${userHandle}`] = null;
+  });
+
+  const updateDownVotesDeletion = {};
+  downvoted.forEach((postId) => {
+    updateDownVotesDeletion[`/posts/${postId}/downvotedBy/${userHandle}`] = null;
+  });
+
+  const updates = {
+    ...updateVotesDeletion,
+    ...updateDownVotesDeletion,
+  };
+  await update(ref(database), updates);
+
+  console.log('User and associated comments & posts deleted successfully');
 }

@@ -18,10 +18,30 @@ export default function Posts({ searchTerm, userName, tag }) {
   const { loggedInUser, user } = useContext(AuthContext);
   const { allPosts } = useContext(PostsContext);
 
-  useEffect(() => {
+  console.log(filter);
 
+  const handleFilterChange = (selectedFilter) => {
+    setFilter(selectedFilter);
+    setSelectedButton(selectedFilter === 'new' ? 1 : selectedFilter === 'upvoted' ? 2 : 3);
+  };
+
+  useEffect(() => {
     if (_.isEmpty(allPosts)) {
       return;
+    }
+
+    const sortPosts = (result) => {
+      console.log(filter);
+
+      let sortedPosts;
+      if (filter === 'new') {
+        sortedPosts = result.sort((a, b) => b.createdOn - a.createdOn);
+      } else if (filter === 'upvoted') {
+        sortedPosts = result.sort((a, b) => Object.keys(b).includes('upvotedBy') ? (Object.keys(b.upvotedBy).length - Object.keys(a.upvotedBy).length) : -1);
+      } else if (filter === 'commented') {
+        sortedPosts = result.sort((a, b) => Object.keys(b).includes('hasComment') ? (Object.keys(b.hasComment).length - Object.keys(a.hasComment).length) : -1);
+      }
+      return sortedPosts;
     }
 
     let result = allPosts;
@@ -35,16 +55,12 @@ export default function Posts({ searchTerm, userName, tag }) {
       result = result.filter(el => el.topic.split(" ").join("") === params.id);
     }
 
-    if (filter === 'new') {
-      result = result.sort((a, b) => b.createdOn - a.createdOn);
-    } else if (filter === 'upvoted') {
-      result = result.sort((a, b) => Object.keys(b.upvotedBy).length - Object.keys(a.upvotedBy).length);
-    } else {
-      result = result.sort((a, b) => Object.keys(b.hasComment).length - Object.keys(a.hasComment).length);
-    }
+    const sortedPosts = sortPosts(result);
 
-    let data = user ? result : result.slice(0, result.length <= 10 ? result.length : 10);
-    setRenderedPosts(userName ? data.filter(el => el.author === userName) : data);
+    // Filter only 10 posts for logged out user
+    let filteredPosts = user ? sortedPosts : sortedPosts.slice(0, sortedPosts.length <= 10 ? sortedPosts.length : 10);
+    // Adjust view for showing posts in Account view
+    setRenderedPosts(userName ? filteredPosts.filter(el => el.author === userName) : filteredPosts);
 
 
   }, [filter, searchTerm, user, userName, tag, params.type, allPosts, params.id]);
@@ -71,7 +87,7 @@ export default function Posts({ searchTerm, userName, tag }) {
 
   return (
     <>
-            
+
       {searchTerm == undefined && (<Container className='mb-3 mt-5'>
         <Row className="d-flex justify-content-center align-items-center">
           <Col style={{ maxWidth: "fit-content" }}>
@@ -79,9 +95,9 @@ export default function Posts({ searchTerm, userName, tag }) {
           </Col>
           <Col>
             <ToggleButtonGroup type="radio" name="options" value={selectedButton} className='w-100'>
-              <ToggleButton id="tbg-radio-1" value={1} onClick={() => { setFilter('new'); setSelectedButton(1) }} variant='outline-danger'>New Posts</ToggleButton>
-              <ToggleButton id="tbg-radio-2" value={2} onClick={() => { setFilter('upvoted'); setSelectedButton(2) }} variant="outline-danger">Most Upvoted</ToggleButton>
-              <ToggleButton id="tbg-radio-3" value={3} onClick={() => { setFilter('commented'); setSelectedButton(3) }} variant="outline-danger">Most Commented</ToggleButton>
+              <ToggleButton id="tbg-radio-1" value={1} onClick={() => handleFilterChange('new')} variant='outline-danger'>New Posts</ToggleButton>
+              <ToggleButton id="tbg-radio-2" value={2} onClick={() => handleFilterChange('upvoted')} variant="outline-danger">Most Upvoted</ToggleButton>
+              <ToggleButton id="tbg-radio-3" value={3} onClick={() => handleFilterChange('commented')} variant="outline-danger">Most Commented</ToggleButton>
             </ToggleButtonGroup>
           </Col>
         </Row>
