@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 
 export default function ViewUpvoted({ upvotedBy }) {
   const [usersData, setUsersData] = useState([]);
-
   useEffect(() => {
     const fetchUsersData = async () => {
       const usersDataArray = await Promise.all(
@@ -64,5 +63,5 @@ export default function ViewUpvoted({ upvotedBy }) {
 }
 
 ViewUpvoted.propTypes = {
-  children: PropTypes.array.isRequired,
+  upvotedBy: PropTypes.array.isRequired,
 };

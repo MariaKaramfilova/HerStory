@@ -3,6 +3,7 @@ import {
   getCommentsByPostHandle,
   getPostById,
   deletePost,
+  getAllPosts,
 } from "../../services/post.services";
 import { Alert, Button, Form, Image } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext.js";
@@ -13,6 +14,7 @@ import PostTags from "../PostTags/PostTags.jsx";
 import PostUpvotes from "../PostUpvotes/PostUpvotes.jsx";
 import Skeleton from "react-loading-skeleton";
 import _ from "lodash";
+import { PostsContext } from "../../context/PostsContext.js";
 
 export default function DetailedPostView() {
   const { loggedInUser, user } = useContext(AuthContext);
@@ -29,6 +31,7 @@ export default function DetailedPostView() {
   const [userName, setUserName] = useState(
     loggedInUser ? loggedInUser.username : null
   );
+  const { allPosts, setAllPosts } = useContext(PostsContext);
 
   const params = useParams();
   const currentPostID = params.id;
@@ -72,8 +75,6 @@ export default function DetailedPostView() {
       .finally(() => setLoading(false));
   }, [refreshComments, currentPostID, post.file]);
 
-  console.log(post.file);
-
   const postDate = new Date(post.createdOn);
 
   async function submitComment(e) {
@@ -113,8 +114,10 @@ export default function DetailedPostView() {
     if (confirmDelete) {
       try {
         await deletePost(currentPostID);
-        alert("Your post has been deleted!");
-        navigate("/home");
+        let result = await getAllPosts()
+        setAllPosts((prev) => ({ ...prev, allPosts: result }));
+        alert('Your post has been deleted!')
+        navigate('/home')
       } catch (error) {
         alert(error);
       }
@@ -149,6 +152,7 @@ export default function DetailedPostView() {
       {/* <h7>{demoPost.topic}</h7> */}
       <div className="row">
         <div className="col-8">
+
           {loading ? (
             <Skeleton width={100} />
           ) : (
@@ -187,6 +191,7 @@ export default function DetailedPostView() {
       </div>
 
       <row className="mt-1">
+
         <h1>{loading ? <Skeleton width={200} /> : post.title}</h1>
         {loading ? (
           <Skeleton count={3} />
@@ -195,13 +200,17 @@ export default function DetailedPostView() {
             <p>{post.content}</p>
             <div className={`media-element ${typeFile}`}>
               {typeFile === "image" && (
-                <Image src={post.file} fluid style={{ width: "40%" }} />
-              )}
-              {typeFile === "video" && (
-                <video controls className="media-element">
-                  <source src={post.file} type="video/mp4" />
-                </video>
-              )}
+            <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+              <Image src={post.file} style={{ height: '320px', width: 'auto%', }} />
+            </div>
+          )}
+            {typeFile === "video" && (
+            <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+              <video controls style={{ height: '320px', width: 'auto%', }}>
+                <source src={post.file} type="video/mp4" />
+              </video>
+            </div>
+          )}
             </div>
           </>
         )}

@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Alert, Button, Form, Card } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
-import { updateProfilePic } from "../../services/users.services";
+import { getAllUsers, updateProfilePic } from "../../services/users.services";
 import { Link } from "react-router-dom/dist";
 import Skeleton from "react-loading-skeleton";
 import { PasswordChanging } from "./PasswordSection";
@@ -38,10 +38,8 @@ const AccountSettings = () => {
       setFirstName(loggedInUser.firstName);
       setSurname(loggedInUser.lastName);
       setEmail(loggedInUser.email);
-      setProfilePictureURL(loggedInUser.profilePictureURL ||
-        "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png")
-      setPrevProfilePictureURL(loggedInUser.profilePictureURL ||
-        "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png");
+      setProfilePictureURL(loggedInUser.profilePictureURL || '../../assets/basic_avatar.png')
+      setPrevProfilePictureURL(loggedInUser.profilePictureURL || '../../assets/basic_avatar.png');
       setUsername(loggedInUser.username);
       setUserRole(loggedInUser.role);
       setPhone(loggedInUser.phone);

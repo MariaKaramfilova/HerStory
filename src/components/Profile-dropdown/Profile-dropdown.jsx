@@ -6,10 +6,11 @@ import { getUserData } from '../../services/users.services';
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
 
 const ProfileDropdown = () => {
   const { loggedInUser, user } = useContext(AuthContext);
-  const [profilePictureURL, setProfilePictureURL] = useState('');
+  const [profilePictureURL, setProfilePictureURL] = useState(user ? loggedInUser.profilePictureURL : '');
   const navigate = useNavigate();
 
   const handleMyAccount = () => {
@@ -20,24 +21,12 @@ const ProfileDropdown = () => {
     navigate('/account-settings')
   }
 
-  useEffect(() => {
-    const getProfilePictureURL = async () => {
-      if (user) {
-        setProfilePictureURL(loggedInUser.profilePictureURL);
-      }
-
-    };
-
-    if (user) {
-      getProfilePictureURL();
-    }
-  }, [loggedInUser]);
   return (
     <div>
-      <Dropdown>
+      {user === undefined ? <Skeleton width={50} height={50} /> : <Dropdown>
         <Dropdown.Toggle variant="light" id="dropdown-basic">
           <img
-            src={profilePictureURL ? (profilePictureURL) : ("https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black.png")}
+            src={profilePictureURL ? (profilePictureURL) : ('../../assets/basic_avatar.png')}
             alt="Profile Icon"
             style={{ width: '30px', height: '30px', borderRadius: '50%' }}
           />
@@ -46,7 +35,9 @@ const ProfileDropdown = () => {
         <Dropdown.Menu className="ml-auto">
           <Dropdown.Item onClick={handleMyAccount}>My Account</Dropdown.Item>
           <Dropdown.Item onClick={handleAccountSettings}>Account Settings</Dropdown.Item>
-          <Button
+          <Dropdown.Item onClick={logoutUser}>Log Out</Dropdown.Item>
+
+          {/* <Button
             type="button"
             variant="danger"
             onClick={() => {
@@ -55,10 +46,10 @@ const ProfileDropdown = () => {
             }}
           >
             Log Out
-          </Button>
+          </Button> */}
 
         </Dropdown.Menu>
-      </Dropdown>
+      </Dropdown>}
     </div>
   );
 };

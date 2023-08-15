@@ -1,16 +1,18 @@
 import React, { useContext, useState } from 'react'
 import { Button, Container, Col, Row, ToggleButtonGroup, ToggleButton, Alert } from 'react-bootstrap'
 import { Form } from 'react-bootstrap'
-import { createPost } from '../../services/post.services.js';
+import { createPost, getAllPosts } from '../../services/post.services.js';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
 import DropzoneComponent from '../Dropzone/Dropzone.jsx';
 import { TOPIC_EDUCATION, TOPIC_EQUALITY, TOPIC_MATERNITY, TOPIC_PAY, TOPIC_REPRO, TOPIC_VIOLENCE } from '../../common/common.js';
 import Loading from '../../views/Loading/Loading.jsx';
+import { PostsContext } from '../../context/PostsContext.js';
 
 export default function CreatePost() {
   // Need to import theme
   const { loggedInUser } = useContext(AuthContext);
+  const { allPosts, setAllPosts } = useContext(PostsContext);
 
   const [isTypeText, setIsTypeText] = useState(true);
   const [postTopic, setPostTopic] = useState('Choose topic');
@@ -58,18 +60,24 @@ export default function CreatePost() {
     const isBlocked = loggedInUser.blockedStatus;
     const userId = loggedInUser.uid;
 
-    if(isBlocked) {
+    if (isBlocked) {
       setError('You cannot create post because you are a blocked user!');
       setLoading(false);
       return;
     }
 
-    createPost(postTitle, postDescription, postTopic, postFile, userName, userEmail, userId)
-      .then(() => {
+    (async () => {
+      try {
+        await createPost(postTitle, postDescription, postTopic, postFile, userName, userEmail, userId);
+        let result = await getAllPosts();
+        setAllPosts((prev) => ({ ...prev, allPosts: result }));
         setIsCompleted(true);
-      })
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false));
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }
 
   if (isCompleted) {
@@ -79,7 +87,7 @@ export default function CreatePost() {
   if (loading) {
     return <Loading />
   }
- 
+
   return (
     <Container className='w-100 mt-3 mb-3' style={{ minHeight: "100vh", maxWidth: "60%", marginLeft: "0" }}>
       <h2 className='mb-4'>Create a post</h2>

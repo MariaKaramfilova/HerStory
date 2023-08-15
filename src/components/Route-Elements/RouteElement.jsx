@@ -16,6 +16,7 @@ import UsersDetails from "../Users/UsersDetails.jsx";
 import SearchWrapper from "../../views/Search/SearchWrapper.jsx";
 import EditPost from "../EditPost/EditPost";
 import NotFound from "../../views/NotFound/NotFound.jsx";
+import Posts from "../Posts/Posts.jsx"
 
 export default function RouteElement() {
   return (
@@ -107,6 +108,7 @@ export default function RouteElement() {
         />
         <Route path="/detailed-post-view/:id" element={<DetailedPostView />} />
         <Route path="/edit-post/:id" element={<EditPost />} />
+        <Route path="/:type/:id" element={<Posts />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

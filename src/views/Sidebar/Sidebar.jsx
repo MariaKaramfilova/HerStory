@@ -1,55 +1,31 @@
 import React, { useContext, useEffect, useState } from "react";
-import { getAllPosts } from "../../services/post.services.js";
-import { getAllUsers } from "../../services/users.services.js";
 import Skeleton from "react-loading-skeleton";
 import { Col, Container, Row, Button } from "react-bootstrap";
-import PostsDetails from "../../components/Posts/PostsDetails.jsx";
+import _ from 'lodash';
+import { PostsContext } from "../../context/PostsContext.js";
+import { AuthContext } from "../../context/AuthContext.js";
+import { Link, useNavigate } from "react-router-dom";
 
 function SideBar() {
   const [forumUsers, setForumUsers] = useState("");
   const [forumPosts, setForumPosts] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [filteredPosts, setFilteredPosts] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
+  const { allPosts } = useContext(PostsContext);
+  const { allUsers } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    let loadingCount = 0;
-    setLoading(true);
-    setError(false);
-    loadingCount++;
 
-    getAllPosts()
-      .then((snapshot) => {
-        const formatter = Intl.NumberFormat("en", { notation: "compact" });
-        setForumPosts(formatter.format(snapshot.length));
-        const filtered = snapshot.filter(
-          (post) => post.topic === selectedTopic
-        );
-        setFilteredPosts(filtered);
-      })
-      .catch((err) => setError(err))
-      .finally(() => {
-        loadingCount--;
-        if (loadingCount === 0) {
-          setLoading(false);
-        }
-      });
+    if (_.isEmpty(allPosts) || _.isEmpty(allUsers)) {
+      return;
+    }
+    const formatter = Intl.NumberFormat("en", { notation: "compact" });
+    setForumPosts(formatter.format(allPosts.length));
+    setForumUsers(formatter.format(Object.keys(allUsers).length));
 
-    loadingCount++;
-    getAllUsers()
-      .then((snapshot) => {
-        const formatter = Intl.NumberFormat("en", { notation: "compact" });
-        setForumUsers(formatter.format(snapshot.length));
-      })
-      .catch((err) => setError(err))
-      .finally(() => {
-        loadingCount--;
-        if (loadingCount === 0) {
-          setLoading(false);
-        }
-      });
-  }, [selectedTopic]);
+  }, [selectedTopic, allPosts, allUsers]);
 
   const femaleRightsTopics = [
     "Gender Equality",
@@ -61,7 +37,8 @@ function SideBar() {
   ];
 
   const handleTopicSelect = (topic) => {
-    setSelectedTopic(topic);
+    navigate(`/topics/${topic.split(' ').join("")}`);
+    return;
   };
 
   let id = 1;
@@ -75,10 +52,11 @@ function SideBar() {
 
   return (
     <div className="container-fluid" style={styles.container}>
+      
       <div className="row align-items-center">
         <div className="col-auto min-vh-100 w-100 bg-light py-4 px-4">
           <Container style={{ height: "30px" }}>
-            {loading ? (
+            {!forumUsers || !forumPosts ? (
               <Skeleton />
             ) : (
               <Row>
@@ -110,33 +88,10 @@ function SideBar() {
             </ul>
           </ul>
           <hr></hr>
-          {filteredPosts.length > 0 ? (
-            <>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "10px",
-                }}
-              >
-                <h3 style={{ marginRight: "10px" }}>{selectedTopic}</h3>
-                <Button onClick={() => setSelectedTopic("")} variant="dark">
-                  Clear
-                </Button>
-              </div>
-              {filteredPosts.map((post) => (
-                <PostsDetails key={post.postId} {...post} />
-              ))}
-            </>
-          ) : selectedTopic ? (
-            <h3 style={{ textAlign: "center" }}>
-              There are no posts on {selectedTopic}
-            </h3>
-          ) : (
-            ""
-          )}
         </div>
+
       </div>
+      
     </div>
   );
 }
