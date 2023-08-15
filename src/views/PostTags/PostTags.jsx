@@ -16,6 +16,7 @@ export default function PostTags({ post }) {
     setLoading(true);
     getPostsByAuthor(post.author)
       .then(data => {
+        console.log();
         const filterValidTags = Object.entries(data.filter(el => el.postId === post.postId)[0].tags);
         const defaultTagsList = filterValidTags.map(el => el[0]);
         setTags(defaultTagsList);
@@ -32,10 +33,6 @@ export default function PostTags({ post }) {
       <p>No tags</p>
     </div>
   )
-
-  if (error) {
-    return <Error error={error} />;
-  }
 
   return (
     <Container className='d-flex mt-4'>
