@@ -33,16 +33,21 @@ export default function MyAccount() {
     }
 
     if (location.pathname !== "/my-account") {
-      getUserData(userId)
-        .then((snapshot) => {
+      (async function () {
+        try {
+          const snapshot = await getUserData(userId);
           const userData = snapshot.val(Object.keys(snapshot.val())[0]);
           const userInfo = Object.values(userData).filter(
             (el) => el.uid === userId
           )[0];
           setUserInfo(userInfo);
-        })
-        .catch((err) => setError(err))
-        .finally(() => setLoading(false));
+        } catch (err) {
+          setError(err);
+        } finally {
+          setLoading(false);
+        }
+      })();
+
       return;
     } else {
       setUserInfo(loggedInUser);

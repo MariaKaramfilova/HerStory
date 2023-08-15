@@ -22,28 +22,37 @@ export default function SelectCreatable({ changeTags, post }) {
 
   useEffect(() => {
     setLoading(true);
-    getPostsByAuthor(post.author)
-      .then(data => {
-        const filterValidTags = Object.entries(data.filter(el => el.postId === post.postId)[0].tags);
-        const defaultTagsList = filterValidTags.map(el => createOption(el[0]));
+    (async function () {
+      try {
+        const data = await getPostsByAuthor(post.author);
+        const filterValidTags = Object.entries(
+          data.filter((el) => el.postId === post.postId)[0].tags
+        );
+        const defaultTagsList = filterValidTags.map((el) => createOption(el[0]));
         setDefaultTags(defaultTagsList);
         setValue(defaultTagsList);
         changeTags(defaultTagsList);
-      })
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    })();
 
-    getAllTags()
-      .then(data => {
+    (async function () {
+      try {
+        const data = await getAllTags();
         const arr = [];
         data.map((tag) => {
           return arr.push({ value: tag.name, label: tag.name });
         });
         setAllTags(arr);
-      })
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   if (error) {

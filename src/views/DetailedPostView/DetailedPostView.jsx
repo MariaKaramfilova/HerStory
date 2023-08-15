@@ -40,8 +40,9 @@ export default function DetailedPostView() {
 
   useEffect(() => {
     setLoading(true);
-    getPostById(currentPostID)
-      .then((currentPost) => {
+    (async function () {
+      try {
+        const currentPost = await getPostById(currentPostID);
         const updatedPost = {
           ...currentPost,
           upvotedBy: currentPost.upvotedBy
@@ -64,15 +65,14 @@ export default function DetailedPostView() {
             setTypeFile("image");
           }
         }
-        return getCommentsByPostHandle(currentPostID);
-      })
-      .then((comments) => {
+        const comments = await getCommentsByPostHandle(currentPostID);
         setCommentsLibrary(comments);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching post and comments:", error);
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [refreshComments, currentPostID, post.file]);
 
   const postDate = new Date(post.createdOn);
@@ -89,15 +89,19 @@ export default function DetailedPostView() {
       return;
     }
 
-    await createComment(
-      comment,
-      loggedInUser.username,
-      post.postId,
-      loggedInUser.uid
-    );
-    alert("comment submitted");
-    setComment("");
-    SetRefreshComments(!refreshComments);
+    try {
+      await createComment(
+        comment,
+        loggedInUser.username,
+        post.postId,
+        loggedInUser.uid
+      );
+      alert("comment submitted");
+      setComment("");
+      SetRefreshComments(!refreshComments);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function handleEdit(e) {
@@ -149,59 +153,59 @@ export default function DetailedPostView() {
 
   return (
     <div className="container-auto mt-3">
-     <div className="container-auto mt-3">
-      <div className="row">
-        <div className="col-8">
-          {loading ? (
-            <Skeleton width={100} />
-          ) : (
-            <h6>
-              Posted by{" "}
-              <Link to={`/account/${post.userId}`}>
-                {post.author}
-              </Link>{" "}
-              on {postDate.toLocaleString()} | {post.topic}
-            </h6>
+      <div className="container-auto mt-3">
+        <div className="row">
+          <div className="col-8">
+            {loading ? (
+              <Skeleton width={100} />
+            ) : (
+              <h6>
+                Posted by{" "}
+                <Link to={`/account/${post.userId}`}>
+                  {post.author}
+                </Link>{" "}
+                on {postDate.toLocaleString()} | {post.topic}
+              </h6>
+            )}
+          </div>
+          {(userRole === 'admin' || post.author === userName) && (
+            <div className="col-4 text-right">
+              <Link className="mt-1 mr-2 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleEdit}>Edit Post</Link>
+              <Link className="mt-1 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleDeletePost}>Delete Post</Link>
+            </div>
           )}
         </div>
-        {(userRole === 'admin' || post.author === userName) && (
-          <div className="col-4 text-right">
-          <Link className="mt-1 mr-2 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleEdit}>Edit Post</Link>
-          <Link className="mt-1 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleDeletePost}>Delete Post</Link>
-        </div>
-        )}
+        <hr /> {/* Line */}
       </div>
-      <hr /> {/* Line */}
-    </div>
 
-    <div className="container mt-1">
-      <div className="mx-auto" style={{ maxWidth: '97%' }}>
-        <h1>{loading ? <Skeleton width={200} /> : post.title}</h1>
-        {loading ? (
-          <Skeleton count={3} />
-        ) : (
-          <>
-          <hr/>
-            <p>{post.content}</p>
-            <div className={`media-element ${typeFile}`}>
-              {typeFile === "image" && (
-                <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-                  <Image src={post.file} style={{ height: '320px', width: 'auto' }} />
-                </div>
-              )}
-              {typeFile === "video" && (
-                <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-                  <video controls style={{ height: '320px', width: 'auto' }}>
-                    <source src={post.file} type="video/mp4" />
-                  </video>
-                </div>
-              )}
-            </div>
-              <hr/>
-          </>
-        )}
+      <div className="container mt-1">
+        <div className="mx-auto" style={{ maxWidth: '97%' }}>
+          <h1>{loading ? <Skeleton width={200} /> : post.title}</h1>
+          {loading ? (
+            <Skeleton count={3} />
+          ) : (
+            <>
+              <hr />
+              <p>{post.content}</p>
+              <div className={`media-element ${typeFile}`}>
+                {typeFile === "image" && (
+                  <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Image src={post.file} style={{ height: '320px', width: 'auto' }} />
+                  </div>
+                )}
+                {typeFile === "video" && (
+                  <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <video controls style={{ height: '320px', width: 'auto' }}>
+                      <source src={post.file} type="video/mp4" />
+                    </video>
+                  </div>
+                )}
+              </div>
+              <hr />
+            </>
+          )}
+        </div>
       </div>
-    </div>
 
       {loggedInUser ? (
         <div className="row">
@@ -240,7 +244,7 @@ export default function DetailedPostView() {
 
       {error && <Alert variant="danger">{error}</Alert>}
       {post && <PostTags post={post} />}
-      
+
       {loading ? (
         <Skeleton count={5} height={40} />
       ) : (

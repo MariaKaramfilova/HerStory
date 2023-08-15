@@ -14,15 +14,22 @@ export default function PostTags({ post }) {
 
   useEffect(() => {
     setLoading(true);
-    getPostsByAuthor(post.author)
-      .then(data => {
+    (async function () {
+      try {
+        const data = await getPostsByAuthor(post.author);
         console.log();
-        const filterValidTags = Object.entries(data.filter(el => el.postId === post.postId)[0].tags);
-        const defaultTagsList = filterValidTags.map(el => el[0]);
+        const filterValidTags = Object.entries(
+          data.filter((el) => el.postId === post.postId)[0].tags
+        );
+        const defaultTagsList = filterValidTags.map((el) => el[0]);
         setTags(defaultTagsList);
-      })
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+
 
   }, [post]);
 

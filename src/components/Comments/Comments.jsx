@@ -21,9 +21,13 @@ export default function Comment ({author, createdOn, content, commentPostId, com
       async function deleteComment (commentId) {
           const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
 
-          if (confirmDelete) {
-              await deleteCommentID(commentId, commentPostId);
-              SetRefreshComments(!refreshComments)
+          try {
+            if (confirmDelete) {
+                await deleteCommentID(commentId, commentPostId);
+                SetRefreshComments(!refreshComments)
+            }
+          } catch (error) {
+            console.error('Error deleting comment:', error);
           }
       }
 

@@ -18,8 +18,10 @@ export default function Users({ searchTerm }) {
     let result;
     setLoading(true);
 
-    getAllUsers()
-      .then((data) => {
+    (async function () {
+      try {
+        const data = await getAllUsers();
+        let result;
         if (params.type.includes("username")) {
           result = data.filter((el) =>
             el.username.toLowerCase().startsWith(searchTerm.toLowerCase())
@@ -35,18 +37,22 @@ export default function Users({ searchTerm }) {
               el.firstName.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
               el.lastName.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
               el.firstName.toLowerCase() + " " + el.lastName.toLowerCase() ===
-                searchTerm.toLowerCase()
+              searchTerm.toLowerCase()
           );
         }
         setUsers(result);
-      })
-      .catch((err) => setError(err))
-      .finally(() => setLoading(false));
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+
   }, [params.type, searchTerm]);
 
   // Need to fix this with error pages - check for lib
   if (error) {
-    return <Error error={error}/>
+    return <Error error={error} />
   }
 
   const usersToShow = users.length ? (

@@ -56,25 +56,29 @@ export default function RegistrationForm() {
       setError('Password should be more than 6 characters!')
       return;
     }
-    const snapshot = await getUserByUsername(userName);
-    if (snapshot.exists()) {
-      return alert('This Username already exists!')
+    try {
+      const snapshot = await getUserByUsername(userName);
+      if (snapshot.exists()) {
+        return alert('This Username already exists!')
+      }
+      const emailExists = await checkEmailExistence(email);
+      if (emailExists) {
+        setError('This Email is already in use!');
+      }
+      const credential = await registerUser(email, password);
+      await createUserByUsername(firstName, lastName, credential.user.uid, credential.user.email, userName, profilePictureURL);
+      const loggedUserSnapshot = await getUserData(credential.user.uid);
+      const loggedInUser = Object.values(loggedUserSnapshot.val()).find((el) => el.uid === credential.user.uid);
+      const allUsers = await getAllUsers();
+      setUser({
+        user: credential.user,
+        loggedInUser,
+        allUsers
+      });
+      navigate('/success-register');
+    } catch (error) {
+      console.error(error);
     }
-    const emailExists = await checkEmailExistence(email);
-    if (emailExists) {
-      setError('This Email is already in use!');
-    }
-    const credential = await registerUser(email, password);
-    await createUserByUsername(firstName, lastName, credential.user.uid, credential.user.email, userName, profilePictureURL);
-    const loggedUserSnapshot = await getUserData(credential.user.uid);
-    const loggedInUser = Object.values(loggedUserSnapshot.val()).find((el) => el.uid === credential.user.uid);
-    const allUsers = await getAllUsers();
-    setUser({
-      user: credential.user,
-      loggedInUser,
-      allUsers
-    });
-    navigate('/success-register');
   }
 
 
