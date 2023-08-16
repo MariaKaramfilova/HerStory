@@ -2,10 +2,6 @@
 
 This project is a Forum System where users can create posts, add comments, and upvote/downvote the things that they like or dislike the most. The forum revolves around one or two general topics.
 
-## Link to the hosted project
-<font color="red">Need to update this</font>
-(Add link to the hosted project here if it is hosted online)
-
 ## Instructions on how to setup and run the project locally
 <font color="red">Check at the end of the project</font>
 1.  Clone the repository with HTTPS
@@ -26,12 +22,8 @@ npm run preview
 
 ## Scheme (structure) of the documents in the database
 
-<font color="red">Need to update this</font>
 The data is stored in a document (NoSQL) database hosted by Google Firebase. The documents are organized to achieve the functionalities described in the project description.
-
-## Badges
-<font color="red">Check what is this and if a must</font>
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+![Database schema visual diagram](/HerStory-database-schema.png)
 
 # Features
 
@@ -70,11 +62,6 @@ On some READMEs, you may see small images that convey metadata, such as whether 
 -   Users can find posts by typing in the tag in the search bar.
 -   A User can add/remove/edit tags only on its own posts. Admins can add/remove/edit tags on all posts.
 
-## Visuals
-
-<font color="red">Nice to have some images</font>
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
 ## Authors and acknowledgment
 
 [Hristiyan Fachikov](https://gitlab.com/hristiyan.fachikov)
@@ -82,6 +69,8 @@ Depending on what you are making, it can be a good idea to include screenshots o
 [Maria Karamfilova](https://gitlab.com/maria_karamfilova)
 
 [Viktor Petrov](https://gitlab.com/viktor.mp)
+
+Random avatar functionality delivered with https://personas.draftbit.com/
 
 ## License
 Licensed under the terms of the MIT license.

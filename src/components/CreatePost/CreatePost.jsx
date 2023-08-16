@@ -98,10 +98,6 @@ export default function CreatePost() {
     return <Loading />
   }
 
-  if (error) {
-    return <Error error={error} />
-  }
-
   return (
     <Container className='w-100 mt-3 mb-3' style={{ minHeight: "100vh", maxWidth: "60%", marginLeft: "0" }}>
       <h2 className='mb-4'>Create a post</h2>
