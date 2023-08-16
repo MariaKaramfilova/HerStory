@@ -1,7 +1,8 @@
 import { get, set, ref, query, orderByChild, equalTo, update, remove } from "firebase/database";
 import { auth, database } from "../config/firebase";
 import { setFileToStorage } from "./storage.services.js";
-import { deleteCommentID, deletePost } from "./post.services.js";
+import { deletePost } from "./post.services.js";
+import { deleteCommentID } from "./comment.services";
 
 /**
  * Transforms the users document snapshot into an array of user objects.

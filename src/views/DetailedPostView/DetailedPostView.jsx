@@ -1,6 +1,4 @@
 import {
-  createComment,
-  getCommentsByPostHandle,
   getPostById,
   deletePost,
   getAllPosts,
@@ -16,6 +14,7 @@ import _ from "lodash";
 import { PostsContext } from "../../context/PostsContext.js";
 import CommentsLibrary from "../CommentsLibrary/CommentsLibrary.jsx";
 import { ADMIN, DELETE_POST } from "../../common/common";
+import { createComment, getCommentsByPostHandle } from "../../services/comment.services";
 
 /**
  * The DetailedPostView component displays detailed information about a specific post.

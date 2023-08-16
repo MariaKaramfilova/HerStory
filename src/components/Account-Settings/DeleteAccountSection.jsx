@@ -4,7 +4,8 @@ import { Button, Card, Form } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext.js';
 import { deleteUserData, getAllUsers } from '../../services/users.services.js';
 import { PostsContext } from '../../context/PostsContext.js';
-import { getAllComments, getAllPosts } from '../../services/post.services.js';
+import { getAllPosts } from '../../services/post.services.js';
+import { getAllComments } from '../../services/comment.services.js';
 import _ from 'lodash';
 import { logoutUser } from '../../services/auth.services.js';
 

@@ -1,7 +1,7 @@
 
 import { AuthContext } from '../../context/AuthContext.js';
 import React, { useContext, useState} from 'react';
-import { deleteCommentID, editComment, } from '../../services/post.services';
+import { deleteCommentID, editComment } from '../../services/comment.services.js';
 import { Button, Modal, Card} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
