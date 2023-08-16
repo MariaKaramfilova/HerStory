@@ -9,7 +9,7 @@ import PostTags from "../../views/PostTags/PostTags.jsx";
 import PostUpvotes from "../../views/PostUpvotes/PostUpvotes";
 import Skeleton from "react-loading-skeleton";
 import { PostsContext } from "../../context/PostsContext.js";
-import { COMMENT_BUTTON_MESSAGE, DELETE_POST } from "../../common/common";
+import { ADMIN, COMMENT_BUTTON_MESSAGE, DELETE_POST } from "../../common/common";
 
 /**
  * A component to display details of a single post.
@@ -109,7 +109,7 @@ export default function PostsDetails({ ...post }) {
                 <Link to={`/account/${post.userId}`}>{post.author}</Link>
               </span>
             </div>
-            {(userRole === "admin" || userName === post.author) && (
+            {(userRole === ADMIN || userName === post.author) && (
               <Button variant="outline-dark" onClick={handleDeletePost}>
                 {DELETE_POST}
               </Button>

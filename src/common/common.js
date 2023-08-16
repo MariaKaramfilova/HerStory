@@ -57,3 +57,58 @@ export const NO_TAGS = 'No tags';
 
 // About message in Create Post
 export const CREATE_POST = 'Create Post';
+
+export const ADMIN = 'admin';
+
+export const DEFAULT_PROF_PIC_DIR = '../../assets/basic_avatar.png';
+
+export const AVATAR_API_URL = 'https://api.dicebear.com/6.x/personas/jpg?seed=';
+
+export const CHOOSE_TOPIC = 'Choose topic';
+
+export const ADD_TITLE = 'Add post title';
+
+export const POST_DESCRIPTION = 'Write post description';
+
+export const NEW = 'new';
+
+export const UPVOTED = 'upvoted';
+
+export const COMMENTED = 'commented';
+
+export const UPVOTED_BY = 'upvotedBy';
+
+export const HAS_cOMMENT = 'hasComment';
+
+export const TAG = 'tag';
+
+export const TOPICS = 'topics';
+
+export const URL_TO_EXTERNAL_DEFAULT_PROF_PIC = 'https://shorturl.at/jtQ19';
+
+export const USERNAME = 'username';
+
+export const EMAIL = 'email';
+
+export const NAME = '-name';
+
+export const UP = 'up';
+
+export const DOWN = 'down';
+
+export const POSTS = 'posts';
+
+export const USERS = 'users';
+
+export const USER = 'user';
+
+export const BY_TITLE = 'by title';
+
+export const BY_TAG = 'by tag';
+
+export const USERS_USERNAME = 'users-username';
+
+export const USERS_EMAIL = 'users-email';
+
+export const USERS_NAME = 'users-name';
+

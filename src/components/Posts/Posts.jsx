@@ -8,7 +8,7 @@ import Skeleton from 'react-loading-skeleton';
 import { PostsContext } from '../../context/PostsContext.js';
 import _ from 'lodash';
 import Error from '../../views/Error/Error.jsx';
-import { NEW_POSTS } from '../../common/common.js';
+import { COMMENTED, HAS_cOMMENT, NEW, NEW_POSTS, TAG, TOPICS, UPVOTED, UPVOTED_BY } from '../../common/common.js';
 import { MOST_UPVOTED } from '../../common/common.js';
 import { MOST_COMMENTED } from '../../common/common.js';
 import { SORT_BY } from '../../common/common.js';
@@ -29,7 +29,7 @@ import { SORT_BY } from '../../common/common.js';
  * );
  */
 export default function Posts({ searchTerm, userName, tag }) {
-  const [filter, setFilter] = useState('new');
+  const [filter, setFilter] = useState(NEW);
   const [loading, setLoading] = useState(false);
   const [renderedPosts, setRenderedPosts] = useState([]);
   const [error, setError] = useState(null);
@@ -42,7 +42,7 @@ export default function Posts({ searchTerm, userName, tag }) {
   
   const handleFilterChange = (selectedFilter) => {
     setFilter(selectedFilter);
-    setSelectedButton(selectedFilter === 'new' ? 1 : selectedFilter === 'upvoted' ? 2 : 3);
+    setSelectedButton(selectedFilter === NEW ? 1 : selectedFilter === UPVOTED ? 2 : 3);
   };
   
   useEffect(() => {
@@ -52,12 +52,12 @@ export default function Posts({ searchTerm, userName, tag }) {
     const sortPosts = (result) => {
 
       let sortedPosts;
-      if (filter === 'new') {
+      if (filter === NEW) {
         sortedPosts = result.sort((a, b) => b.createdOn - a.createdOn);
-      } else if (filter === 'upvoted') {
-        sortedPosts = result.sort((a, b) => Object.keys(b).includes('upvotedBy') ? (Object.keys(b.upvotedBy).length - Object.keys(a.upvotedBy).length) : -1);
-      } else if (filter === 'commented') {
-        sortedPosts = result.sort((a, b) => Object.keys(b).includes('hasComment') ? (Object.keys(b.hasComment).length - Object.keys(a.hasComment).length) : -1);
+      } else if (filter === UPVOTED) {
+        sortedPosts = result.sort((a, b) => Object.keys(b).includes(UPVOTED_BY) ? (Object.keys(b.upvotedBy).length - Object.keys(a.upvotedBy).length) : -1);
+      } else if (filter === COMMENTED) {
+        sortedPosts = result.sort((a, b) => Object.keys(b).includes(HAS_cOMMENT) ? (Object.keys(b.hasComment).length - Object.keys(a.hasComment).length) : -1);
       }
       return sortedPosts;
     }
@@ -68,11 +68,10 @@ export default function Posts({ searchTerm, userName, tag }) {
       result = result.filter(el => {
         return el.title.split(' ').filter(el => el.toLowerCase().startsWith(searchTerm.toLowerCase())).length > 0;
       });
-    } else if (params.type === "tag") {
+    } else if (params.type === TAG) {
       result = result.filter(el => el.tags ? Object.keys(el.tags).filter(el => el.toLowerCase().startsWith(tag.toLowerCase())).length > 0 : false);
-    } else if (params.type === "topics") {
+    } else if (params.type === TOPICS) {
       result = result.filter(el => el.topic.split(" ").join("") === params.id);
-      console.log('here');
     }
     
     const sortedPosts = sortPosts(result);
@@ -115,9 +114,9 @@ export default function Posts({ searchTerm, userName, tag }) {
           </Col>
           <Col>
             <ToggleButtonGroup type="radio" name="options" value={selectedButton} className='w-100'>
-              <ToggleButton id="tbg-radio-1" value={1} onClick={() => handleFilterChange('new')} variant='outline-danger'>{NEW_POSTS}</ToggleButton>
-              <ToggleButton id="tbg-radio-2" value={2} onClick={() => handleFilterChange('upvoted')} variant="outline-danger">{MOST_UPVOTED}</ToggleButton>
-              <ToggleButton id="tbg-radio-3" value={3} onClick={() => handleFilterChange('commented')} variant="outline-danger">{MOST_COMMENTED}</ToggleButton>
+              <ToggleButton id="tbg-radio-1" value={1} onClick={() => handleFilterChange(NEW)} variant='outline-danger'>{NEW_POSTS}</ToggleButton>
+              <ToggleButton id="tbg-radio-2" value={2} onClick={() => handleFilterChange(UPVOTED)} variant="outline-danger">{MOST_UPVOTED}</ToggleButton>
+              <ToggleButton id="tbg-radio-3" value={3} onClick={() => handleFilterChange(COMMENTED)} variant="outline-danger">{MOST_COMMENTED}</ToggleButton>
             </ToggleButtonGroup>
           </Col>
         </Row>

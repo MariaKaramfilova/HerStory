@@ -9,14 +9,13 @@ import { Alert, Button, Form, Image } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext.js";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Comment from "../../components/Comments/Comments";
 import PostTags from "../PostTags/PostTags.jsx";
 import PostUpvotes from "../PostUpvotes/PostUpvotes.jsx";
 import Skeleton from "react-loading-skeleton";
 import _ from "lodash";
 import { PostsContext } from "../../context/PostsContext.js";
 import CommentsLibrary from "../CommentsLibrary/CommentsLibrary.jsx";
-import { DELETE_POST } from "../../common/common";
+import { ADMIN, DELETE_POST } from "../../common/common";
 
 /**
  * The DetailedPostView component displays detailed information about a specific post.
@@ -169,7 +168,7 @@ export default function DetailedPostView() {
               </h6>
             )}
           </div>
-          {(userRole === 'admin' || post.author === userName) && (
+          {(userRole === ADMIN || post.author === userName) && (
             <div className="col-4 text-right">
               <Link className="mt-1 mr-2 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleEdit}>Edit Post</Link>
               <Link className="mt-1 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleDeletePost}>{DELETE_POST}</Link>
