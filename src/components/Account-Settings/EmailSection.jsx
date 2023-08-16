@@ -9,9 +9,7 @@ import { Button, Card, Form, Alert } from 'react-bootstrap';
 /**
  * Component that allows the user to change their email address associated with their account.
  *
- * @component
- * @example
- * return <EmailSection />;
+ * @return {<EmailSection />};
  */
 export default function EmailSection() {
 

@@ -11,8 +11,7 @@ import { AVATAR_API_URL, DEFAULT_PROF_PIC_DIR } from '../../common/common.js';
  * Component that allows the user to manage their profile picture.
  *
  * @component
- * @example
- * return <ProfilePictureSection />;
+ * @return {JSX.Element} The rendered ProfilePictureSection component.
  */
 export default function ProfilePictureSection() {
   const [photo, setPhoto] = useState(null);
@@ -46,6 +45,10 @@ export default function ProfilePictureSection() {
     setLoading(false);
   }, [loggedInUser]);
 
+  /**
+   * Handle photo selection from input.
+   * @param {Event} e - The change event object.
+   */
   function handleChange(e) {
     const selectedFile = e.target.files[0];
 
@@ -64,7 +67,12 @@ export default function ProfilePictureSection() {
       setPhoto(selectedFile);
     }
   }
-
+  /**
+     * Create a File object from a URL.
+     * @async
+     * @param {string} url - The URL of the image.
+     * @returns {Promise<File>} A Promise resolving to the created File object.
+     */
   async function createFileFromUrl(url) {
     try {
       let response = await fetch(url);
@@ -79,10 +87,16 @@ export default function ProfilePictureSection() {
     }
   }
 
+  /**
+     * Switch to the previous profile picture URL.
+     */
   function switchToPrevProfilePictureURL() {
     setProfilePictureURL(prevProfilePictureURL);
   }
 
+  /**
+   * Handle click event for generating a random avatar.
+   */
   const handleClickRandomAvatar = async () => {
     try {
       const image = await fetch(
@@ -97,6 +111,10 @@ export default function ProfilePictureSection() {
     }
   };
 
+  /**
+   * Handle click event for uploading a profile picture.
+   * @async
+   */
   async function handleClick() {
     if (photo && loggedInUser.username) {
       try {

@@ -12,10 +12,8 @@ import { ACCOUNT_SETTINGS, HOME_PATH, ADMIN } from "../../common/common";
  * Account Settings component that allows users to manage their account settings.
  * This component displays various sections for managing profile picture, password,
  * email, phone number, and account deletion.
- *
- * @component
- * @example
- * return <AccountSettings />;
+ * 
+ * @return {<AccountSettings />};
  */
 
 const AccountSettings = () => {

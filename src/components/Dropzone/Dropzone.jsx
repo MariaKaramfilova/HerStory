@@ -12,7 +12,6 @@ import PropTypes from "prop-types";
  * @component
  * @param {Object} props - The component props.
  * @param {Function} props.setFile - A callback function to set the selected file.
- * @example
  * return (
  *   <DropzoneComponent setFile={handleSetFile} />
  * );
@@ -50,7 +49,6 @@ export default function DropzoneComponent({ setFile }) {
     reader.readAsDataURL(file);
 
     reader.onloadend = () => {
-      // Do whatever you want with the file contents
       setPreview({ caption: url, name: file.name, type: file.type.split('/')[0] })
     }
   });

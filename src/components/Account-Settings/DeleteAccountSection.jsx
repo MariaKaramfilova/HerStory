@@ -14,9 +14,7 @@ import { logoutUser } from '../../services/auth.services.js';
  * Component that provides the functionality to delete the user's account,
  * along with associated posts, comments, and voting data.
  *
- * @component
- * @example
- * return <DeleteAccountSection />;
+ * @return {<DeleteAccountSection />};
  */
 export default function DeleteAccountSection() {
   const { loggedInUser, user, setUser } = useContext(AuthContext);

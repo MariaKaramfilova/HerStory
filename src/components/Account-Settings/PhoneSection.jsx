@@ -9,9 +9,7 @@ import { AuthContext } from "../../context/AuthContext.js";
 /**
  * A component that allows a user with administrative rights to change their phone number.
  *
- * @component
- * @example
- * return <PhoneSection />;
+ * @return {<PhoneSection />};
  */
 export default function PhoneSection() {
 

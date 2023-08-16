@@ -6,9 +6,7 @@ import { AuthContext } from "../../context/AuthContext.js";
 /**
  * Component that allows the user to change their account password.
  *
- * @component
- * @example
- * return <PasswordSection />;
+ * @return {<PasswordSection />};
  */
 export default function PasswordSection() {
 

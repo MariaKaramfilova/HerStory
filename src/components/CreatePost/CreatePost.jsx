@@ -19,7 +19,6 @@ import { PostsContext } from '../../context/PostsContext.js';
  * );
  */
 export default function CreatePost() {
-  // Need to import theme
   const { loggedInUser } = useContext(AuthContext);
   const { allPosts, setAllPosts } = useContext(PostsContext);
 
@@ -33,6 +32,10 @@ export default function CreatePost() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  /**
+   * Handle the form submission for creating a new post.
+   * @param {Event} event - The form submission event.
+   */
   async function handleSubmit(event) {
     event.preventDefault();
     setError(null)
