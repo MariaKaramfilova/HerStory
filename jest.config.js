@@ -1,10 +1,8 @@
-/* eslint-disable no-undef */
 export default {
   verbose: true,
   moduleNameMapper: {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
   },
-  // testEnvironment: 'jest-environment jsdom',
   transformIgnorePatterns: [
     "node_modules/(?!(react-native"
       + "|react-navigation-tabs"

@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import makeAnimated from 'react-select/animated';
@@ -26,7 +25,6 @@ import PropTypes from "prop-types";
 export default function SelectCreatable({ changeTags, post }) {
   const animatedComponents = makeAnimated();
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState(null);
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState([]);
