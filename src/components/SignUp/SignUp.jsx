@@ -89,7 +89,10 @@ export default function RegistrationForm() {
       setError("Password should be more than 6 characters!");
       return;
     }
-    if (!email.includes("@gmail.com") || !email.includes("@abv.bg")) {
+    if (
+      (!email.includes("@") && !email.includes(".com")) ||
+      (!email.includes(".bg") && !email.includes("@"))
+    ) {
       setError("Email is not valid!");
     }
 
