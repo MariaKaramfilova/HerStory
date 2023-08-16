@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react'
 import { blockUser, unblockUser } from '../../services/users.services.js';
 import { Button } from 'react-bootstrap';
@@ -15,6 +16,7 @@ import Error from '../Error/Error.jsx';
 export default function BlockUserButton({ user }) {
   const [blockedStatus, setBlockedStatus] = useState(user.blockedStatus);
   const [error, setError] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false);
 
   /**

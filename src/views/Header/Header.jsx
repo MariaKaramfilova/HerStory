@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import SearchBar from "../SearchBar/SearchBar";
 import NavBar from "../NavBar/NavBar";
 import ProfileDropdown from "../../components/Profile-dropdown/Profile-dropdown";

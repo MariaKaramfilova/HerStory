@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { EmailAuthProvider, deleteUser, reauthenticateWithCredential } from 'firebase/auth';
 import React, { useContext } from 'react'
 import { Button, Card, Form } from 'react-bootstrap';

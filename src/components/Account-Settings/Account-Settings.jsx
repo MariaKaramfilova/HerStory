@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+// eslint-disable-next-line no-unused-vars
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Link } from "react-router-dom/dist";
@@ -18,6 +20,7 @@ import { ACCOUNT_SETTINGS, HOME_PATH, ADMIN } from "../../common/common";
 
 const AccountSettings = () => {
   const { loggedInUser, user } = useContext(AuthContext);
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false);
   const [userRole, setUserRole] = useState("");
 

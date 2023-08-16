@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useContext, useEffect, useState } from 'react'
 import { PostsContext } from '../../context/PostsContext.js'
 import { getAllPosts } from '../../services/post.services.js';
@@ -16,6 +17,7 @@ import PropTypes from "prop-types";
 export default function PostsContextProvider({ children }) {
   const { post, setPost } = useContext(PostsContext);
   const [appPostState, setAppPostsState] = useState({ post, setPost });
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 

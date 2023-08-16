@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import RoutePage from "./components/Auth-Context-Provider/Auth-Countext-Provider";

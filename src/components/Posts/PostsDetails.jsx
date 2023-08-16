@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect, useContext } from "react";
 import moment from "moment";
 import { Card, Image, Button } from "react-bootstrap";
@@ -27,12 +29,15 @@ import { ADMIN, COMMENT_BUTTON_MESSAGE, DELETE_POST } from "../../common/common"
 export default function PostsDetails({ ...post }) {
   const navigate = useNavigate();
   const [authorData, setAuthorData] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false);
   const [userRole, setUserRole] = useState('');
   const [userName, setUserName] = useState('');
   const [typeFile, setTypeFile] = useState('');
   const [isDeleted, setIsDeleted] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const { user, loggedInUser, allUsers } = useContext(AuthContext);
+  // eslint-disable-next-line no-unused-vars
   const { allPosts, setAllPosts } = useContext(PostsContext);
 
   useEffect(() => {

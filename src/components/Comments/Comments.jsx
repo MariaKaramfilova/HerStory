@@ -1,4 +1,4 @@
-
+/* eslint-disable no-unused-vars */
 import { AuthContext } from '../../context/AuthContext.js';
 import React, { useContext, useState} from 'react';
 import { deleteCommentID, editComment } from '../../services/comment.services.js';
@@ -25,6 +25,7 @@ import './Comments.css';
 export default function Comment({ author, createdOn, content, commentPostId, commentUserUid, commentId, SetRefreshComments, refreshComments }) {
 
   const { loggedInUser } = useContext(AuthContext);
+  // eslint-disable-next-line no-unused-vars
   const [userId, setUserId] = useState(loggedInUser ? loggedInUser.uid : null)
 
   const [showEditModal, setShowEditModal] = useState(false);

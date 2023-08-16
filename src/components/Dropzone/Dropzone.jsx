@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// eslint-disable-next-line no-unused-vars
 import React, { useCallback, useState } from 'react';
 import { Alert, Container, Figure, Image } from 'react-bootstrap';
 import { useDropzone } from 'react-dropzone';

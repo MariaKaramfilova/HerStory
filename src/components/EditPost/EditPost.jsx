@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect, useContext } from 'react';
 import { editPost, getPostById, addPostTags, removePostTags, getAllPosts } from '../../services/post.services';
 import { Button, Form, } from 'react-bootstrap';
@@ -21,6 +22,7 @@ const EditPost = () => {
   const [editedContent, setEditedContent] = useState('');
   const [editedFile, setEditedFile] = useState(null);
   const [tags, setTags] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const { allPosts, setAllPosts } = useContext(PostsContext);
 
   /**

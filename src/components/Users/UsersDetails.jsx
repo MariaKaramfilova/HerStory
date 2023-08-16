@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useContext, useEffect, useState } from 'react'
 import { Badge, Container } from 'react-bootstrap'
 import PropTypes from "prop-types";
@@ -28,8 +29,8 @@ import Error from '../../views/Error/Error.jsx';
  * );
  */
 export default function UsersDetails(user) {
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [postsCount, setPostsCount] = useState("");
   const navigate = useNavigate();
   const { allPosts } = useContext(PostsContext);

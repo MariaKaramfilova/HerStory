@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Col, Container, Row, Button } from "react-bootstrap";
 import _ from 'lodash';
 import { PostsContext } from "../../context/PostsContext.js";
 import { AuthContext } from "../../context/AuthContext.js";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Error from "../Error/Error.jsx";
 import { MESSAGE_ABOUT_NUMBER_POSTS, MESSAGE_ABOUT_NUMBER_USERS, POPULAR_TOPICS } from "../../common/common.js";
 

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+// eslint-disable-next-line no-unused-vars
+import React, { useEffect, useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import makeAnimated from 'react-select/animated';
 import { getAllTags } from '../../services/tag.services.js';
 import { getPostsByAuthor } from '../../services/post.services.js';
 import PropTypes from "prop-types";
-import Error from '../../views/Error/Error.jsx';
 
 /**
  * Component that provides a creatable select input for managing tags.
@@ -24,6 +26,7 @@ import Error from '../../views/Error/Error.jsx';
 export default function SelectCreatable({ changeTags, post }) {
   const animatedComponents = makeAnimated();
   const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState(null);
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState([]);

@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap';
 import { makeAdminUser, removeAdminRights } from '../../services/users.services.js';
@@ -14,6 +15,7 @@ import { ADMIN } from '../../common/common.js';
 export default function MakeAdminButton({ user }) {
   const [adminStatus, setAdminStatus] = useState(user.role === ADMIN);
   const [error, setError] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false);
 
   const handleMakeAdmin = async () => {

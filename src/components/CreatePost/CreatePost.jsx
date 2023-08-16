@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useState } from 'react'
 import { Button, Container, Col, Row, ToggleButtonGroup, ToggleButton, Alert } from 'react-bootstrap'
 import { Form } from 'react-bootstrap'

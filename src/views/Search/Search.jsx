@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from 'react'
 import Posts from '../../components/Posts/Posts.jsx'
 import { useParams } from 'react-router-dom';

@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from 'react'
 import AuthenticatedRoute from '../../hoc/AuthenticatedRoute.jsx';
 import Search from './Search.jsx';

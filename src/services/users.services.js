@@ -1,5 +1,5 @@
-import { get, set, ref, query, orderByChild, equalTo, update, remove } from "firebase/database";
-import { auth, database } from "../config/firebase";
+import { get, set, ref, orderByChild, equalTo, update, remove } from "firebase/database";
+import { database } from "../config/firebase";
 import { setFileToStorage } from "./storage.services.js";
 import { deletePost } from "./post.services.js";
 import { deleteCommentID } from "./comment.services";

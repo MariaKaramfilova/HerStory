@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useContext } from 'react'
 import { Card, ListGroup } from 'react-bootstrap';
 import BlockUserButton from '../BlockUserButton/BlockUserButton.jsx';
@@ -54,7 +55,7 @@ export default function AccountDetails({ userInfo }) {
       )}
     </div>
   );
-};
+}
 
 AccountDetails.propTypes = {
   userInfo: PropTypes.object.isRequired,

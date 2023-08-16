@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { getAllUsers } from "../../services/users.services.js";
 import { Container } from "react-bootstrap";

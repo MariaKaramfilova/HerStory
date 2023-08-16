@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+// eslint-disable-next-line no-unused-vars
 import React, { useContext, useEffect } from 'react'
 import { Button, Form } from 'react-bootstrap';
 import { getAllUsers } from '../../services/users.services';
@@ -16,12 +18,14 @@ import { AVATAR_API_URL, DEFAULT_PROF_PIC_DIR } from '../../common/common.js';
 export default function ProfilePictureSection() {
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [isPhotoSelected, setIsPhotoSelected] = useState(false);
   const [profilePictureURL, setProfilePictureURL] = useState("");
   const [prevProfilePictureURL, setPrevProfilePictureURL] =
     useState(profilePictureURL);
   const [isRandomAvatarDisabled, setIsRandomAvatarDisabled] = useState(false);
   const { loggedInUser, user, setUser } = useContext(AuthContext);
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState("");
   const [firstName, setFirstName] = useState("");
   const [surname, setSurname] = useState("");

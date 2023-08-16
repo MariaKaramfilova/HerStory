@@ -1,4 +1,5 @@
 import './SignUp.css'
+// eslint-disable-next-line no-unused-vars
 import React, { useContext, useState } from 'react';
 import { Alert, Button, Form } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext';
@@ -23,6 +24,7 @@ import { LOG_IN_PATH } from '../../common/common';
  */
 export default function RegistrationForm() {
 
+  // eslint-disable-next-line no-unused-vars
   const [profilePictureURL, setProfilePictureURL] = useState(URL_TO_EXTERNAL_DEFAULT_PROF_PIC);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');

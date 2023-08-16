@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { logoutUser } from '../../services/auth.services';
@@ -21,6 +22,7 @@ import { DEFAULT_PROF_PIC_DIR } from '../../common/common.js';
  */
 const ProfileDropdown = () => {
   const { loggedInUser, user } = useContext(AuthContext);
+  // eslint-disable-next-line no-unused-vars
   const [profilePictureURL, setProfilePictureURL] = useState(user ? loggedInUser.profilePictureURL : '');
   const navigate = useNavigate();
 

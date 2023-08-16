@@ -1,12 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.js";
-import { Card, ListGroup } from "react-bootstrap";
 import Posts from "../../components/Posts/Posts.jsx";
 import { getUserData } from "../../services/users.services.js";
 import { useLocation, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import BlockUserButton from "../BlockUserButton/BlockUserButton.jsx";
-import MakeAdminButton from "../MakeAdminButton/MakeAdminButton.jsx";
 import Error from "../Error/Error.jsx";
 import AccountDetails from "./AccountDetails.jsx";
 import { MY_ACCOUNT_PATH } from "../../common/common.js";

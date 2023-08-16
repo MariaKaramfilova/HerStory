@@ -13,8 +13,9 @@ export default function PasswordSection() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState("");
-  const {loggedInUser, user} = useContext(AuthContext);
+  const { loggedInUser, user } = useContext(AuthContext);
 
   /**
    * Handles the password change process.
@@ -60,7 +61,7 @@ export default function PasswordSection() {
 
   return (
     <>
-       <div>
+      <div>
         <Form.Label
           htmlFor=""
           style={{

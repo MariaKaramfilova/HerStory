@@ -1,4 +1,5 @@
 import { AuthContext } from '../../context/AuthContext';
+// eslint-disable-next-line no-unused-vars
 import React, { useContext, useEffect, useState } from 'react';
 import { auth } from '../../config/firebase';
 import PropTypes from "prop-types";
@@ -16,6 +17,7 @@ import Error from '../../views/Error/Error.jsx';
 const RoutePage = ({ children }) => {
   const { user, loggedInUser } = useContext(AuthContext);
   const [appState, setAppState] = useState({ user, loggedInUser });
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
