@@ -57,3 +57,22 @@ export const NO_TAGS = 'No tags';
 
 // About message in Create Post
 export const CREATE_POST = 'Create Post';
+
+// About Paths in application.
+export const HOME_PATH = "/home";
+export const ABOUT_PATH = "/about";
+export const LOG_IN_PATH = "/log-in";
+export const SIGN_UP_PATH = "/sign-up";
+export const FORGOT_PASSWORD_PATH = "/forgot-password";
+export const CREATE_POST_PATH = "/create-post";
+export const ACCOUNT_SETTING_PATH = "/account-settings";
+export const MY_ACCOUNT_PATH = "/my-account";
+export const ACCOUNT_ID_PATH = "/account/:id";
+export const SUCCESS_POSTING_PATH = "/success-posting";
+export const SUCCESS_REGISTER_PATH = "/success-register";
+export const SEARCH_TYPE_ID_PATH = "/search/:type/:id";
+export const DETAILED_POST_VIEW_ID_PATH = "/detailed-post-view/:id";
+export const EDIT_POST_ID_PATH = "/edit-post/:id";
+export const TYPE_ID_PATH = "/:type/:id";
+export const STAR_PATH = "*";
+export const USER_ID_PATH = "/users/:id";

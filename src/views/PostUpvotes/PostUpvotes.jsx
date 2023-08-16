@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import ViewUpvoted from "../ViewUpvoted/ViewUpvoted";
 import _ from "lodash";
 import PropTypes from "prop-types";
+import { LOG_IN_PATH } from "../../common/common";
 
 /**
  * The PostUpvotes component allows users to upvote or downvote a post.
@@ -53,7 +54,7 @@ export default function PostUpvotes({ post }) {
         setIsDownDisabled(true);
       }
     } else {
-      navigate("/log-in");
+      navigate(LOG_IN_PATH);
     }
   };
 

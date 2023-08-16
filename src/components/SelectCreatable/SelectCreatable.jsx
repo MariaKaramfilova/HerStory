@@ -70,9 +70,6 @@ export default function SelectCreatable({ changeTags, post }) {
     })();
   }, []);
 
-  if (error) {
-    return <Error error={error} />;
-  }
 
   if (loading) {
     return;

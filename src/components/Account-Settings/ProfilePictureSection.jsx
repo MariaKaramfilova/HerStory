@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react'
-import { Button, Form } from 'react-bootstrap';
-import { getAllUsers } from '../../services/users.services';
-import { updateProfilePic } from '../../services/users.services';
-import { useState } from 'react';
-import { AuthContext } from '../../context/AuthContext.js';
-import Skeleton from 'react-loading-skeleton';
+import React, { useContext, useEffect } from "react";
+import { Button, Form } from "react-bootstrap";
+import { getAllUsers } from "../../services/users.services";
+import { updateProfilePic } from "../../services/users.services";
+import { useState } from "react";
+import { AuthContext } from "../../context/AuthContext.js";
+import Skeleton from "react-loading-skeleton";
 
 /**
  * Component that allows the user to manage their profile picture.
@@ -17,8 +17,9 @@ export default function ProfilePictureSection() {
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isPhotoSelected, setIsPhotoSelected] = useState(false);
-  const [profilePictureURL, setProfilePictureURL] = useState('');
-  const [prevProfilePictureURL, setPrevProfilePictureURL] = useState(profilePictureURL);
+  const [profilePictureURL, setProfilePictureURL] = useState("");
+  const [prevProfilePictureURL, setPrevProfilePictureURL] =
+    useState(profilePictureURL);
   const [isRandomAvatarDisabled, setIsRandomAvatarDisabled] = useState(false);
   const { loggedInUser, user, setUser } = useContext(AuthContext);
   const [error, setError] = useState("");
@@ -104,7 +105,9 @@ export default function ProfilePictureSection() {
 
         setLoading(false);
         window.location.reload();
-        alert('You have successfully changed your profile picture! Please refresh the page to see your new profile picture!');
+        alert(
+          "You have successfully changed your profile picture! Please refresh the page to see your new profile picture!"
+        );
         const allUsers = await getAllUsers();
         setUser((prev) => ({ ...prev, allUsers }));
       } catch (error) {
@@ -197,5 +200,5 @@ export default function ProfilePictureSection() {
         </Button>
       )}
     </>
-  )
+  );
 }

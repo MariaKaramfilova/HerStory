@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { HOME_PATH } from '../../common/common'
 
 /**
  * The NotFound component displays a "404 - Page not found" error page.
@@ -15,7 +16,7 @@ export default function NotFound() {
         <p className="lead">
           The page you`re looking for doesn`t exist.
         </p>
-        <Link to={"/home"} className="btn btn-primary">Go Home</Link>
+        <Link to={HOME_PATH} className="btn btn-primary">Go Home</Link>
       </div>
     </div>
   )

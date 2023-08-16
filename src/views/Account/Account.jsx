@@ -9,6 +9,7 @@ import BlockUserButton from "../BlockUserButton/BlockUserButton.jsx";
 import MakeAdminButton from "../MakeAdminButton/MakeAdminButton.jsx";
 import Error from "../Error/Error.jsx";
 import AccountDetails from "./AccountDetails.jsx";
+import { MY_ACCOUNT_PATH } from "../../common/common.js";
 
 /**
  * The MyAccount component displays user account details and their posts.
@@ -39,7 +40,7 @@ export default function MyAccount() {
       return;
     }
 
-    if (location.pathname !== "/my-account") {
+    if (location.pathname !== MY_ACCOUNT_PATH) {
       (async function () {
         try {
           const snapshot = await getUserData(userId);
@@ -71,7 +72,7 @@ export default function MyAccount() {
       <div className="container-fluid">
         <div className="row">
           <div className="col-7">
-            {location.pathname === "/my-account" && <h1>My Posts</h1>}
+            {location.pathname === MY_ACCOUNT_PATH && <h1>My Posts</h1>}
             {loading ? (
               <Skeleton
                 height={300}

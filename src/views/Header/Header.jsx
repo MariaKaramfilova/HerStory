@@ -7,7 +7,7 @@ import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext.js";
 import Skeleton from "react-loading-skeleton";
-import { LOG_IN } from "../../common/common";
+import { LOG_IN, LOG_IN_PATH, SIGN_UP_PATH } from "../../common/common";
 import { SIGN_UP } from "../../common/common";
 /**
  * The Header component displays the top header section of the application.
@@ -26,7 +26,7 @@ const Header = () => {
         type="button"
         style={styles.button1}
         variant="danger"
-        onClick={() => navigate("/log-in")}
+        onClick={() => navigate(LOG_IN_PATH)}
       >
         {LOG_IN}
       </Button>
@@ -34,7 +34,7 @@ const Header = () => {
         type="button"
         style={styles.button2}
         variant="dark"
-        onClick={() => navigate("/sign-up")}
+        onClick={() => navigate(SIGN_UP_PATH)}
       >
         {SIGN_UP}
       </Button>

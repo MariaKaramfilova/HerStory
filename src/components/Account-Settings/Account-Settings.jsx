@@ -6,7 +6,7 @@ import EmailSection from "./EmailSection";
 import PasswordSection from "./PasswordSection";
 import PhoneSection from "./PhoneSection";
 import ProfilePictureSection from "./ProfilePictureSection";
-import { ACCOUNT_SETTINGS } from "../../common/common";
+import { ACCOUNT_SETTINGS, HOME_PATH } from "../../common/common";
 
 /**
  * Account Settings component that allows users to manage their account settings.
@@ -44,7 +44,7 @@ const AccountSettings = () => {
       >
         <h1 style={{ marginTop: "20px", flexGrow: 1 }}>{ACCOUNT_SETTINGS}</h1>
         <Link
-          to="/home"
+          to={HOME_PATH}
           style={{
             display: "block",
             color: "black",

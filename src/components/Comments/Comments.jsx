@@ -37,7 +37,7 @@ import './Comments.css';
 export default function Comment ({author, createdOn, content, commentPostId, commentUserUid, commentId, SetRefreshComments, refreshComments }) {
 
       const { loggedInUser } = useContext(AuthContext);
-      const [userId, setUserId] = useState(loggedInUser ? loggedInUser.uid : null)
+      const [userId, setUserId] = useState(loggedInUser ? loggedInUser.uid : null);
 
       const [showEditModal, setShowEditModal] = useState(false);
       const [editedContent, setEditedContent] = useState(content);

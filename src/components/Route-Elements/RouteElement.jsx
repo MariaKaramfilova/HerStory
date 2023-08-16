@@ -17,6 +17,7 @@ import SearchWrapper from "../../views/Search/SearchWrapper.jsx";
 import EditPost from "../EditPost/EditPost";
 import NotFound from "../../views/NotFound/NotFound.jsx";
 import Posts from "../Posts/Posts.jsx"
+import { ABOUT_PATH, ACCOUNT_ID_PATH, ACCOUNT_SETTING_PATH, CREATE_POST_PATH, DETAILED_POST_VIEW_ID_PATH, EDIT_POST_ID_PATH, FORGOT_PASSWORD_PATH, HOME_PATH, LOG_IN_PATH, MY_ACCOUNT_PATH, SEARCH_TYPE_ID_PATH, SIGN_UP_PATH, STAR_PATH, SUCCESS_POSTING_PATH, SUCCESS_REGISTER_PATH, TYPE_ID_PATH, USER_ID_PATH } from "../../common/common";
 
 /**
  * Component defining the routing structure for the application.
@@ -36,11 +37,11 @@ export default function RouteElement() {
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/search/:type/:id" element={<SearchWrapper />} />
+        <Route path={HOME_PATH} element={<Home />} />
+        <Route path={ABOUT_PATH} element={<About />} />
+        <Route path={SEARCH_TYPE_ID_PATH} element={<SearchWrapper />} />
         <Route
-          path="/users/:id"
+          path={USER_ID_PATH}
           element={
             <AuthenticatedRoute>
               <UsersDetails />
@@ -48,7 +49,7 @@ export default function RouteElement() {
           }
         />
         <Route
-          path="/sign-up"
+          path={SIGN_UP_PATH}
           element={
             <AuthModal>
               <RegistrationForm />
@@ -56,7 +57,7 @@ export default function RouteElement() {
           }
         />
         <Route
-          path="/log-in"
+          path={LOG_IN_PATH}
           element={
             <AuthModal>
               <Login />
@@ -64,7 +65,7 @@ export default function RouteElement() {
           }
         />
         <Route
-          path="/forgot-password"
+          path={FORGOT_PASSWORD_PATH}
           element={
             <AuthModal>
               <ForgottenPassword />
@@ -72,7 +73,7 @@ export default function RouteElement() {
           }
         />
         <Route
-          path="/create-post"
+          path={CREATE_POST_PATH}
           element={
             <AuthenticatedRoute>
               <CreatePost />
@@ -80,7 +81,7 @@ export default function RouteElement() {
           }
         />
         <Route
-          path="/account-settings"
+          path={ACCOUNT_SETTING_PATH}
           element={
             <AuthenticatedRoute>
               <AccountSettings />
@@ -88,7 +89,7 @@ export default function RouteElement() {
           }
         />
         <Route
-          path="/my-account"
+          path={MY_ACCOUNT_PATH}
           element={
             <AuthenticatedRoute>
               <MyAccount />
@@ -96,7 +97,7 @@ export default function RouteElement() {
           }
         />
         <Route
-          path="/account/:id"
+          path={ACCOUNT_ID_PATH}
           element={
             <AuthenticatedRoute>
               <MyAccount />
@@ -104,7 +105,7 @@ export default function RouteElement() {
           }
         />
         <Route
-          path="/success-posting"
+          path={SUCCESS_POSTING_PATH}
           element={
             <AuthenticatedRoute>
               <SuccessPosting />
@@ -112,17 +113,17 @@ export default function RouteElement() {
           }
         />
         <Route
-          path="/success-register"
+          path={SUCCESS_REGISTER_PATH}
           element={
             <AuthenticatedRoute>
               <SuccessRegister />
             </AuthenticatedRoute>
           }
         />
-        <Route path="/detailed-post-view/:id" element={<DetailedPostView />} />
-        <Route path="/edit-post/:id" element={<EditPost />} />
-        <Route path="/:type/:id" element={<Posts />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path={DETAILED_POST_VIEW_ID_PATH} element={<DetailedPostView />} />
+        <Route path={EDIT_POST_ID_PATH} element={<EditPost />} />
+        <Route path={TYPE_ID_PATH} element={<Posts />} />
+        <Route path={STAR_PATH} element={<NotFound />} />
       </Routes>
     </>
   );

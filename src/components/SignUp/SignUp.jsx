@@ -6,6 +6,7 @@ import { createUserByUsername, getAllUsers, getUserByUsername, getUserData } fro
 import { registerUser } from '../../services/auth.services';
 import { Link, useNavigate } from 'react-router-dom/dist';
 import { fetchSignInMethodsForEmail, getAuth } from 'firebase/auth';
+import { LOG_IN_PATH } from '../../common/common';
 
 /**
  * Component for user registration form.
@@ -157,7 +158,7 @@ export default function RegistrationForm() {
       </div>
       <div className="footer">
         <Button onClick={handleSubmit} className='w-100 mt-3' type='submit' variant="dark">Register</Button>
-        <p>Already have registration? <Link to="/log-in">Log in</Link></p>
+        <p>Already have registration? <Link to={LOG_IN_PATH}>Log in</Link></p>
       </div>
     </div>
   );
