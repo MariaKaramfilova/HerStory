@@ -97,7 +97,7 @@ export default function PostsDetails({ ...post }) {
               {authorData && (
                 <Link to={`/account/${post.userId}`}>
                   <Image
-                    src={authorData.profilePictureURL}
+                    src={authorData[0].profilePictureURL}
                     alt="Profile Picture"
                     roundedCircle
                     width={60}
