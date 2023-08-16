@@ -8,6 +8,7 @@ import Skeleton from "react-loading-skeleton";
 import BlockUserButton from "../BlockUserButton/BlockUserButton.jsx";
 import MakeAdminButton from "../MakeAdminButton/MakeAdminButton.jsx";
 import Error from "../Error/Error.jsx";
+import AccountDetails from "./AccountDetails.jsx";
 
 /**
  * The MyAccount component displays user account details and their posts.
@@ -81,37 +82,7 @@ export default function MyAccount() {
               <Posts userName={userInfo.username} />
             )}
           </div>
-
-          <div className="col-auto">
-            <h1>Account Details</h1>
-            {user && (
-              <Card>
-                <Card.Body>
-                  <Card.Title>{userInfo.username}</Card.Title>
-                  <ListGroup variant="flush">
-                    <ListGroup.Item>Email: {userInfo.email}</ListGroup.Item>
-                    <ListGroup.Item>
-                      First Name: {userInfo.firstName}
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      Last Name: {userInfo.lastName}
-                    </ListGroup.Item>
-                    {/* If the createdOn is a timestamp, you can format it accordingly */}
-                    <ListGroup.Item>
-                      Created On:{" "}
-                      {new Date(userInfo.createdOn).toLocaleString()}
-                    </ListGroup.Item>
-                  </ListGroup>
-                  {loggedInUser.role === "admin" && (
-                    <>
-                      <BlockUserButton user={userInfo} />
-                      <MakeAdminButton user={userInfo} />
-                    </>
-                  )}
-                </Card.Body>
-              </Card>
-            )}
-          </div>
+          <AccountDetails userInfo={userInfo}/>
         </div>
       </div>
     </>
