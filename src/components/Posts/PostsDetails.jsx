@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import moment from "moment";
 import { Card, Image, Button } from "react-bootstrap";
-import { getUserByUsername } from "../../services/users.services";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { deletePost, getAllPosts } from "../../services/post.services";
@@ -33,38 +32,30 @@ export default function PostsDetails({ ...post }) {
   const [userName, setUserName] = useState('');
   const [typeFile, setTypeFile] = useState('');
   const [isDeleted, setIsDeleted] = useState(false);
-  const { user, loggedInUser } = useContext(AuthContext);
+  const { user, loggedInUser, allUsers } = useContext(AuthContext);
   const { allPosts, setAllPosts } = useContext(PostsContext);
 
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      try {
-        const snapshot = await getUserByUsername(post.author);
-        const userData = snapshot.val();
-        setAuthorData(userData);
-        if (loggedInUser) {
-          setUserRole(loggedInUser.role);
-          setUserName(loggedInUser.username);
-        }
+    if (allUsers) {
+      const userData = allUsers.filter(user => user.uid === post.userId);
+      setAuthorData(userData);
+    }
+    if (loggedInUser) {
+      setUserRole(loggedInUser.role);
+      setUserName(loggedInUser.username);
+    }
 
-        if (post.file) {
-          if (post.file.includes("mp4")) {
-            setTypeFile("video");
-          } else if (
-            post.file.includes("images") &&
-            !post.file.includes("mp4")
-          ) {
-            setTypeFile("image");
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching author data:", error);
-      } finally {
-        setLoading(false);
+    if (post.file) {
+      if (post.file.includes("mp4")) {
+        setTypeFile("video");
+      } else if (
+        post.file.includes("images") &&
+        !post.file.includes("mp4")
+      ) {
+        setTypeFile("image");
       }
+    }
 
-    })();
   }, [loggedInUser]);
 
   if (isDeleted) {
@@ -100,8 +91,8 @@ export default function PostsDetails({ ...post }) {
     <>
       {loading || !post ? (<Skeleton height={300} style={{ marginBottom: "20px" }} />
       ) : (
-        <Card className="mb-3 post-card" style={{ maxWidth: "100%" }}>
-          <Card.Header className="d-flex justify-content-between align-items-center" >
+        <Card className="mb-3 post-card" style={{ maxWidth: "100%" }} >
+          <Card.Header className="d-flex justify-content-between align-items-center" style={{ minHeight: "50px" }}>
             <div>
               {authorData && (
                 <Link to={`/account/${post.userId}`}>
@@ -136,9 +127,11 @@ export default function PostsDetails({ ...post }) {
                 backgroundColor: "WhiteSmoke",
                 paddingLeft: "5px",
                 paddingRight: "5px",
+                height: "auto",
+                minHeight: "250px"
               }}
             >
-              {post.content.split(' ').length > 150 ? (
+              {post.content.split(' ').length > 350 ? (
                 <>
                   {limitContent(post.content)}
                   <Button
@@ -153,23 +146,22 @@ export default function PostsDetails({ ...post }) {
               ) : (
                 post.content
               )}
+              <div className={`media-element ${typeFile}`} >
+
+                {typeFile === "image" && (
+                  <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Image src={post.file} style={{ height: '250px', width: 'auto%', }} />
+                  </div>
+                )}
+                {typeFile === "video" && (
+                  <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <video controls style={{ height: '250px', width: 'auto%', }}>
+                      <source src={post.file} type="video/mp4" />
+                    </video>
+                  </div>
+                )}
+              </div>
             </Card>
-            <div className={`media-element ${typeFile}`}>
-
-              {typeFile === "image" && (
-                <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-                  <Image src={post.file} style={{ height: '320px', width: 'auto%', }} />
-                </div>
-              )}
-              {typeFile === "video" && (
-                <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-                  <video controls style={{ height: '320px', width: 'auto%', }}>
-                    <source src={post.file} type="video/mp4" />
-                  </video>
-                </div>
-              )}
-
-            </div>
             <hr />
             <div className="d-flex justify-content-between align-items-center mt-3">
               <div>
