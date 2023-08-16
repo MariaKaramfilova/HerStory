@@ -3,6 +3,7 @@ import { Card, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { getUserByUsername } from "../../services/users.services";
 import PropTypes from "prop-types";
+import { MISSING_VOTED_BY_MESSAGE, VOTED_BY_MESSAGE } from "../../common/common";
 
 /**
  * The ViewUpvoted component displays a list of users who have upvoted a post.
@@ -33,7 +34,7 @@ export default function ViewUpvoted({ upvotedBy }) {
   return (
     <Card>
       <Card.Header style={{ textAlign: "center", fontSize: "40px" }}>
-        Voted By
+        {VOTED_BY_MESSAGE}
       </Card.Header>
       <Card.Body>
         <ul style={{ listStyle: "none", padding: 0 }}>
@@ -63,7 +64,7 @@ export default function ViewUpvoted({ upvotedBy }) {
             ))
           ) : (
             <li style={{ fontSize: "20px" }}>
-              There are no upvotes for this post yet!
+              {MISSING_VOTED_BY_MESSAGE}
             </li>
           )}
         </ul>

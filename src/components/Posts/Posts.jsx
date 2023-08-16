@@ -8,6 +8,10 @@ import Skeleton from 'react-loading-skeleton';
 import { PostsContext } from '../../context/PostsContext.js';
 import _ from 'lodash';
 import Error from '../../views/Error/Error.jsx';
+import { NEW_POSTS } from '../../common/common.js';
+import { MOST_UPVOTED } from '../../common/common.js';
+import { MOST_COMMENTED } from '../../common/common.js';
+import { SORT_BY } from '../../common/common.js';
 
 /**
  * A component to display posts based on various filters.
@@ -108,13 +112,13 @@ export default function Posts({ searchTerm, userName, tag }) {
       {searchTerm == undefined && (<Container className='mb-3 mt-5'>
         <Row className="d-flex justify-content-center align-items-center">
           <Col style={{ maxWidth: "fit-content" }}>
-            <h5>Sort by:</h5>
+            <h5>{SORT_BY}</h5>
           </Col>
           <Col>
             <ToggleButtonGroup type="radio" name="options" value={selectedButton} className='w-100'>
-              <ToggleButton id="tbg-radio-1" value={1} onClick={() => handleFilterChange('new')} variant='outline-danger'>New Posts</ToggleButton>
-              <ToggleButton id="tbg-radio-2" value={2} onClick={() => handleFilterChange('upvoted')} variant="outline-danger">Most Upvoted</ToggleButton>
-              <ToggleButton id="tbg-radio-3" value={3} onClick={() => handleFilterChange('commented')} variant="outline-danger">Most Commented</ToggleButton>
+              <ToggleButton id="tbg-radio-1" value={1} onClick={() => handleFilterChange('new')} variant='outline-danger'>{NEW_POSTS}</ToggleButton>
+              <ToggleButton id="tbg-radio-2" value={2} onClick={() => handleFilterChange('upvoted')} variant="outline-danger">{MOST_UPVOTED}</ToggleButton>
+              <ToggleButton id="tbg-radio-3" value={3} onClick={() => handleFilterChange('commented')} variant="outline-danger">{MOST_COMMENTED}</ToggleButton>
             </ToggleButtonGroup>
           </Col>
         </Row>

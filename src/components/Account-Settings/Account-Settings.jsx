@@ -6,7 +6,7 @@ import EmailSection from "./EmailSection";
 import PasswordSection from "./PasswordSection";
 import PhoneSection from "./PhoneSection";
 import ProfilePictureSection from "./ProfilePictureSection";
-
+import { ACCOUNT_SETTINGS } from "../../common/common";
 
 /**
  * Account Settings component that allows users to manage their account settings.
@@ -42,7 +42,7 @@ const AccountSettings = () => {
           alignItems: "center",
         }}
       >
-        <h1 style={{ marginTop: "20px", flexGrow: 1 }}>Account Settings</h1>
+        <h1 style={{ marginTop: "20px", flexGrow: 1 }}>{ACCOUNT_SETTINGS}</h1>
         <Link
           to="/home"
           style={{

@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../services/auth.services.js';
 import { AuthContext } from '../../context/AuthContext.js';
 import { getUserData } from '../../services/users.services.js';
+import { LOG_IN } from '../../common/common.js';
 
 /**
  * A component for user login.
@@ -61,7 +62,7 @@ export default function Login() {
               <Form.Control type='password' ref={passwordRef} required></Form.Control>
             </Form.Group>
             <Button disabled={loading} className='w-100 mt-3' type='submit' variant="dark">
-              Log in
+              {LOG_IN}
             </Button>
             <div className='w-100 text-center mt-2'>
               <Link to='/forgot-password'>Forgot password?</Link>

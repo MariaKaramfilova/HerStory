@@ -42,6 +42,7 @@ const ProfileDropdown = () => {
             alt="Profile Icon"
             style={{ width: '30px', height: '30px', borderRadius: '50%' }}
           />
+          <span>{loggedInUser.username}</span>
         </Dropdown.Toggle>
 
         <Dropdown.Menu className="ml-auto">

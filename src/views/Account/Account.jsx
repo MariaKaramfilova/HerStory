@@ -8,7 +8,7 @@ import Skeleton from "react-loading-skeleton";
 import BlockUserButton from "../BlockUserButton/BlockUserButton.jsx";
 import MakeAdminButton from "../MakeAdminButton/MakeAdminButton.jsx";
 import Error from "../Error/Error.jsx";
-
+import { ACCOUNT_DETAILS } from "../../common/common.js";
 /**
  * The MyAccount component displays user account details and their posts.
  *
@@ -82,7 +82,7 @@ export default function MyAccount() {
           </div>
 
           <div className="col-auto">
-            <h1>Account Details</h1>
+            <h1>{ACCOUNT_DETAILS}</h1>
             {user && (
               <Card>
                 <Card.Body>

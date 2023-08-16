@@ -9,7 +9,7 @@ import PostTags from "../../views/PostTags/PostTags.jsx";
 import PostUpvotes from "../../views/PostUpvotes/PostUpvotes";
 import Skeleton from "react-loading-skeleton";
 import { PostsContext } from "../../context/PostsContext.js";
-
+import { COMMENT_BUTTON_MESSAGE, DELETE_POST } from "../../common/common";
 
 /**
  * A component to display details of a single post.
@@ -111,7 +111,7 @@ export default function PostsDetails({ ...post }) {
             </div>
             {(userRole === "admin" || userName === post.author) && (
               <Button variant="outline-dark" onClick={handleDeletePost}>
-                Delete post
+                {DELETE_POST}
               </Button>
             )}
           </Card.Header>
@@ -170,7 +170,7 @@ export default function PostsDetails({ ...post }) {
                   variant="dark"
                   onClick={() => navigate(`/detailed-post-view/${post.id}`)}
                 >
-                  Comment
+                  {COMMENT_BUTTON_MESSAGE}
                 </Button>
 
               </div>

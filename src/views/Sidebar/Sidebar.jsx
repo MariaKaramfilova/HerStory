@@ -6,6 +6,7 @@ import { PostsContext } from "../../context/PostsContext.js";
 import { AuthContext } from "../../context/AuthContext.js";
 import { Link, useNavigate } from "react-router-dom";
 import Error from "../Error/Error.jsx";
+import { MESSAGE_ABOUT_NUMBER_POSTS, MESSAGE_ABOUT_NUMBER_USERS, POPULAR_TOPICS } from "../../common/common.js";
 
 /**
  * The SideBar component displays user and post statistics along with popular topics.
@@ -68,10 +69,10 @@ function SideBar() {
             ) : (
               <Row>
                 <Col>
-                  <h6>{forumUsers} Users</h6>
+                  <h6>{forumUsers} {MESSAGE_ABOUT_NUMBER_USERS}</h6>
                 </Col>
                 <Col>
-                  <h6>{forumPosts} Posts</h6>
+                  <h6>{forumPosts} {MESSAGE_ABOUT_NUMBER_POSTS}</h6>
                 </Col>
               </Row>
             )}
@@ -79,7 +80,7 @@ function SideBar() {
           <hr></hr>
 
           <ul>
-            <h3>Popular Topics</h3>
+            <h3>{POPULAR_TOPICS}</h3>
             <ul>
               {femaleRightsTopics.map((topic) => (
                 <div key={randomID()}>

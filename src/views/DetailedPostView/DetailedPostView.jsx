@@ -15,6 +15,7 @@ import PostUpvotes from "../PostUpvotes/PostUpvotes.jsx";
 import Skeleton from "react-loading-skeleton";
 import _ from "lodash";
 import { PostsContext } from "../../context/PostsContext.js";
+import { DELETE_POST } from "../../common/common";
 
 /**
  * The DetailedPostView component displays detailed information about a specific post.
@@ -188,7 +189,7 @@ export default function DetailedPostView() {
           {(userRole === 'admin' || post.author === userName) && (
             <div className="col-4 text-right">
               <Link className="mt-1 mr-2 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleEdit}>Edit Post</Link>
-              <Link className="mt-1 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleDeletePost}>Delete Post</Link>
+              <Link className="mt-1 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleDeletePost}>{DELETE_POST}</Link>
             </div>
           )}
         </div>

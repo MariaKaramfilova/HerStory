@@ -5,7 +5,7 @@ import { createPost, getAllPosts } from '../../services/post.services.js';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
 import DropzoneComponent from '../Dropzone/Dropzone.jsx';
-import { TOPIC_EDUCATION, TOPIC_EQUALITY, TOPIC_MATERNITY, TOPIC_PAY, TOPIC_REPRO, TOPIC_VIOLENCE } from '../../common/common.js';
+import { CREATE_POST, TOPIC_EDUCATION, TOPIC_EQUALITY, TOPIC_MATERNITY, TOPIC_PAY, TOPIC_REPRO, TOPIC_VIOLENCE } from '../../common/common.js';
 import Loading from '../../views/Loading/Loading.jsx';
 import { PostsContext } from '../../context/PostsContext.js';
 import Error from '../../views/Error/Error.jsx';
@@ -100,7 +100,7 @@ export default function CreatePost() {
 
   return (
     <Container className='w-100 mt-3 mb-3' style={{ minHeight: "100vh", maxWidth: "60%", marginLeft: "0" }}>
-      <h2 className='mb-4'>Create a post</h2>
+      <h2 className='mb-4'>{CREATE_POST}</h2>
       <Form>
         {error && <Alert variant='danger'>{error}</Alert>}
         <Form.Group>

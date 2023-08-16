@@ -6,6 +6,7 @@ import { Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 import Error from '../Error/Error.jsx';
+import { NO_TAGS } from '../../common/common.js';
 
 /**
  * The PostTags component displays the tags associated with a post.
@@ -45,7 +46,7 @@ export default function PostTags({ post }) {
     return (<p key={crypto.randomUUID()}><Link to={`/search/tag/${tag}`}>{tag}</Link>{index !== tags.length - 1 && ','}&nbsp;</p>)
   }) : (
     <div>
-      <p>No tags</p>
+      <p>{NO_TAGS}</p>
     </div>
   )
 
