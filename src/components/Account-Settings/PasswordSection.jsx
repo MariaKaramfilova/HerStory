@@ -1,5 +1,5 @@
-import { updatePassword, } from "firebase/auth";
-import { Button, Card, Form, Alert } from 'react-bootstrap';
+import { updatePassword } from "firebase/auth";
+import { Button, Card, Form, Alert } from "react-bootstrap";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.js";
 
@@ -9,7 +9,6 @@ import { AuthContext } from "../../context/AuthContext.js";
  * @return {<PasswordSection />};
  */
 export default function PasswordSection() {
-
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -35,8 +34,8 @@ export default function PasswordSection() {
           if (password && confirmPassword) {
             if (password === confirmPassword) {
               await updatePassword(user, password);
-              setPassword('');
-              setConfirmPassword('');
+              setPassword("");
+              setConfirmPassword("");
               alert("Congratulations! You successfully changed your password!");
               setError("");
             } else {
@@ -106,5 +105,5 @@ export default function PasswordSection() {
         </Card.Body>
       </Card>
     </>
-  )
+  );
 }

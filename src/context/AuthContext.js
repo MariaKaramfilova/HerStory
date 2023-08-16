@@ -1,4 +1,4 @@
-import { createContext } from "react"
+import { createContext } from "react";
 
 /**
  * The AuthContext provides a context for managing user authentication and user data.
@@ -30,8 +30,8 @@ import { createContext } from "react"
  * const { user, loggedInUser, allUsers, setUser } = useContext(AuthContext);
  */
 export const AuthContext = createContext({
-    user: undefined,
-    loggedInUser: {},
-    allUsers: {},
-    setUser: () => {},
+  user: undefined,
+  loggedInUser: {},
+  allUsers: {},
+  setUser: () => {},
 });

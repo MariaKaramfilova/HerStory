@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // eslint-disable-next-line no-unused-vars
-import React, { useContext, useEffect } from 'react'
-import { Button, Form } from 'react-bootstrap';
-import { getAllUsers } from '../../services/users.services';
-import { updateProfilePic } from '../../services/users.services';
-import { useState } from 'react';
-import { AuthContext } from '../../context/AuthContext.js';
-import Skeleton from 'react-loading-skeleton';
-import { AVATAR_API_URL, DEFAULT_PROF_PIC_DIR } from '../../common/common.js';
+import React, { useContext, useEffect } from "react";
+import { Button, Form } from "react-bootstrap";
+import { getAllUsers } from "../../services/users.services";
+import { updateProfilePic } from "../../services/users.services";
+import { useState } from "react";
+import { AuthContext } from "../../context/AuthContext.js";
+import Skeleton from "react-loading-skeleton";
+import { AVATAR_API_URL, DEFAULT_PROF_PIC_DIR } from "../../common/common.js";
 
 /**
  * Component that allows the user to manage their profile picture.
@@ -72,11 +72,11 @@ export default function ProfilePictureSection() {
     }
   }
   /**
-     * Create a File object from a URL.
-     * @async
-     * @param {string} url - The URL of the image.
-     * @returns {Promise<File>} A Promise resolving to the created File object.
-     */
+   * Create a File object from a URL.
+   * @async
+   * @param {string} url - The URL of the image.
+   * @returns {Promise<File>} A Promise resolving to the created File object.
+   */
   async function createFileFromUrl(url) {
     try {
       let response = await fetch(url);
@@ -92,8 +92,8 @@ export default function ProfilePictureSection() {
   }
 
   /**
-     * Switch to the previous profile picture URL.
-     */
+   * Switch to the previous profile picture URL.
+   */
   function switchToPrevProfilePictureURL() {
     setProfilePictureURL(prevProfilePictureURL);
   }
@@ -103,9 +103,7 @@ export default function ProfilePictureSection() {
    */
   const handleClickRandomAvatar = async () => {
     try {
-      const image = await fetch(
-        `${AVATAR_API_URL}${crypto.randomUUID()}`
-      );
+      const image = await fetch(`${AVATAR_API_URL}${crypto.randomUUID()}`);
       setProfilePictureURL(image.url);
       const file = await createFileFromUrl(image.url);
       setPhoto(file);

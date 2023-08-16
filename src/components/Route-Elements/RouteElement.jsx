@@ -16,8 +16,26 @@ import UsersDetails from "../Users/UsersDetails.jsx";
 import SearchWrapper from "../../views/Search/SearchWrapper.jsx";
 import EditPost from "../EditPost/EditPost";
 import NotFound from "../../views/NotFound/NotFound.jsx";
-import Posts from "../Posts/Posts.jsx"
-import { ABOUT_PATH, ACCOUNT_ID_PATH, ACCOUNT_SETTING_PATH, CREATE_POST_PATH, DETAILED_POST_VIEW_ID_PATH, EDIT_POST_ID_PATH, FORGOT_PASSWORD_PATH, HOME_PATH, LOG_IN_PATH, MY_ACCOUNT_PATH, SEARCH_TYPE_ID_PATH, SIGN_UP_PATH, STAR_PATH, SUCCESS_POSTING_PATH, SUCCESS_REGISTER_PATH, TYPE_ID_PATH, USER_ID_PATH } from "../../common/common";
+import Posts from "../Posts/Posts.jsx";
+import {
+  ABOUT_PATH,
+  ACCOUNT_ID_PATH,
+  ACCOUNT_SETTING_PATH,
+  CREATE_POST_PATH,
+  DETAILED_POST_VIEW_ID_PATH,
+  EDIT_POST_ID_PATH,
+  FORGOT_PASSWORD_PATH,
+  HOME_PATH,
+  LOG_IN_PATH,
+  MY_ACCOUNT_PATH,
+  SEARCH_TYPE_ID_PATH,
+  SIGN_UP_PATH,
+  STAR_PATH,
+  SUCCESS_POSTING_PATH,
+  SUCCESS_REGISTER_PATH,
+  TYPE_ID_PATH,
+  USER_ID_PATH,
+} from "../../common/common";
 
 /**
  * Component defining the routing structure for the application.
@@ -120,7 +138,10 @@ export default function RouteElement() {
             </AuthenticatedRoute>
           }
         />
-        <Route path={DETAILED_POST_VIEW_ID_PATH} element={<DetailedPostView />} />
+        <Route
+          path={DETAILED_POST_VIEW_ID_PATH}
+          element={<DetailedPostView />}
+        />
         <Route path={EDIT_POST_ID_PATH} element={<EditPost />} />
         <Route path={TYPE_ID_PATH} element={<Posts />} />
         <Route path={STAR_PATH} element={<NotFound />} />

@@ -1,14 +1,19 @@
-import './SignUp.css'
+import "./SignUp.css";
 // eslint-disable-next-line no-unused-vars
-import React, { useContext, useState } from 'react';
-import { Alert, Button, Form } from 'react-bootstrap';
-import { AuthContext } from '../../context/AuthContext';
-import { createUserByUsername, getAllUsers, getUserByUsername, getUserData } from '../../services/users.services';
-import { registerUser } from '../../services/auth.services';
-import { Link, useNavigate } from 'react-router-dom/dist';
-import { fetchSignInMethodsForEmail, getAuth } from 'firebase/auth';
-import { URL_TO_EXTERNAL_DEFAULT_PROF_PIC } from '../../common/common.js';
-import { LOG_IN_PATH } from '../../common/common';
+import React, { useContext, useState } from "react";
+import { Alert, Button, Form } from "react-bootstrap";
+import { AuthContext } from "../../context/AuthContext";
+import {
+  createUserByUsername,
+  getAllUsers,
+  getUserByUsername,
+  getUserData,
+} from "../../services/users.services";
+import { registerUser } from "../../services/auth.services";
+import { Link, useNavigate } from "react-router-dom/dist";
+import { fetchSignInMethodsForEmail, getAuth } from "firebase/auth";
+import { URL_TO_EXTERNAL_DEFAULT_PROF_PIC } from "../../common/common.js";
+import { LOG_IN_PATH } from "../../common/common";
 
 /**
  * Component for user registration form.
@@ -23,17 +28,18 @@ import { LOG_IN_PATH } from '../../common/common';
  * );
  */
 export default function RegistrationForm() {
-
   // eslint-disable-next-line no-unused-vars
-  const [profilePictureURL, setProfilePictureURL] = useState(URL_TO_EXTERNAL_DEFAULT_PROF_PIC);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate()
+  const [profilePictureURL, setProfilePictureURL] = useState(
+    URL_TO_EXTERNAL_DEFAULT_PROF_PIC
+  );
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const { setUser } = useContext(AuthContext);
 
@@ -54,7 +60,7 @@ export default function RegistrationForm() {
         return false;
       }
     } catch (error) {
-      console.error('Error checking email existence:', error);
+      console.error("Error checking email existence:", error);
       throw error;
     }
   };
@@ -65,53 +71,61 @@ export default function RegistrationForm() {
    */
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(null)
+    setError(null);
 
     if (firstName.length < 4 || firstName.length > 32 || !firstName) {
-      setError('First name should be between 4 and 32 symbols')
+      setError("First name should be between 4 and 32 symbols");
       return;
     }
     if (lastName.length < 4 || lastName.length > 32 || !lastName) {
-      setError('Last name should be between 4 and 32 symbols')
+      setError("Last name should be between 4 and 32 symbols");
       return;
     }
     if (password !== confirmPassword || !password) {
-      setError('Please check if your passwords match!')
+      setError("Please check if your passwords match!");
       return;
     }
     if (password.length < 6) {
-      setError('Password should be more than 6 characters!')
+      setError("Password should be more than 6 characters!");
       return;
     }
-    if (!email.includes('@gmail.com') || !email.includes('@abv.bg')) {
-      setError('Email is not valid!')
+    if (!email.includes("@gmail.com") || !email.includes("@abv.bg")) {
+      setError("Email is not valid!");
     }
 
     try {
       const snapshot = await getUserByUsername(userName);
       if (snapshot.exists()) {
-        return alert('This Username already exists!')
+        return alert("This Username already exists!");
       }
       const emailExists = await checkEmailExistence(email);
       if (emailExists) {
-        setError('This Email is already in use!');
+        setError("This Email is already in use!");
       }
       const credential = await registerUser(email, password);
-      await createUserByUsername(firstName, lastName, credential.user.uid, credential.user.email, userName, profilePictureURL);
+      await createUserByUsername(
+        firstName,
+        lastName,
+        credential.user.uid,
+        credential.user.email,
+        userName,
+        profilePictureURL
+      );
       const loggedUserSnapshot = await getUserData(credential.user.uid);
-      const loggedInUser = Object.values(loggedUserSnapshot.val()).find((el) => el.uid === credential.user.uid);
+      const loggedInUser = Object.values(loggedUserSnapshot.val()).find(
+        (el) => el.uid === credential.user.uid
+      );
       const allUsers = await getAllUsers();
       setUser({
         user: credential.user,
         loggedInUser,
-        allUsers
+        allUsers,
       });
-      navigate('/success-register');
+      navigate("/success-register");
     } catch (error) {
       console.error(error);
     }
-  }
-
+  };
 
   return (
     <div className="form">
@@ -174,8 +188,17 @@ export default function RegistrationForm() {
         </Form.Group>
       </div>
       <div className="footer">
-        <Button onClick={handleSubmit} className='w-100 mt-3' type='submit' variant="dark">Register</Button>
-        <p>Already have registration? <Link to={LOG_IN_PATH}>Log in</Link></p>
+        <Button
+          onClick={handleSubmit}
+          className="w-100 mt-3"
+          type="submit"
+          variant="dark"
+        >
+          Register
+        </Button>
+        <p>
+          Already have registration? <Link to={LOG_IN_PATH}>Log in</Link>
+        </p>
       </div>
     </div>
   );

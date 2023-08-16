@@ -1,8 +1,8 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useContext, useEffect, useState } from 'react'
-import { PostsContext } from '../../context/PostsContext.js'
-import { getAllPosts } from '../../services/post.services.js';
-import Error from '../../views/Error/Error.jsx';
+import React, { useContext, useEffect, useState } from "react";
+import { PostsContext } from "../../context/PostsContext.js";
+import { getAllPosts } from "../../services/post.services.js";
+import Error from "../../views/Error/Error.jsx";
 import PropTypes from "prop-types";
 
 /**
@@ -32,20 +32,22 @@ export default function PostsContextProvider({ children }) {
       } finally {
         setLoading(false);
       }
-    })()
+    })();
   }, []);
 
   if (error) {
-    return <Error error={error} />
+    return <Error error={error} />;
   }
 
   return (
-    <div className='main-content'>
-      <PostsContext.Provider value={{ ...appPostState, setAllPosts: setAppPostsState }}>
+    <div className="main-content">
+      <PostsContext.Provider
+        value={{ ...appPostState, setAllPosts: setAppPostsState }}
+      >
         {children}
       </PostsContext.Provider>
     </div>
-  )
+  );
 }
 
 PostsContextProvider.propTypes = {

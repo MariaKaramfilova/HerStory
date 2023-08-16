@@ -11,7 +11,11 @@ import PostTags from "../../views/PostTags/PostTags.jsx";
 import PostUpvotes from "../../views/PostUpvotes/PostUpvotes";
 import Skeleton from "react-loading-skeleton";
 import { PostsContext } from "../../context/PostsContext.js";
-import { ADMIN, COMMENT_BUTTON_MESSAGE, DELETE_POST } from "../../common/common";
+import {
+  ADMIN,
+  COMMENT_BUTTON_MESSAGE,
+  DELETE_POST,
+} from "../../common/common";
 
 /**
  * A component to display details of a single post.
@@ -28,12 +32,12 @@ import { ADMIN, COMMENT_BUTTON_MESSAGE, DELETE_POST } from "../../common/common"
  */
 export default function PostsDetails({ ...post }) {
   const navigate = useNavigate();
-  const [authorData, setAuthorData] = useState('');
+  const [authorData, setAuthorData] = useState("");
   // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false);
-  const [userRole, setUserRole] = useState('');
-  const [userName, setUserName] = useState('');
-  const [typeFile, setTypeFile] = useState('');
+  const [userRole, setUserRole] = useState("");
+  const [userName, setUserName] = useState("");
+  const [typeFile, setTypeFile] = useState("");
   const [isDeleted, setIsDeleted] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const { user, loggedInUser, allUsers } = useContext(AuthContext);
@@ -42,7 +46,7 @@ export default function PostsDetails({ ...post }) {
 
   useEffect(() => {
     if (allUsers) {
-      const userData = allUsers.filter(user => user.uid === post.userId);
+      const userData = allUsers.filter((user) => user.uid === post.userId);
       setAuthorData(userData);
     }
     if (loggedInUser) {
@@ -53,14 +57,10 @@ export default function PostsDetails({ ...post }) {
     if (post.file) {
       if (post.file.includes("mp4")) {
         setTypeFile("video");
-      } else if (
-        post.file.includes("images") &&
-        !post.file.includes("mp4")
-      ) {
+      } else if (post.file.includes("images") && !post.file.includes("mp4")) {
         setTypeFile("image");
       }
     }
-
   }, [loggedInUser]);
 
   if (isDeleted) {
@@ -73,12 +73,14 @@ export default function PostsDetails({ ...post }) {
    */
   const handleDeletePost = async (e) => {
     e.preventDefault();
-    const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this comment?"
+    );
 
     if (confirmDelete) {
       try {
-        await deletePost(post.postId)
-        alert('Post successfully deleted.');
+        await deletePost(post.postId);
+        alert("Post successfully deleted.");
         let result = await getAllPosts();
         setAllPosts((prev) => ({ ...prev, allPosts: result }));
         setIsDeleted(true);
@@ -86,7 +88,7 @@ export default function PostsDetails({ ...post }) {
         alert(`Something went wrong ${error}`);
       }
     }
-  }
+  };
 
   /**
    * Limit post content to a specific word count.
@@ -94,19 +96,23 @@ export default function PostsDetails({ ...post }) {
    * @returns {string} Limited content.
    */
   const limitContent = (content) => {
-    const words = content.split(' ');
+    const words = content.split(" ");
     if (words.length > 100) {
-      return words.slice(0, 180).join(' ') + '...';
+      return words.slice(0, 180).join(" ") + "...";
     }
     return content;
   };
 
   return (
     <>
-      {loading || !post ? (<Skeleton height={300} style={{ marginBottom: "20px" }} />
+      {loading || !post ? (
+        <Skeleton height={300} style={{ marginBottom: "20px" }} />
       ) : (
-        <Card className="mb-3 post-card" style={{ maxWidth: "100%" }} >
-          <Card.Header className="d-flex justify-content-between align-items-center" style={{ minHeight: "50px" }}>
+        <Card className="mb-3 post-card" style={{ maxWidth: "100%" }}>
+          <Card.Header
+            className="d-flex justify-content-between align-items-center"
+            style={{ minHeight: "50px" }}
+          >
             <div>
               {authorData && (
                 <Link to={`/account/${post.userId}`}>
@@ -142,10 +148,10 @@ export default function PostsDetails({ ...post }) {
                 paddingLeft: "5px",
                 paddingRight: "5px",
                 height: "auto",
-                minHeight: "250px"
+                minHeight: "250px",
               }}
             >
-              {post.content.split(' ').length > 350 ? (
+              {post.content.split(" ").length > 350 ? (
                 <>
                   {limitContent(post.content)}
                   <Button
@@ -160,16 +166,24 @@ export default function PostsDetails({ ...post }) {
               ) : (
                 post.content
               )}
-              <div className={`media-element ${typeFile}`} >
-
+              <div className={`media-element ${typeFile}`}>
                 {typeFile === "image" && (
-                  <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Image src={post.file} style={{ height: '250px', width: 'auto%', }} />
+                  <div
+                    className="media-element"
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Image
+                      src={post.file}
+                      style={{ height: "250px", width: "auto%" }}
+                    />
                   </div>
                 )}
                 {typeFile === "video" && (
-                  <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-                    <video controls style={{ height: '250px', width: 'auto%', }}>
+                  <div
+                    className="media-element"
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <video controls style={{ height: "250px", width: "auto%" }}>
                       <source src={post.file} type="video/mp4" />
                     </video>
                   </div>
@@ -186,7 +200,6 @@ export default function PostsDetails({ ...post }) {
                 >
                   {COMMENT_BUTTON_MESSAGE}
                 </Button>
-
               </div>
               <PostTags post={post} />
               {post && <PostUpvotes post={post} />}

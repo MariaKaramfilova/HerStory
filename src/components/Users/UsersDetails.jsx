@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useContext, useEffect, useState } from 'react'
-import { Badge, Container } from 'react-bootstrap'
+import React, { useContext, useEffect, useState } from "react";
+import { Badge, Container } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser, faEnvelope } from "@fortawesome/free-solid-svg-icons";
@@ -9,9 +9,9 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import BlockUserButton from "../../views/BlockUserButton/BlockUserButton.jsx";
 import MakeAdminButton from "../../views/MakeAdminButton/MakeAdminButton.jsx";
-import { PostsContext } from '../../context/PostsContext.js';
-import _ from 'lodash';
-import Error from '../../views/Error/Error.jsx';
+import { PostsContext } from "../../context/PostsContext.js";
+import _ from "lodash";
+import Error from "../../views/Error/Error.jsx";
 
 /**
  * Component for displaying user details and actions.
@@ -39,8 +39,7 @@ export default function UsersDetails(user) {
     if (_.isEmpty(allPosts)) {
       return;
     }
-    setPostsCount(allPosts.filter(el => el.author === user.username).length);
-
+    setPostsCount(allPosts.filter((el) => el.author === user.username).length);
   }, [user, allPosts]);
 
   const handleGoToDetails = () => {
@@ -48,7 +47,7 @@ export default function UsersDetails(user) {
   };
 
   if (error) {
-    return <Error error={error} />
+    return <Error error={error} />;
   }
 
   return (

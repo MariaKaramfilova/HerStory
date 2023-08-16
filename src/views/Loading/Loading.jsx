@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-import React from 'react'
-import './Loading.css'
+import React from "react";
+import "./Loading.css";
 /**
  * The Loading component displays a loading animation using CSS styles.
  *
@@ -25,5 +25,5 @@ export default function Loading() {
       <div></div>
       <div></div>
     </div>
-  )
+  );
 }

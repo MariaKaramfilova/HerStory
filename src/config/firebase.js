@@ -1,7 +1,7 @@
 import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
-import { getStorage } from 'firebase/storage';
+import { getStorage } from "firebase/storage";
 
 /**
  * Firebase configuration object.
@@ -26,7 +26,8 @@ import { getStorage } from 'firebase/storage';
 const firebaseConfig = {
   apiKey: "AIzaSyDTCw153TnKVVCTqpGhk0Sctbyeq-oy7gQ",
   authDomain: "herstory-forum-app-dev.firebaseapp.com",
-  databaseURL: "https://herstory-forum-app-dev-default-rtdb.europe-west1.firebasedatabase.app",
+  databaseURL:
+    "https://herstory-forum-app-dev-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "herstory-forum-app-dev",
   storageBucket: "herstory-forum-app-dev.appspot.com",
   messagingSenderId: "127971481183",

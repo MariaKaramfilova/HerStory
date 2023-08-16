@@ -1,11 +1,14 @@
 /* eslint-disable no-unused-vars */
-import { AuthContext } from '../../context/AuthContext.js';
-import React, { useContext, useState} from 'react';
-import { deleteCommentID, editComment } from '../../services/comment.services.js';
-import { Button, Modal, Card} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { AuthContext } from "../../context/AuthContext.js";
+import React, { useContext, useState } from "react";
+import {
+  deleteCommentID,
+  editComment,
+} from "../../services/comment.services.js";
+import { Button, Modal, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import './Comments.css';
+import "./Comments.css";
 
 /**
  * A component that displays a comment along with options to edit or delete it.
@@ -20,12 +23,20 @@ import './Comments.css';
  * @param {function} props.SetRefreshComments - A function to refresh the comments.
  * @param {boolean} props.refreshComments - A flag to trigger comment refreshing.
  * @param {string} props.commentPostId - The ID of the post that the comment belongs to.
- * 
+ *
  */
-export default function Comment({ author, createdOn, content, commentPostId, commentUserUid, commentId, SetRefreshComments, refreshComments }) {
-
+export default function Comment({
+  author,
+  createdOn,
+  content,
+  commentPostId,
+  commentUserUid,
+  commentId,
+  SetRefreshComments,
+  refreshComments,
+}) {
   const { loggedInUser } = useContext(AuthContext);
-  const [userId, setUserId] = useState(loggedInUser ? loggedInUser.uid : null)
+  const [userId, setUserId] = useState(loggedInUser ? loggedInUser.uid : null);
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
@@ -44,18 +55,19 @@ export default function Comment({ author, createdOn, content, commentPostId, com
    * @param {string} commentId - The ID of the comment to be deleted.
    */
   async function deleteComment(commentId) {
-    const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this comment?"
+    );
 
     try {
       if (confirmDelete) {
         await deleteCommentID(commentId, commentPostId);
-        SetRefreshComments(!refreshComments)
+        SetRefreshComments(!refreshComments);
       }
     } catch (error) {
-      console.error('Error deleting comment:', error);
+      console.error("Error deleting comment:", error);
     }
   }
-
 
   /**
    * Edit a comment.
@@ -67,27 +79,26 @@ export default function Comment({ author, createdOn, content, commentPostId, com
       SetRefreshComments(!refreshComments);
       handleClose();
     } catch (error) {
-      console.error('Error editing comment:', error);
+      console.error("Error editing comment:", error);
     }
   }
 
-
   return (
     <div key={createdOn} className="d-flex justify-content-center mt-3">
-      <div style={{ maxWidth: '96%', minWidth: '96%' }}>
+      <div style={{ maxWidth: "96%", minWidth: "96%" }}>
         <Card>
-
           <Card.Header className="bg-light">
             <div className="d-flex justify-content-between align-items-center">
               <div>
-
                 <Link to={`/account/${commentUserUid}`}>{author}</Link>
-                <div className="ml-2"> {new Date(createdOn).toLocaleString()}</div>
+                <div className="ml-2">
+                  {" "}
+                  {new Date(createdOn).toLocaleString()}
+                </div>
               </div>
 
               {userId === commentUserUid && (
                 <div>
-
                   <button
                     className="mt-1 text-link-button mr-2"
                     onClick={handleShow}
@@ -126,26 +137,27 @@ export default function Comment({ author, createdOn, content, commentPostId, com
             <Button variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant="primary" onClick={() => handleEditComment(commentId)}>
+            <Button
+              variant="primary"
+              onClick={() => handleEditComment(commentId)}
+            >
               Save Changes
             </Button>
           </Modal.Footer>
         </Modal>
-
       </div>
     </div>
   );
 }
 
 /**
-* PropTypes for the Comment component.
-*
-* @memberof Comment
-* @static
-*/
+ * PropTypes for the Comment component.
+ *
+ * @memberof Comment
+ * @static
+ */
 
 Comment.propTypes = {
-
   author: PropTypes.string,
   createdOn: PropTypes.Date,
   content: PropTypes.string,

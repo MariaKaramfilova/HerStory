@@ -1,10 +1,13 @@
 // eslint-disable-next-line no-unused-vars
-import React from 'react'
-import Comment from '../../components/Comments/Comments.jsx';
+import React from "react";
+import Comment from "../../components/Comments/Comments.jsx";
 import PropTypes from "prop-types";
 
-export default function CommentsLibrary({ commentsLibrary, refreshComments, SetRefreshComments }) {
-
+export default function CommentsLibrary({
+  commentsLibrary,
+  refreshComments,
+  SetRefreshComments,
+}) {
   const commentsToShow =
     commentsLibrary.length > 0 ? (
       commentsLibrary.map((comment) => (
@@ -38,4 +41,3 @@ CommentsLibrary.propTypes = {
   SetRefreshComments: PropTypes.func.isRequired,
   commentsLibrary: PropTypes.array.isRequired,
 };
-

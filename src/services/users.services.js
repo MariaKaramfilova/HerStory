@@ -1,4 +1,12 @@
-import { get, set, ref, orderByChild, equalTo, update, remove } from "firebase/database";
+import {
+  get,
+  set,
+  ref,
+  orderByChild,
+  equalTo,
+  update,
+  remove,
+} from "firebase/database";
 import { database } from "../config/firebase";
 import { setFileToStorage } from "./storage.services.js";
 import { deletePost } from "./post.services.js";
@@ -10,10 +18,10 @@ import { deleteCommentID } from "./comment.services";
  * @param {DataSnapshot} snapshot - The snapshot of the users document.
  * @returns {Array} - An array of user objects.
  */
-export const fromUsersDocument = snapshot => {
+export const fromUsersDocument = (snapshot) => {
   const usersDocument = snapshot.val();
 
-  return Object.keys(usersDocument).map(key => {
+  return Object.keys(usersDocument).map((key) => {
     const post = usersDocument[key];
 
     return {
@@ -22,7 +30,7 @@ export const fromUsersDocument = snapshot => {
       createdOn: new Date(post.createdOn),
     };
   });
-}
+};
 
 /**
  * Retrieves a user by their username.
@@ -32,7 +40,7 @@ export const fromUsersDocument = snapshot => {
  */
 export const getUserByUsername = (username) => {
   return get(ref(database, `users/${username}`));
-}
+};
 
 /**
  * Creates a new user using their username as the key.
@@ -45,7 +53,14 @@ export const getUserByUsername = (username) => {
  * @param {string} profilePictureURL - The URL of the user's profile picture.
  * @returns {Promise<void>} - A promise that resolves after creating the user.
  */
-export const createUserByUsername = (firstName, lastName, uid, email, username, profilePictureURL) => {
+export const createUserByUsername = (
+  firstName,
+  lastName,
+  uid,
+  email,
+  username,
+  profilePictureURL
+) => {
   return set(ref(database, `users/${username}`), {
     firstName,
     lastName,
@@ -53,10 +68,10 @@ export const createUserByUsername = (firstName, lastName, uid, email, username, 
     username,
     profilePictureURL,
     email,
-    role: 'user',
+    role: "user",
     createdOn: Date.now(),
-  })
-}
+  });
+};
 
 /**
  * Retrieves user data by UID.
@@ -65,8 +80,8 @@ export const createUserByUsername = (firstName, lastName, uid, email, username, 
  * @returns {Promise<Object>} - A promise that resolves with the retrieved user object.
  */
 export const getUserData = (uid) => {
-  return get(ref(database, 'users'), orderByChild('uid'), equalTo(uid))
-}
+  return get(ref(database, "users"), orderByChild("uid"), equalTo(uid));
+};
 
 /**
  * Retrieves all users.
@@ -74,15 +89,14 @@ export const getUserData = (uid) => {
  * @returns {Promise<Array>} - A promise that resolves with an array of user objects.
  */
 export const getAllUsers = () => {
-  return get(ref(database, 'users'))
-    .then(snapshot => {
-      if (!snapshot.exists()) {
-        return [];
-      }
+  return get(ref(database, "users")).then((snapshot) => {
+    if (!snapshot.exists()) {
+      return [];
+    }
 
-      return fromUsersDocument(snapshot);
-    });
-}
+    return fromUsersDocument(snapshot);
+  });
+};
 
 /**
  * Updates the profile picture URL for a user.
@@ -99,7 +113,7 @@ export const updateProfilePic = async (file, currentUser) => {
 
   update(ref(database), updateProfilePic);
   return url;
-}
+};
 
 /**
  * Updates the email address for a user.
@@ -113,7 +127,7 @@ export const updateProfileEmail = async (email, currentUser) => {
   updateEmail[`/users/${currentUser}/email`] = email;
 
   return update(ref(database), updateEmail);
-}
+};
 
 /**
  * Updates the phone number for a user.
@@ -127,7 +141,7 @@ export const updateProfilePhone = async (phone, currentUser) => {
   updatePhone[`/users/${currentUser}/phone`] = phone;
 
   return update(ref(database), updatePhone);
-}
+};
 
 /**
  * Blocks a user.
@@ -141,7 +155,7 @@ export const blockUser = (handle) => {
   updateBlockedStatus[`/users/${handle}/blockedStatus`] = true;
 
   return update(ref(database), updateBlockedStatus);
-}
+};
 
 /**
  * Unblocks a user.
@@ -155,7 +169,7 @@ export const unblockUser = (handle) => {
   updateBlockedStatus[`/users/${handle}/blockedStatus`] = false;
 
   return update(ref(database), updateBlockedStatus);
-}
+};
 
 /**
  * Grants admin privileges to a user.
@@ -169,7 +183,7 @@ export const makeAdminUser = (handle) => {
   updateAdminStatus[`/users/${handle}/role`] = "admin";
 
   return update(ref(database), updateAdminStatus);
-}
+};
 
 /**
  * Removes admin privileges from a user.
@@ -183,7 +197,7 @@ export const removeAdminRights = (handle) => {
   updateAdminStatus[`/users/${handle}/role`] = "user";
 
   return update(ref(database), updateAdminStatus);
-}
+};
 
 /**
  * Deletes a user's data, including their posts, comments, and votes.
@@ -195,17 +209,22 @@ export const removeAdminRights = (handle) => {
  * @param {Array} downvoted - An array of post IDs downvoted by the user.
  * @returns {Promise<void>} - A promise that resolves after deleting the user's data.
  */
-export async function deleteUserData(userHandle, posts, comments, upvoted, downvoted) {
-
+export async function deleteUserData(
+  userHandle,
+  posts,
+  comments,
+  upvoted,
+  downvoted
+) {
   await remove(ref(database, `users/${userHandle}`));
 
   posts.map(async (post) => {
     await deletePost(post.postId);
-  })
+  });
 
   comments.map(async (comment) => {
     await deleteCommentID(comment.commentId, comment.postId);
-  })
+  });
 
   const updateVotesDeletion = {};
   upvoted.forEach((postId) => {
@@ -214,7 +233,8 @@ export async function deleteUserData(userHandle, posts, comments, upvoted, downv
 
   const updateDownVotesDeletion = {};
   downvoted.forEach((postId) => {
-    updateDownVotesDeletion[`/posts/${postId}/downvotedBy/${userHandle}`] = null;
+    updateDownVotesDeletion[`/posts/${postId}/downvotedBy/${userHandle}`] =
+      null;
   });
 
   const updates = {
@@ -223,5 +243,5 @@ export async function deleteUserData(userHandle, posts, comments, upvoted, downv
   };
   await update(ref(database), updates);
 
-  console.log('User and associated comments & posts deleted successfully');
+  console.log("User and associated comments & posts deleted successfully");
 }

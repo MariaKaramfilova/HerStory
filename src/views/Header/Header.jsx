@@ -62,7 +62,11 @@ const Header = () => {
         <div className="col-1"></div>
         {/* this is just some empty space */}
         <div className="col-2">
-          {user === undefined ? <Skeleton width={50} height={50} /> : renderAuthView}
+          {user === undefined ? (
+            <Skeleton width={50} height={50} />
+          ) : (
+            renderAuthView
+          )}
         </div>
       </div>
     </div>

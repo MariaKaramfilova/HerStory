@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useContext } from 'react'
-import { Card, ListGroup } from 'react-bootstrap';
-import BlockUserButton from '../BlockUserButton/BlockUserButton.jsx';
-import MakeAdminButton from '../MakeAdminButton/MakeAdminButton.jsx';
-import { AuthContext } from '../../context/AuthContext.js';
+import React, { useContext } from "react";
+import { Card, ListGroup } from "react-bootstrap";
+import BlockUserButton from "../BlockUserButton/BlockUserButton.jsx";
+import MakeAdminButton from "../MakeAdminButton/MakeAdminButton.jsx";
+import { AuthContext } from "../../context/AuthContext.js";
 import { ACCOUNT_DETAILS, ADMIN } from "../../common/common.js";
 import PropTypes from "prop-types";
 
@@ -33,15 +33,10 @@ export default function AccountDetails({ userInfo }) {
             <Card.Title>{userInfo.username}</Card.Title>
             <ListGroup variant="flush">
               <ListGroup.Item>Email: {userInfo.email}</ListGroup.Item>
+              <ListGroup.Item>First Name: {userInfo.firstName}</ListGroup.Item>
+              <ListGroup.Item>Last Name: {userInfo.lastName}</ListGroup.Item>
               <ListGroup.Item>
-                First Name: {userInfo.firstName}
-              </ListGroup.Item>
-              <ListGroup.Item>
-                Last Name: {userInfo.lastName}
-              </ListGroup.Item>
-              <ListGroup.Item>
-                Created On:{" "}
-                {new Date(userInfo.createdOn).toLocaleString()}
+                Created On: {new Date(userInfo.createdOn).toLocaleString()}
               </ListGroup.Item>
             </ListGroup>
             {loggedInUser.role === ADMIN && (
@@ -60,5 +55,3 @@ export default function AccountDetails({ userInfo }) {
 AccountDetails.propTypes = {
   userInfo: PropTypes.object.isRequired,
 };
-
-

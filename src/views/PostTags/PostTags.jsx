@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { faTags } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useEffect, useState } from 'react'
-import { getPostsByAuthor } from '../../services/post.services.js';
-import { Container } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { faTags } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
+import { getPostsByAuthor } from "../../services/post.services.js";
+import { Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { NO_TAGS } from '../../common/common.js';
+import { NO_TAGS } from "../../common/common.js";
 
 /**
  * The PostTags component displays the tags associated with a post.
@@ -17,7 +17,7 @@ import { NO_TAGS } from '../../common/common.js';
  * @returns {JSX.Element} - JSX representing the PostTags component.
  */
 export default function PostTags({ post }) {
-  const [tags, setTags] = useState('');
+  const [tags, setTags] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -37,26 +37,38 @@ export default function PostTags({ post }) {
         setLoading(false);
       }
     })();
-
-
   }, [post]);
 
-  const tagsToshow = tags.length ? tags.map((tag, index) => {
-    return (<p key={crypto.randomUUID()}><Link to={`/search/tag/${tag}`}>{tag}</Link>{index !== tags.length - 1 && ','}&nbsp;</p>)
-  }) : (
+  const tagsToshow = tags.length ? (
+    tags.map((tag, index) => {
+      return (
+        <p key={crypto.randomUUID()}>
+          <Link to={`/search/tag/${tag}`}>{tag}</Link>
+          {index !== tags.length - 1 && ","}&nbsp;
+        </p>
+      );
+    })
+  ) : (
     <div>
       <p>{NO_TAGS}</p>
     </div>
-  )
+  );
 
   return (
-    <Container className='d-flex mt-4'>
+    <Container className="d-flex mt-4">
       <div>
-        <FontAwesomeIcon icon={faTags} style={{ "--fa-primary-color": "#f5195a", "--fa-secondary-color": "#f5195a", }} />&nbsp;
+        <FontAwesomeIcon
+          icon={faTags}
+          style={{
+            "--fa-primary-color": "#f5195a",
+            "--fa-secondary-color": "#f5195a",
+          }}
+        />
+        &nbsp;
       </div>
       {!loading && tagsToshow}
     </Container>
-  )
+  );
 }
 
 PostTags.propTypes = {

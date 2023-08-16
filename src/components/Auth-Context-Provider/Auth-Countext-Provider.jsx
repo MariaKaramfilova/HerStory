@@ -1,11 +1,11 @@
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from "../../context/AuthContext";
 // eslint-disable-next-line no-unused-vars
-import React, { useContext, useEffect, useState } from 'react';
-import { auth } from '../../config/firebase';
+import React, { useContext, useEffect, useState } from "react";
+import { auth } from "../../config/firebase";
 import PropTypes from "prop-types";
-import { onAuthStateChanged } from 'firebase/auth';
-import { getAllUsers, getUserData } from '../../services/users.services.js';
-import Error from '../../views/Error/Error.jsx';
+import { onAuthStateChanged } from "firebase/auth";
+import { getAllUsers, getUserData } from "../../services/users.services.js";
+import Error from "../../views/Error/Error.jsx";
 
 /**
  * A component that handles the authentication state and provides it to its children.
@@ -28,10 +28,22 @@ const RoutePage = ({ children }) => {
           const allUsers = await getAllUsers();
           if (currentUser) {
             const loggedUserSnapshot = await getUserData(currentUser.uid);
-            const loggedInUser = Object.values(loggedUserSnapshot.val()).find((el) => el.uid === currentUser.uid);
-            setAppState((prev) => ({ ...prev, loggedInUser, user: currentUser, allUsers }));
+            const loggedInUser = Object.values(loggedUserSnapshot.val()).find(
+              (el) => el.uid === currentUser.uid
+            );
+            setAppState((prev) => ({
+              ...prev,
+              loggedInUser,
+              user: currentUser,
+              allUsers,
+            }));
           } else {
-            setAppState((prev) => ({ ...prev, loggedInUser: currentUser, user: currentUser, allUsers }));
+            setAppState((prev) => ({
+              ...prev,
+              loggedInUser: currentUser,
+              user: currentUser,
+              allUsers,
+            }));
           }
         } catch (error) {
           setError(error);
@@ -43,11 +55,11 @@ const RoutePage = ({ children }) => {
   }, []);
 
   if (error) {
-    return <Error error={error} />
+    return <Error error={error} />;
   }
 
   return (
-    <div className='main-content'>
+    <div className="main-content">
       <AuthContext.Provider value={{ ...appState, setUser: setAppState }}>
         {children}
       </AuthContext.Provider>
@@ -55,8 +67,7 @@ const RoutePage = ({ children }) => {
   );
 };
 
-
-export default RoutePage
+export default RoutePage;
 
 /**
  * PropTypes for the RoutePage component.

@@ -7,11 +7,10 @@ import { get, ref, push, update } from "firebase/database";
  * @param {DataSnapshot} snapshot - The snapshot of the tags document.
  * @returns {Array} - An array of tag objects.
  */
-const fromTagsDocument = snapshot => {
+const fromTagsDocument = (snapshot) => {
   const tagsDocument = snapshot.val();
 
-
-  return Object.keys(tagsDocument).map(key => {
+  return Object.keys(tagsDocument).map((key) => {
     const tag = tagsDocument[key];
 
     return {
@@ -20,7 +19,7 @@ const fromTagsDocument = snapshot => {
       createdOn: new Date(tag.createdOn),
     };
   });
-}
+};
 
 /**
  * Creates a new tag.
@@ -29,21 +28,18 @@ const fromTagsDocument = snapshot => {
  * @returns {Promise<Object>} - A promise that resolves with the created tag object.
  */
 export const createTag = async (name) => {
-  return push(
-    ref(database, 'tags'), {
+  return push(ref(database, "tags"), {
     name,
     createdOn: Date.now(),
     tagId: null,
-  },
-  )
-    .then(result => {
-      const updatePostIDequalToHandle = {};
-      updatePostIDequalToHandle[`/tags/${result.key}/tagId`] = result.key;
-      update(ref(database), updatePostIDequalToHandle)
+  }).then((result) => {
+    const updatePostIDequalToHandle = {};
+    updatePostIDequalToHandle[`/tags/${result.key}/tagId`] = result.key;
+    update(ref(database), updatePostIDequalToHandle);
 
-      return getTagById(result.key);
-    });
-}
+    return getTagById(result.key);
+  });
+};
 
 /**
  * Retrieves a tag by its ID.
@@ -52,15 +48,13 @@ export const createTag = async (name) => {
  * @returns {Promise<Object>} - A promise that resolves with the retrieved tag object.
  */
 export const getTagById = async (id) => {
-
-  return get(ref(database, `tags/${id}`))
-    .then(result => {
-      if (!result.exists()) {
-        throw new Error(`Tag with id ${id} does not exist!`);
-      }
-      const tag = result.val();
-      return tag;
-    });
+  return get(ref(database, `tags/${id}`)).then((result) => {
+    if (!result.exists()) {
+      throw new Error(`Tag with id ${id} does not exist!`);
+    }
+    const tag = result.val();
+    return tag;
+  });
 };
 
 /**
@@ -69,15 +63,13 @@ export const getTagById = async (id) => {
  * @returns {Promise<Array>} - A promise that resolves with an array of tag objects.
  */
 export const getAllTags = async () => {
+  return get(ref(database, "tags")).then((snapshot) => {
+    if (!snapshot.exists()) {
+      return [];
+    }
 
-  return get(ref(database, 'tags'))
-    .then(snapshot => {
-      if (!snapshot.exists()) {
-        return [];
-      }
-
-      return fromTagsDocument(snapshot);
-    });
+    return fromTagsDocument(snapshot);
+  });
 };
 
 /**
@@ -88,9 +80,11 @@ export const getAllTags = async () => {
  */
 export const updateTags = async (newTags) => {
   try {
-    const allTags = await getAllTags()
-    const allTagsSimpleList = allTags.map(el => el.name);
-    const tagsToCreate = newTags.filter(el => !allTagsSimpleList.includes(el));
+    const allTags = await getAllTags();
+    const allTagsSimpleList = allTags.map((el) => el.name);
+    const tagsToCreate = newTags.filter(
+      (el) => !allTagsSimpleList.includes(el)
+    );
 
     tagsToCreate.map(async (el) => {
       try {
@@ -98,11 +92,8 @@ export const updateTags = async (newTags) => {
       } catch (error) {
         console.log(`Error creating a tag: ${error}`);
       }
-    })
+    });
   } catch (error) {
     console.log(`Failed to update tags: ${error}`);
   }
-}
-
-
-
+};

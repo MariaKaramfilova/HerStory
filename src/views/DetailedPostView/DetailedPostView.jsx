@@ -15,7 +15,10 @@ import _ from "lodash";
 import { PostsContext } from "../../context/PostsContext.js";
 import CommentsLibrary from "../CommentsLibrary/CommentsLibrary.jsx";
 import { ADMIN, DELETE_POST } from "../../common/common";
-import { createComment, getCommentsByPostHandle } from "../../services/comment.services";
+import {
+  createComment,
+  getCommentsByPostHandle,
+} from "../../services/comment.services";
 
 /**
  * The DetailedPostView component displays detailed information about a specific post.
@@ -137,10 +140,10 @@ export default function DetailedPostView() {
     if (confirmDelete) {
       try {
         await deletePost(currentPostID);
-        let result = await getAllPosts()
+        let result = await getAllPosts();
         setAllPosts((prev) => ({ ...prev, allPosts: result }));
-        alert('Your post has been deleted!')
-        navigate('/home')
+        alert("Your post has been deleted!");
+        navigate("/home");
       } catch (error) {
         alert(error);
       }
@@ -157,25 +160,36 @@ export default function DetailedPostView() {
             ) : (
               <h6>
                 Posted by{" "}
-                <Link to={`/account/${post.userId}`}>
-                  {post.author}
-                </Link>{" "}
-                on {postDate.toLocaleString()} | {post.topic}
+                <Link to={`/account/${post.userId}`}>{post.author}</Link> on{" "}
+                {postDate.toLocaleString()} | {post.topic}
               </h6>
             )}
           </div>
-          {loggedInUser && ((userRole === ADMIN || post.author === loggedInUser.username) && (
-            <div className="col-4 text-right">
-              <Link className="mt-1 mr-2 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleEdit}>Edit Post</Link>
-              <Link className="mt-1 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleDeletePost}>{DELETE_POST}</Link>
-            </div>
-          ))}
+          {loggedInUser &&
+            (userRole === ADMIN || post.author === loggedInUser.username) && (
+              <div className="col-4 text-right">
+                <Link
+                  className="mt-1 mr-2 py-1 px-2 text-dark text-decoration-underline"
+                  to="#"
+                  onClick={handleEdit}
+                >
+                  Edit Post
+                </Link>
+                <Link
+                  className="mt-1 py-1 px-2 text-dark text-decoration-underline"
+                  to="#"
+                  onClick={handleDeletePost}
+                >
+                  {DELETE_POST}
+                </Link>
+              </div>
+            )}
         </div>
         <hr /> {/* Line */}
       </div>
 
       <div className="container mt-1">
-        <div className="mx-auto" style={{ maxWidth: '97%' }}>
+        <div className="mx-auto" style={{ maxWidth: "97%" }}>
           <h1>{loading ? <Skeleton width={200} /> : post.title}</h1>
           {loading ? (
             <Skeleton count={3} />
@@ -185,13 +199,22 @@ export default function DetailedPostView() {
               <p>{post.content}</p>
               <div className={`media-element ${typeFile}`}>
                 {typeFile === "image" && (
-                  <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Image src={post.file} style={{ height: '320px', width: 'auto' }} />
+                  <div
+                    className="media-element"
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Image
+                      src={post.file}
+                      style={{ height: "320px", width: "auto" }}
+                    />
                   </div>
                 )}
                 {typeFile === "video" && (
-                  <div className="media-element" style={{ display: 'flex', justifyContent: 'center' }}>
-                    <video controls style={{ height: '320px', width: 'auto' }}>
+                  <div
+                    className="media-element"
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <video controls style={{ height: "320px", width: "auto" }}>
                       <source src={post.file} type="video/mp4" />
                     </video>
                   </div>
@@ -244,7 +267,11 @@ export default function DetailedPostView() {
       {loading ? (
         <Skeleton count={5} height={40} />
       ) : (
-        <CommentsLibrary refreshComments={refreshComments} SetRefreshComments={SetRefreshComments} commentsLibrary={commentsLibrary}/>
+        <CommentsLibrary
+          refreshComments={refreshComments}
+          SetRefreshComments={SetRefreshComments}
+          commentsLibrary={commentsLibrary}
+        />
       )}
     </div>
   );

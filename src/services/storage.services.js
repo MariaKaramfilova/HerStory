@@ -14,4 +14,4 @@ export const setFileToStorage = async (file) => {
   const url = await getDownloadURL(imageRef);
 
   return url;
-}
+};

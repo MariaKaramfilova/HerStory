@@ -4,7 +4,7 @@ import { updateProfileEmail } from "../../services/users.services";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { getAllUsers } from "../../services/users.services";
-import { Button, Card, Form, Alert } from 'react-bootstrap';
+import { Button, Card, Form, Alert } from "react-bootstrap";
 
 /**
  * Component that allows the user to change their email address associated with their account.
@@ -12,12 +12,11 @@ import { Button, Card, Form, Alert } from 'react-bootstrap';
  * @return {<EmailSection />};
  */
 export default function EmailSection() {
-
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const { loggedInUser, user, setUser } = useContext(AuthContext);
 
-   /**
+  /**
    * Handles the email change process.
    * @async
    */
@@ -26,7 +25,10 @@ export default function EmailSection() {
       "Please enter your password to confirm email change:"
     );
     if (password) {
-      const credentials = EmailAuthProvider.credential(loggedInUser.email, password);
+      const credentials = EmailAuthProvider.credential(
+        loggedInUser.email,
+        password
+      );
       try {
         await reauthenticateWithCredential(user, credentials);
         if (email) {

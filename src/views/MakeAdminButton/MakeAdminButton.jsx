@@ -1,10 +1,13 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from 'react'
-import { Button } from 'react-bootstrap';
-import { makeAdminUser, removeAdminRights } from '../../services/users.services.js';
+import React, { useState } from "react";
+import { Button } from "react-bootstrap";
+import {
+  makeAdminUser,
+  removeAdminRights,
+} from "../../services/users.services.js";
 import PropTypes from "prop-types";
-import Error from '../Error/Error.jsx';
-import { ADMIN } from '../../common/common.js';
+import Error from "../Error/Error.jsx";
+import { ADMIN } from "../../common/common.js";
 
 /**
  * The MakeAdminButton component allows toggling a user's admin status.
@@ -27,7 +30,7 @@ export default function MakeAdminButton({ user }) {
     } catch (error) {
       setError(error);
     }
-  }
+  };
 
   /**
    * Handles the action to make the user an admin.
@@ -42,26 +45,37 @@ export default function MakeAdminButton({ user }) {
       setLoading(false);
       setAdminStatus(false);
     } catch (error) {
-      setError(error)
+      setError(error);
     }
-  }
+  };
 
   if (error) {
-    return <Error error={error}/>;
+    return <Error error={error} />;
   }
 
   return (
     <>
       {adminStatus ? (
-        <Button variant="success" style={{ marginRight: '0.5em' }} onClick={handleRemoveAdminRights}>Remove admin rights</Button>
-        ) : (
-        <Button variant="outline-success" style={{ marginRight: '0.5em' }} onClick={handleMakeAdmin} >Make admin</Button >)
-      }
+        <Button
+          variant="success"
+          style={{ marginRight: "0.5em" }}
+          onClick={handleRemoveAdminRights}
+        >
+          Remove admin rights
+        </Button>
+      ) : (
+        <Button
+          variant="outline-success"
+          style={{ marginRight: "0.5em" }}
+          onClick={handleMakeAdmin}
+        >
+          Make admin
+        </Button>
+      )}
     </>
-  )
+  );
 }
 
 MakeAdminButton.propTypes = {
   user: PropTypes.object.isRequired,
 };
-

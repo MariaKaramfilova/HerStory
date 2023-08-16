@@ -63,7 +63,7 @@ export default function MyAccount() {
   }, [loggedInUser, location.pathname, userId]);
 
   if (error) {
-    return <Error error={error} />
+    return <Error error={error} />;
   }
 
   return (
@@ -82,7 +82,7 @@ export default function MyAccount() {
               <Posts userName={userInfo.username} />
             )}
           </div>
-          <AccountDetails userInfo={userInfo}/>
+          <AccountDetails userInfo={userInfo} />
         </div>
       </div>
     </>

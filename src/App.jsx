@@ -7,7 +7,7 @@ import RouteElement from "./components/Route-Elements/RouteElement";
 import Header from "./views/Header/Header";
 import SideBar from "./views/Sidebar/Sidebar";
 import "react-loading-skeleton/dist/skeleton.css";
-import PostsContextProvider from './components/PostsContextProvider/PostsContextProvider.jsx';
+import PostsContextProvider from "./components/PostsContextProvider/PostsContextProvider.jsx";
 
 /**
  * The main application component.
@@ -25,20 +25,19 @@ function App() {
         <RoutePage>
           <Header />
           <div className="container-fluid">
-
             <div className="row">
+              <div
+                className="col-1"
+                style={{ backgroundColor: "#f8f9fa", width: "25%", margin: 0 }}
+              >
+                {/* Put content for the right column here */}
+                <SideBar />
+              </div>
 
-          <div className="col-1" style={{ backgroundColor: '#f8f9fa', width: '25%', margin: 0  }}>
-          {/* Put content for the right column here */}
-              <SideBar/>
-        </div>
-
-            <div className="col">
-              <RouteElement />
+              <div className="col">
+                <RouteElement />
+              </div>
             </div>
-            
-          </div>
-
           </div>
         </RoutePage>
       </PostsContextProvider>

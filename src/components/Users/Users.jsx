@@ -54,7 +54,7 @@ export default function Users({ searchTerm }) {
               el.firstName.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
               el.lastName.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
               el.firstName.toLowerCase() + " " + el.lastName.toLowerCase() ===
-              searchTerm.toLowerCase()
+                searchTerm.toLowerCase()
           );
         }
         setUsers(result);
@@ -64,12 +64,11 @@ export default function Users({ searchTerm }) {
         setLoading(false);
       }
     })();
-
   }, [params.type, searchTerm]);
 
   // Need to fix this with error pages - check for lib
   if (error) {
-    return <Error error={error} />
+    return <Error error={error} />;
   }
 
   const usersToShow = users.length ? (

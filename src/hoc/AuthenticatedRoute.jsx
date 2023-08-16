@@ -16,16 +16,16 @@ import { LOG_IN_PATH } from "../common/common";
  * @returns {ReactNode} - Rendered component or redirection.
  *
  */
-export default function AuthenticatedRoute({ children }){
-    const {user} = useContext(AuthContext);
-    let location = useLocation();
+export default function AuthenticatedRoute({ children }) {
+  const { user } = useContext(AuthContext);
+  let location = useLocation();
 
-    if (user === null) {
-        return <Navigate to={LOG_IN_PATH} state={{ from: location.pathname}}/>
-    }
-    return children;
+  if (user === null) {
+    return <Navigate to={LOG_IN_PATH} state={{ from: location.pathname }} />;
+  }
+  return children;
 }
 
 AuthenticatedRoute.propTypes = {
-    children: PropTypes.node.isRequired,
-  };
+  children: PropTypes.node.isRequired,
+};

@@ -1,5 +1,14 @@
 import { database } from "../config/firebase.js";
-import { get, ref, query, orderByChild, equalTo, push, update, remove } from "firebase/database";
+import {
+  get,
+  ref,
+  query,
+  orderByChild,
+  equalTo,
+  push,
+  update,
+  remove,
+} from "firebase/database";
 import { setFileToStorage } from "./storage.services.js";
 import { getCommentsByPostHandle } from "./comment.services.js";
 
@@ -9,10 +18,10 @@ import { getCommentsByPostHandle } from "./comment.services.js";
  * @param {DataSnapshot} snapshot - The snapshot of the posts document.
  * @returns {Array} - An array of post objects.
  */
-export const fromPostsDocument = snapshot => {
+export const fromPostsDocument = (snapshot) => {
   const postsDocument = snapshot.val();
 
-  return Object.keys(postsDocument).map(key => {
+  return Object.keys(postsDocument).map((key) => {
     const post = postsDocument[key];
 
     return {
@@ -24,7 +33,7 @@ export const fromPostsDocument = snapshot => {
       hasComment: post.hasComment ? Object.keys(post.hasComment) : [],
     };
   });
-}
+};
 
 /**
  * Creates a new post.
@@ -38,30 +47,34 @@ export const fromPostsDocument = snapshot => {
  * @param {string} userId - The author's user ID.
  * @returns {Promise<Object>} - A promise that resolves with the created post object.
  */
-export const createPost = async (title, content = null, topic, file = null, handle, email, userId) => {
-  return push(
-    ref(database, 'posts'),
-    {
-      title,
-      userId,
-      content,
-      topic,
-      file: file ? await setFileToStorage(file) : null,
-      fileType: file ? file.type.split('/')[0] : null,
-      author: handle,
-      email: email,
-      createdOn: Date.now(),
-      postId: 'null',
-    },
-  )
-    .then(result => {
-      const updatePostIDequalToHandle = {};
-      updatePostIDequalToHandle[`/posts/${result.key}/postId`] = result.key;
-      update(ref(database), updatePostIDequalToHandle)
+export const createPost = async (
+  title,
+  content = null,
+  topic,
+  file = null,
+  handle,
+  email,
+  userId
+) => {
+  return push(ref(database, "posts"), {
+    title,
+    userId,
+    content,
+    topic,
+    file: file ? await setFileToStorage(file) : null,
+    fileType: file ? file.type.split("/")[0] : null,
+    author: handle,
+    email: email,
+    createdOn: Date.now(),
+    postId: "null",
+  }).then((result) => {
+    const updatePostIDequalToHandle = {};
+    updatePostIDequalToHandle[`/posts/${result.key}/postId`] = result.key;
+    update(ref(database), updatePostIDequalToHandle);
 
-      return getPostById(result.key);
-    });
-}
+    return getPostById(result.key);
+  });
+};
 
 /**
  * Edits an existing post.
@@ -73,18 +86,24 @@ export const createPost = async (title, content = null, topic, file = null, hand
  * @param {File|null} file - The new file associated with the post.
  * @returns {Promise<Object>} - A promise that resolves with the edited post object.
  */
-export const editPost = async (postId, title, topic, content = null, file = null) => {
+export const editPost = async (
+  postId,
+  title,
+  topic,
+  content = null,
+  file = null
+) => {
   let updates;
 
-  if(content){
-     updates = {
+  if (content) {
+    updates = {
       title,
       content,
       topic,
     };
   }
 
-  if(file){
+  if (file) {
     updates = {
       title,
       file: file ? await setFileToStorage(file) : null,
@@ -94,14 +113,13 @@ export const editPost = async (postId, title, topic, content = null, file = null
 
   try {
     await update(ref(database, `posts/${postId}`), updates);
-    console.log('Post updated successfully!');
+    console.log("Post updated successfully!");
     return getPostById(postId);
   } catch (error) {
-    console.error('Error updating post:', error);
+    console.error("Error updating post:", error);
     throw error;
   }
 };
-
 
 /**
  * Deletes a post and its associated comments.
@@ -110,19 +128,17 @@ export const editPost = async (postId, title, topic, content = null, file = null
  * @returns {Promise<void>} - A promise that resolves when the post and comments are deleted.
  */
 export async function deletePost(postId) {
-
   await remove(ref(database, `posts/${postId}`));
 
   const comments = await getCommentsByPostHandle(postId);
   const commentIds = Object.keys(comments);
-  const removeCommentsPromises = commentIds.map(commentId =>
+  const removeCommentsPromises = commentIds.map((commentId) =>
     remove(ref(database, `comments/${commentId}`))
   );
 
   await Promise.all(removeCommentsPromises);
 
-  console.log('Post and associated comments deleted successfully');
-
+  console.log("Post and associated comments deleted successfully");
 }
 
 /**
@@ -133,20 +149,18 @@ export async function deletePost(postId) {
  * @throws {Error} - If the post with the specified ID does not exist.
  */
 export const getPostById = (id) => {
+  return get(ref(database, `posts/${id}`)).then((result) => {
+    if (!result.exists()) {
+      throw new Error(`Post with id ${id} does not exist!`);
+    }
 
-  return get(ref(database, `posts/${id}`))
-    .then(result => {
-      if (!result.exists()) {
-        throw new Error(`Post with id ${id} does not exist!`);
-      }
+    const post = result.val();
+    post.id = id;
+    post.createdOn = new Date(post.createdOn);
+    if (!post.upvotedBy) post.upvotedBy = [];
 
-      const post = result.val();
-      post.id = id;
-      post.createdOn = new Date(post.createdOn);
-      if (!post.upvotedBy) post.upvotedBy = [];
-
-      return post;
-    });
+    return post;
+  });
 };
 
 /**
@@ -155,15 +169,13 @@ export const getPostById = (id) => {
  * @returns {Promise<Array>} - A promise that resolves with an array of all posts.
  */
 export const getAllPosts = () => {
+  return get(ref(database, "posts")).then((snapshot) => {
+    if (!snapshot.exists()) {
+      return [];
+    }
 
-  return get(ref(database, 'posts'))
-    .then(snapshot => {
-      if (!snapshot.exists()) {
-        return [];
-      }
-
-      return fromPostsDocument(snapshot);
-    });
+    return fromPostsDocument(snapshot);
+  });
 };
 
 /**
@@ -173,14 +185,13 @@ export const getAllPosts = () => {
  * @returns {Promise<Array>} - A promise that resolves with an array of posts authored by the user.
  */
 export const getPostsByAuthor = (handle) => {
+  return get(
+    query(ref(database, "posts"), orderByChild("author"), equalTo(handle))
+  ).then((snapshot) => {
+    if (!snapshot.exists()) return [];
 
-  return get(query(ref(database, 'posts'), orderByChild('author'), equalTo(handle)))
-    .then(snapshot => {
-
-      if (!snapshot.exists()) return [];
-
-      return fromPostsDocument(snapshot);
-    });
+    return fromPostsDocument(snapshot);
+  });
 };
 
 /**
@@ -226,31 +237,29 @@ export const downvotePost = (handle, postId) => {
  * @returns {Promise<void>} - A promise that resolves when the tags are successfully removed from the post.
  */
 export const getUpvotedPosts = (handle) => {
+  return get(ref(database, `users/${handle}`)).then((snapshot) => {
+    if (!snapshot.val()) {
+      throw new Error(`User with handle @${handle} does not exist!`);
+    }
 
-  return get(ref(database, `users/${handle}`))
-    .then(snapshot => {
-      if (!snapshot.val()) {
-        throw new Error(`User with handle @${handle} does not exist!`);
-      }
+    const user = snapshot.val();
+    if (!user.upvotedPosts) return [];
 
-      const user = snapshot.val();
-      if (!user.upvotedPosts) return [];
+    return Promise.all(
+      Object.keys(user.upvotedPosts).map((key) => {
+        return get(ref(database, `posts/${key}`)).then((snapshot) => {
+          const post = snapshot.val();
 
-      return Promise.all(Object.keys(user.upvotedPosts).map(key => {
-
-        return get(ref(database, `posts/${key}`))
-          .then(snapshot => {
-            const post = snapshot.val();
-
-            return {
-              ...post,
-              createdOn: new Date(post.createdOn),
-              id: key,
-              upvotedBy: post.upvotedBy ? Object.keys(post.upvotedBy) : [],
-            };
-          });
-      }));
-    });
+          return {
+            ...post,
+            createdOn: new Date(post.createdOn),
+            id: key,
+            upvotedBy: post.upvotedBy ? Object.keys(post.upvotedBy) : [],
+          };
+        });
+      })
+    );
+  });
 };
 
 /**
@@ -262,9 +271,9 @@ export const getUpvotedPosts = (handle) => {
  */
 export const addPostTags = (postId, tags) => {
   const updatePostTags = {};
-  tags.map(tag => {
+  tags.map((tag) => {
     updatePostTags[`/posts/${postId}/tags/${tag}`] = true;
-  })
+  });
 
   return update(ref(database), updatePostTags);
 };
@@ -278,11 +287,10 @@ export const addPostTags = (postId, tags) => {
  */
 export const removePostTags = async (postId, tags) => {
   const promises = [];
-  tags.forEach(tag => {
+  tags.forEach((tag) => {
     const updatePostTags = {};
     updatePostTags[`/posts/${postId}/tags/${tag.value}`] = null;
     return update(ref(database), updatePostTags);
   });
   await Promise.all(promises);
-}
-
+};

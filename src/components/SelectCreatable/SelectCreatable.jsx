@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
-import CreatableSelect from 'react-select/creatable';
-import makeAnimated from 'react-select/animated';
-import { getAllTags } from '../../services/tag.services.js';
-import { getPostsByAuthor } from '../../services/post.services.js';
+import React, { useEffect, useState } from "react";
+import CreatableSelect from "react-select/creatable";
+import makeAnimated from "react-select/animated";
+import { getAllTags } from "../../services/tag.services.js";
+import { getPostsByAuthor } from "../../services/post.services.js";
 import PropTypes from "prop-types";
 
 /**
@@ -26,14 +26,14 @@ export default function SelectCreatable({ changeTags, post }) {
   const animatedComponents = makeAnimated();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [value, setValue] = useState([]);
   const [allTags, setAllTags] = useState();
   const [defaultTags, setDefaultTags] = useState();
 
   const createOption = (label) => ({
     label,
-    value: label.toLowerCase().replace(/\W/g, ''),
+    value: label.toLowerCase().replace(/\W/g, ""),
   });
 
   useEffect(() => {
@@ -44,7 +44,9 @@ export default function SelectCreatable({ changeTags, post }) {
         const filterValidTags = Object.entries(
           data.filter((el) => el.postId === post.postId)[0].tags
         );
-        const defaultTagsList = filterValidTags.map((el) => createOption(el[0]));
+        const defaultTagsList = filterValidTags.map((el) =>
+          createOption(el[0])
+        );
         setDefaultTags(defaultTagsList);
         setValue(defaultTagsList);
         changeTags(defaultTagsList);
@@ -71,7 +73,6 @@ export default function SelectCreatable({ changeTags, post }) {
     })();
   }, []);
 
-
   if (loading) {
     return;
   }
@@ -82,7 +83,10 @@ export default function SelectCreatable({ changeTags, post }) {
       defaultOptions
       defaultValue={defaultTags}
       inputValue={inputValue}
-      onChange={(newValue) => { setValue(newValue); changeTags([newValue, defaultTags]) }}
+      onChange={(newValue) => {
+        setValue(newValue);
+        changeTags([newValue, defaultTags]);
+      }}
       onInputChange={(newValue) => setInputValue(newValue.toLowerCase())}
       isClearable
       closeMenuOnSelect={false}
@@ -90,7 +94,7 @@ export default function SelectCreatable({ changeTags, post }) {
       isMulti
       options={allTags}
     />
-  )
+  );
 }
 
 SelectCreatable.propTypes = {

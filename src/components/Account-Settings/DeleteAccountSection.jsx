@@ -1,15 +1,18 @@
 /* eslint-disable no-unused-vars */
-import { EmailAuthProvider, deleteUser, reauthenticateWithCredential } from 'firebase/auth';
-import React, { useContext } from 'react'
-import { Button, Card, Form } from 'react-bootstrap';
-import { AuthContext } from '../../context/AuthContext.js';
-import { deleteUserData, getAllUsers } from '../../services/users.services.js';
-import { PostsContext } from '../../context/PostsContext.js';
-import { getAllPosts } from '../../services/post.services.js';
-import { getAllComments } from '../../services/comment.services.js';
-import _ from 'lodash';
-import { logoutUser } from '../../services/auth.services.js';
-
+import {
+  EmailAuthProvider,
+  deleteUser,
+  reauthenticateWithCredential,
+} from "firebase/auth";
+import React, { useContext } from "react";
+import { Button, Card, Form } from "react-bootstrap";
+import { AuthContext } from "../../context/AuthContext.js";
+import { deleteUserData, getAllUsers } from "../../services/users.services.js";
+import { PostsContext } from "../../context/PostsContext.js";
+import { getAllPosts } from "../../services/post.services.js";
+import { getAllComments } from "../../services/comment.services.js";
+import _ from "lodash";
+import { logoutUser } from "../../services/auth.services.js";
 
 /**
  * Component that provides the functionality to delete the user's account,
@@ -21,43 +24,72 @@ export default function DeleteAccountSection() {
   const { loggedInUser, user, setUser } = useContext(AuthContext);
   const { allPosts, setAllPosts } = useContext(PostsContext);
 
-
-   /**
+  /**
    * Deletes the user account, associated data, and logs out the user.
    * @async
    */
 
   const deleteAccount = async () => {
-    const password = prompt("Please enter your password to confirm account deletion:");
+    const password = prompt(
+      "Please enter your password to confirm account deletion:"
+    );
     if (password) {
-      const credentials = EmailAuthProvider.credential(loggedInUser.email, password);
+      const credentials = EmailAuthProvider.credential(
+        loggedInUser.email,
+        password
+      );
       try {
         await reauthenticateWithCredential(user, credentials);
-        if (window.confirm("Are you sure you want to delete your account? This action is irreversible. Your account, posts, comments and other activity will be deleted.")) {
+        if (
+          window.confirm(
+            "Are you sure you want to delete your account? This action is irreversible. Your account, posts, comments and other activity will be deleted."
+          )
+        ) {
           try {
-            const postToBeDeleted = allPosts.filter(el => el.userId === loggedInUser.uid);
+            const postToBeDeleted = allPosts.filter(
+              (el) => el.userId === loggedInUser.uid
+            );
             let commentsToBeDeleted = await getAllComments();
-            commentsToBeDeleted = commentsToBeDeleted.filter(el => el.userUid === loggedInUser.uid);
+            commentsToBeDeleted = commentsToBeDeleted.filter(
+              (el) => el.userUid === loggedInUser.uid
+            );
             console.log(loggedInUser.upvotedPosts);
             console.log(loggedInUser.downvotedPosts);
-            const upvotedPosts = loggedInUser.upvotedPosts ? Object.keys(loggedInUser.upvotedPosts) : [];
-            const downvotedPosts = loggedInUser.downvotedPosts ? Object.keys(loggedInUser.downvotedPosts) : [];
+            const upvotedPosts = loggedInUser.upvotedPosts
+              ? Object.keys(loggedInUser.upvotedPosts)
+              : [];
+            const downvotedPosts = loggedInUser.downvotedPosts
+              ? Object.keys(loggedInUser.downvotedPosts)
+              : [];
 
             console.log(downvotedPosts);
             console.log(upvotedPosts);
 
             await deleteUser(user);
-            await deleteUserData(loggedInUser.username, postToBeDeleted, commentsToBeDeleted, upvotedPosts, downvotedPosts);
-            alert('Your account has been deleted.');
+            await deleteUserData(
+              loggedInUser.username,
+              postToBeDeleted,
+              commentsToBeDeleted,
+              upvotedPosts,
+              downvotedPosts
+            );
+            alert("Your account has been deleted.");
             logoutUser();
           } catch (error) {
-            console.error('An error occurred while deleting the account:', error);
-            alert('An error occurred while deleting your account. Please try again.');
+            console.error(
+              "An error occurred while deleting the account:",
+              error
+            );
+            alert(
+              "An error occurred while deleting your account. Please try again."
+            );
           }
         }
       } catch (error) {
-        console.error('An error occurred during re-authentication:', error);
-        alert('Failed to re-authenticate. Please check your password and try again.');
+        console.error("An error occurred during re-authentication:", error);
+        alert(
+          "Failed to re-authenticate. Please check your password and try again."
+        );
       } finally {
         const allUsers = await getAllUsers();
         setUser((prev) => ({ ...prev, allUsers }));
@@ -106,7 +138,7 @@ export default function DeleteAccountSection() {
                 style={{
                   fontSize: "16px",
                   color: "white",
-                  marginBottom: '15px'
+                  marginBottom: "15px",
                 }}
               >
                 Delete Account
@@ -116,5 +148,5 @@ export default function DeleteAccountSection() {
         </Card.Body>
       </Card>
     </>
-  )
+  );
 }

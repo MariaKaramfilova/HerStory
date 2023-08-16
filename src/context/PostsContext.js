@@ -1,4 +1,4 @@
-import { createContext } from "react"
+import { createContext } from "react";
 
 /**
  * The PostsContext provides a context for managing post data.
@@ -25,6 +25,6 @@ import { createContext } from "react"
  * const { allPosts, setAllPosts } = useContext(PostsContext);
  */
 export const PostsContext = createContext({
-    allPosts: [],
-    setAllPosts: () => [],
+  allPosts: [],
+  setAllPosts: () => [],
 });

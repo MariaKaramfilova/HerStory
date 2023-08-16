@@ -4,7 +4,10 @@ import { Card, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { getUserByUsername } from "../../services/users.services";
 import PropTypes from "prop-types";
-import { MISSING_VOTED_BY_MESSAGE, VOTED_BY_MESSAGE } from "../../common/common";
+import {
+  MISSING_VOTED_BY_MESSAGE,
+  VOTED_BY_MESSAGE,
+} from "../../common/common";
 
 /**
  * The ViewUpvoted component displays a list of users who have upvoted a post.
@@ -21,7 +24,6 @@ export default function ViewUpvoted({ upvotedBy }) {
         upvotedBy.map(async (username) => {
           const snapshot = await getUserByUsername(username);
           return snapshot.val();
-
         })
       );
       setUsersData(usersDataArray);
@@ -62,9 +64,7 @@ export default function ViewUpvoted({ upvotedBy }) {
               </li>
             ))
           ) : (
-            <li style={{ fontSize: "20px" }}>
-              {MISSING_VOTED_BY_MESSAGE}
-            </li>
+            <li style={{ fontSize: "20px" }}>{MISSING_VOTED_BY_MESSAGE}</li>
           )}
         </ul>
       </Card.Body>

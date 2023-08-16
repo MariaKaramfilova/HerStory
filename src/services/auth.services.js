@@ -1,4 +1,9 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { auth } from "../config/firebase";
 
 /**
@@ -9,8 +14,8 @@ import { auth } from "../config/firebase";
  * @returns {Promise<AuthCredential>} - A promise that resolves with the user's authentication credential.
  */
 export const registerUser = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
-}
+  return createUserWithEmailAndPassword(auth, email, password);
+};
 
 /**
  * Logs in a user with the provided email and password.
@@ -20,8 +25,8 @@ export const registerUser = (email, password) => {
  * @returns {Promise<AuthCredential>} - A promise that resolves with the user's authentication credential.
  */
 export const loginUser = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
-}
+  return signInWithEmailAndPassword(auth, email, password);
+};
 
 /**
  * Logs out the currently authenticated user.
@@ -29,8 +34,8 @@ export const loginUser = (email, password) => {
  * @returns {Promise<void>} - A promise that resolves when the user is successfully logged out.
  */
 export const logoutUser = () => {
-    return signOut(auth);
-}
+  return signOut(auth);
+};
 
 /**
  * Sends a password reset email to the provided email address.
@@ -39,5 +44,5 @@ export const logoutUser = () => {
  * @returns {Promise<void>} - A promise that resolves when the password reset email is sent successfully.
  */
 export const resetPassword = (email) => {
-    return sendPasswordResetEmail(auth, email);
-}
+  return sendPasswordResetEmail(auth, email);
+};

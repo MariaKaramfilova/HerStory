@@ -1,12 +1,18 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState, useEffect, useContext } from 'react';
-import { editPost, getPostById, addPostTags, removePostTags, getAllPosts } from '../../services/post.services';
-import { Button, Form, } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
-import SelectCreatable from '../../components/SelectCreatable/SelectCreatable.jsx';
-import { updateTags } from '../../services/tag.services.js';
-import DropzoneComponent from '../../components/Dropzone/Dropzone';
-import { PostsContext } from '../../context/PostsContext.js';
+import React, { useState, useEffect, useContext } from "react";
+import {
+  editPost,
+  getPostById,
+  addPostTags,
+  removePostTags,
+  getAllPosts,
+} from "../../services/post.services";
+import { Button, Form } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import SelectCreatable from "../../components/SelectCreatable/SelectCreatable.jsx";
+import { updateTags } from "../../services/tag.services.js";
+import DropzoneComponent from "../../components/Dropzone/Dropzone";
+import { PostsContext } from "../../context/PostsContext.js";
 
 /**
  * A component for editing an existing post.
@@ -17,9 +23,9 @@ import { PostsContext } from '../../context/PostsContext.js';
  */
 const EditPost = () => {
   const [post, setPost] = useState(null);
-  const [editedTitle, setEditedTitle] = useState('');
-  const [editedTopic, setEditedTopic] = useState('');
-  const [editedContent, setEditedContent] = useState('');
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedTopic, setEditedTopic] = useState("");
+  const [editedContent, setEditedContent] = useState("");
   const [editedFile, setEditedFile] = useState(null);
   const [tags, setTags] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -31,7 +37,7 @@ const EditPost = () => {
    */
   const handleSelectChange = (e) => {
     setTags(e);
-  }
+  };
 
   const params = useParams();
   const currentPostID = params.id;
@@ -44,21 +50,19 @@ const EditPost = () => {
         const postData = await getPostById(currentPostID);
         setPost(postData);
         setEditedTitle(postData.title);
-        setEditedTopic(postData.topic)
+        setEditedTopic(postData.topic);
         setEditedContent(postData.content);
 
         if (postData.file) {
           setEditedFile(postData.file); // Include edited file only if it exists
         }
-
       } catch (error) {
-        console.error('Error fetching post data:', error);
+        console.error("Error fetching post data:", error);
       }
     };
 
     fetchPostData();
   }, [currentPostID]);
-
 
   /**
    * Handle form submission for updating the post.
@@ -68,13 +72,18 @@ const EditPost = () => {
     e.preventDefault();
 
     try {
-
-      await editPost(currentPostID, editedTitle, editedTopic, editedContent, editedFile);
+      await editPost(
+        currentPostID,
+        editedTitle,
+        editedTopic,
+        editedContent,
+        editedFile
+      );
 
       let tagsSimple;
 
       if (tags[0]) {
-        tagsSimple = tags[0].map(el => el.value);
+        tagsSimple = tags[0].map((el) => el.value);
       }
 
       if (tags.length && tags[0]) {
@@ -83,19 +92,20 @@ const EditPost = () => {
       }
 
       if (tags[1]) {
-        const deletedTags = tags[1].filter(el => !tagsSimple.includes(el.value));
+        const deletedTags = tags[1].filter(
+          (el) => !tagsSimple.includes(el.value)
+        );
         await removePostTags(currentPostID, deletedTags);
       }
 
-      console.log('Post updated successfully!');
+      console.log("Post updated successfully!");
       let result = await getAllPosts();
       setAllPosts((prev) => ({ ...prev, allPosts: result }));
-      navigate(`/detailed-post-view/${currentPostID}`)
+      navigate(`/detailed-post-view/${currentPostID}`);
     } catch (error) {
-      console.error('Error updating post:', error);
+      console.error("Error updating post:", error);
     }
   };
-
 
   if (!post) {
     return <p>Loading...</p>;
@@ -112,7 +122,6 @@ const EditPost = () => {
             value={editedTitle}
             onChange={(e) => setEditedTitle(e.target.value)}
           />
-
         </Form.Group>
         <Form.Group controlId="editTopic">
           <Form.Label>Topic</Form.Label>
@@ -122,19 +131,20 @@ const EditPost = () => {
             value={editedTopic}
             onChange={(e) => setEditedTopic(e.target.value)}
           />
-
         </Form.Group>
-        {post.content && <Form.Group controlId="editContent">
-          <Form.Label>Content</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={5}
-            value={editedContent}
-            onChange={(e) => setEditedContent(e.target.value)}
-          />
-        </Form.Group>}
+        {post.content && (
+          <Form.Group controlId="editContent">
+            <Form.Label>Content</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={5}
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+            />
+          </Form.Group>
+        )}
 
-        {post.file && (<DropzoneComponent setFile={setEditedFile} />)}
+        {post.file && <DropzoneComponent setFile={setEditedFile} />}
 
         <Form.Label>Add post tags</Form.Label>
         <SelectCreatable changeTags={handleSelectChange} post={post} />
@@ -142,15 +152,19 @@ const EditPost = () => {
 
         <div className="row">
           <div className="col-2">
-            <Button type="submit" variant="dark" onClick={() => navigate(`/detailed-post-view/${currentPostID}`)}>Back to post</Button>
+            <Button
+              type="submit"
+              variant="dark"
+              onClick={() => navigate(`/detailed-post-view/${currentPostID}`)}
+            >
+              Back to post
+            </Button>
           </div>
           <div className="col">
             <Button type="submit">Submit Changes</Button>
           </div>
         </div>
-
       </Form>
-
     </div>
   );
 };
