@@ -30,6 +30,7 @@ export default function MyAccount() {
    * Post-details - view another person or own account with /account/uid
    */
   useEffect(() => {
+    window.scrollTo(0, 0);
     setLoading(true);
     setError(null);
 
