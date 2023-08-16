@@ -16,7 +16,7 @@ npm install
 3.  Run the project
 
 ```
-npm run preview
+npm run dev
 ```
 
 ## Scheme (structure) of the documents in the database
