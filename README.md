@@ -23,6 +23,7 @@ npm run preview
 ## Scheme (structure) of the documents in the database
 
 The data is stored in a document (NoSQL) database hosted by Google Firebase. The documents are organized to achieve the functionalities described in the project description.
+
 ![Database schema visual diagram](/HerStory-database-schema.png)
 
 # Features
