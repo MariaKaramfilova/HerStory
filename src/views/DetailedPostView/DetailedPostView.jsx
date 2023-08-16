@@ -168,7 +168,7 @@ export default function DetailedPostView() {
               </h6>
             )}
           </div>
-          {(userRole === ADMIN || post.author === userName) && (
+          {(userRole === ADMIN || post.author === loggedInUser.username) && (
             <div className="col-4 text-right">
               <Link className="mt-1 mr-2 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleEdit}>Edit Post</Link>
               <Link className="mt-1 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleDeletePost}>{DELETE_POST}</Link>
