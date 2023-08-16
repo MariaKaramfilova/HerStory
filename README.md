@@ -3,7 +3,6 @@
 This project is a Forum System where users can create posts, add comments, and upvote/downvote the things that they like or dislike the most. The forum revolves around one or two general topics.
 
 ## Instructions on how to setup and run the project locally
-<font color="red">Check at the end of the project</font>
 1.  Clone the repository with HTTPS
 
 ```
