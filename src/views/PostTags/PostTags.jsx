@@ -5,7 +5,6 @@ import { getPostsByAuthor } from '../../services/post.services.js';
 import { Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
-import Error from '../Error/Error.jsx';
 import { NO_TAGS } from '../../common/common.js';
 
 /**
@@ -26,7 +25,6 @@ export default function PostTags({ post }) {
     (async function () {
       try {
         const data = await getPostsByAuthor(post.author);
-        console.log();
         const filterValidTags = Object.entries(
           data.filter((el) => el.postId === post.postId)[0].tags
         );

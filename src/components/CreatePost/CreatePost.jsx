@@ -5,10 +5,9 @@ import { createPost, getAllPosts } from '../../services/post.services.js';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
 import DropzoneComponent from '../Dropzone/Dropzone.jsx';
-import { CREATE_POST, TOPIC_EDUCATION, TOPIC_EQUALITY, TOPIC_MATERNITY, TOPIC_PAY, TOPIC_REPRO, TOPIC_VIOLENCE } from '../../common/common.js';
+import { ADD_TITLE, CHOOSE_TOPIC, CREATE_POST, POST_DESCRIPTION, TOPIC_EDUCATION, TOPIC_EQUALITY, TOPIC_MATERNITY, TOPIC_PAY, TOPIC_REPRO, TOPIC_VIOLENCE } from '../../common/common.js';
 import Loading from '../../views/Loading/Loading.jsx';
 import { PostsContext } from '../../context/PostsContext.js';
-import Error from '../../views/Error/Error.jsx';
 
 /**
  * A component for creating a new post.
@@ -25,7 +24,7 @@ export default function CreatePost() {
   const { allPosts, setAllPosts } = useContext(PostsContext);
 
   const [isTypeText, setIsTypeText] = useState(true);
-  const [postTopic, setPostTopic] = useState('Choose topic');
+  const [postTopic, setPostTopic] = useState(CHOOSE_TOPIC);
   const [postTitle, setPostTitle] = useState('');
   const [postDescription, setPostDescription] = useState('');
   const [postFile, setPostFile] = useState('');
@@ -106,8 +105,8 @@ export default function CreatePost() {
         <Form.Group>
           <Row className='mb-3'>
             <Col>
-              <Form.Select aria-label='Choose topic' onChange={(e) => setPostTopic(e.target.value)} required>
-                <option>Choose topic</option>
+              <Form.Select aria-label={CHOOSE_TOPIC} onChange={(e) => setPostTopic(e.target.value)} required>
+                <option>{CHOOSE_TOPIC}</option>
                 <option>{TOPIC_EQUALITY}</option>
                 <option>{TOPIC_EDUCATION}</option>
                 <option>{TOPIC_MATERNITY}</option>
@@ -123,10 +122,10 @@ export default function CreatePost() {
               </ToggleButtonGroup>
             </Col>
           </Row>
-          <Form.Control type="text" placeholder="Add post title" onChange={(e) => setPostTitle(e.target.value)} required className='mb-3' />
+          <Form.Control type="text" placeholder={ADD_TITLE} onChange={(e) => setPostTitle(e.target.value)} required className='mb-3' />
         </Form.Group>
         {isTypeText ? (<Form.Group>
-          <Form.Control as="textarea" placeholder="Write post description" onChange={(e) => setPostDescription(e.target.value)} style={{ minHeight: '30vh' }} />
+          <Form.Control as="textarea" placeholder={POST_DESCRIPTION} onChange={(e) => setPostDescription(e.target.value)} style={{ minHeight: '30vh' }} />
         </Form.Group>) :
           (<DropzoneComponent setFile={setPostFile} />)}
         <Button type="submit" className='mt-3' variant="danger" data-testid="create-post-btn" onClick={handleSubmit}>Create post</Button>

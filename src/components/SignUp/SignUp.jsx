@@ -6,6 +6,7 @@ import { createUserByUsername, getAllUsers, getUserByUsername, getUserData } fro
 import { registerUser } from '../../services/auth.services';
 import { Link, useNavigate } from 'react-router-dom/dist';
 import { fetchSignInMethodsForEmail, getAuth } from 'firebase/auth';
+import { URL_TO_EXTERNAL_DEFAULT_PROF_PIC } from '../../common/common.js';
 import { LOG_IN_PATH } from '../../common/common';
 
 /**
@@ -22,7 +23,7 @@ import { LOG_IN_PATH } from '../../common/common';
  */
 export default function RegistrationForm() {
 
-  const [profilePictureURL, setProfilePictureURL] = useState('https://shorturl.at/jtQ19');
+  const [profilePictureURL, setProfilePictureURL] = useState(URL_TO_EXTERNAL_DEFAULT_PROF_PIC);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');

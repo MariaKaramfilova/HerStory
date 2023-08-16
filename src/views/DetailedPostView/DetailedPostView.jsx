@@ -5,17 +5,17 @@ import {
   deletePost,
   getAllPosts,
 } from "../../services/post.services";
-import { Alert, Button, Form, Image, Card } from "react-bootstrap";
+import { Alert, Button, Form, Image } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext.js";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Comment from "../../components/Comments/Comments";
 import PostTags from "../PostTags/PostTags.jsx";
 import PostUpvotes from "../PostUpvotes/PostUpvotes.jsx";
 import Skeleton from "react-loading-skeleton";
 import _ from "lodash";
 import { PostsContext } from "../../context/PostsContext.js";
-import { DELETE_POST } from "../../common/common";
+import CommentsLibrary from "../CommentsLibrary/CommentsLibrary.jsx";
+import { ADMIN, DELETE_POST } from "../../common/common";
 
 /**
  * The DetailedPostView component displays detailed information about a specific post.
@@ -147,25 +147,6 @@ export default function DetailedPostView() {
     }
   }
 
-  const commentsToShow =
-    commentsLibrary.length > 0 ? (
-      commentsLibrary.map((comment) => (
-        <Comment
-          key={crypto.randomUUID()}
-          author={comment.author}
-          createdOn={comment.createdOn}
-          content={comment.content}
-          commentUserUid={comment.userUid}
-          commentPostId={comment.postId}
-          commentId={comment.commentId}
-          SetRefreshComments={SetRefreshComments}
-          refreshComments={refreshComments}
-        />
-      ))
-    ) : (
-      <p>There are no comments, yet. You can write the first one.</p>
-    );
-
   // if (_.isEmpty(loggedInUser) && loggedInUser !== null) {
   //   return;
   // }
@@ -187,7 +168,7 @@ export default function DetailedPostView() {
               </h6>
             )}
           </div>
-          {(userRole === 'admin' || post.author === userName) && (
+          {(userRole === ADMIN || post.author === loggedInUser.username) && (
             <div className="col-4 text-right">
               <Link className="mt-1 mr-2 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleEdit}>Edit Post</Link>
               <Link className="mt-1 py-1 px-2 text-dark text-decoration-underline" to="#" onClick={handleDeletePost}>{DELETE_POST}</Link>
@@ -267,11 +248,7 @@ export default function DetailedPostView() {
       {loading ? (
         <Skeleton count={5} height={40} />
       ) : (
-        <>
-          <hr />
-          <h2>Comments:</h2>
-          {commentsToShow}
-        </>
+        <CommentsLibrary refreshComments={refreshComments} SetRefreshComments={SetRefreshComments} commentsLibrary={commentsLibrary}/>
       )}
     </div>
   );

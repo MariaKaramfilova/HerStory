@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { PostsContext } from '../../context/PostsContext.js'
 import { getAllPosts } from '../../services/post.services.js';
 import Error from '../../views/Error/Error.jsx';
+import PropTypes from "prop-types";
 
 /**
  * A context provider component for managing posts data within the application.
@@ -44,3 +45,7 @@ export default function PostsContextProvider({ children }) {
     </div>
   )
 }
+
+PostsContextProvider.propTypes = {
+  children: PropTypes.node,
+};

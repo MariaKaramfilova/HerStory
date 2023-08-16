@@ -1,10 +1,11 @@
-import React, { useContext, useEffect } from "react";
-import { Button, Form } from "react-bootstrap";
-import { getAllUsers } from "../../services/users.services";
-import { updateProfilePic } from "../../services/users.services";
-import { useState } from "react";
-import { AuthContext } from "../../context/AuthContext.js";
-import Skeleton from "react-loading-skeleton";
+import React, { useContext, useEffect } from 'react'
+import { Button, Form } from 'react-bootstrap';
+import { getAllUsers } from '../../services/users.services';
+import { updateProfilePic } from '../../services/users.services';
+import { useState } from 'react';
+import { AuthContext } from '../../context/AuthContext.js';
+import Skeleton from 'react-loading-skeleton';
+import { AVATAR_API_URL, DEFAULT_PROF_PIC_DIR } from '../../common/common.js';
 
 /**
  * Component that allows the user to manage their profile picture.
@@ -35,10 +36,10 @@ export default function ProfilePictureSection() {
       setFirstName(loggedInUser.firstName);
       setSurname(loggedInUser.lastName);
       setProfilePictureURL(
-        loggedInUser.profilePictureURL || "../../assets/basic_avatar.png"
+        loggedInUser.profilePictureURL || DEFAULT_PROF_PIC_DIR
       );
       setPrevProfilePictureURL(
-        loggedInUser.profilePictureURL || "../../assets/basic_avatar.png"
+        loggedInUser.profilePictureURL || DEFAULT_PROF_PIC_DIR
       );
       setUsername(loggedInUser.username);
     }
@@ -85,7 +86,7 @@ export default function ProfilePictureSection() {
   const handleClickRandomAvatar = async () => {
     try {
       const image = await fetch(
-        `https://api.dicebear.com/6.x/personas/jpg?seed=${crypto.randomUUID()}`
+        `${AVATAR_API_URL}${crypto.randomUUID()}`
       );
       setProfilePictureURL(image.url);
       const file = await createFileFromUrl(image.url);

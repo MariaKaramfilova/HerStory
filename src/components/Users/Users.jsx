@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import UsersDetails from "./UsersDetails.jsx";
 import PropTypes from "prop-types";
 import Error from "../../views/Error/Error.jsx";
+import { EMAIL, NAME, USERNAME } from "../../common/common.js";
 
 /**
  * Component for displaying a list of users based on search criteria.
@@ -37,16 +38,16 @@ export default function Users({ searchTerm }) {
       try {
         const data = await getAllUsers();
         let result;
-        if (params.type.includes("username")) {
+        if (params.type.includes(USERNAME)) {
           result = data.filter((el) =>
             el.username.toLowerCase().startsWith(searchTerm.toLowerCase())
           );
-        } else if (params.type.includes("email")) {
+        } else if (params.type.includes(EMAIL)) {
           console.log(data);
           result = data.filter((el) =>
             el.email.toLowerCase().startsWith(searchTerm.toLowerCase())
           );
-        } else if (params.type.includes("-name")) {
+        } else if (params.type.includes(NAME)) {
           result = data.filter(
             (el) =>
               el.firstName.toLowerCase().startsWith(searchTerm.toLowerCase()) ||

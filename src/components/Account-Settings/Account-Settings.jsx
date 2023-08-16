@@ -6,7 +6,7 @@ import EmailSection from "./EmailSection";
 import PasswordSection from "./PasswordSection";
 import PhoneSection from "./PhoneSection";
 import ProfilePictureSection from "./ProfilePictureSection";
-import { ACCOUNT_SETTINGS, HOME_PATH } from "../../common/common";
+import { ACCOUNT_SETTINGS, HOME_PATH, ADMIN } from "../../common/common";
 
 /**
  * Account Settings component that allows users to manage their account settings.
@@ -68,7 +68,7 @@ const AccountSettings = () => {
         <EmailSection />
       </div>
 
-      {userRole === "admin" && (
+      {userRole === ADMIN && (
         <div>
           <PhoneSection />
         </div>

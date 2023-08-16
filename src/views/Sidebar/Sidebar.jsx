@@ -18,7 +18,6 @@ function SideBar() {
   const [forumUsers, setForumUsers] = useState("");
   const [forumPosts, setForumPosts] = useState("");
   const [error, setError] = useState(null);
-  const [filteredPosts, setFilteredPosts] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
   const { allPosts } = useContext(PostsContext);
   const { allUsers } = useContext(AuthContext);

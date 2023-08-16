@@ -3,6 +3,7 @@ import { Button, FormControl, Form, DropdownButton, Dropdown } from 'react-boots
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.js';
 import { InputGroup } from 'react-bootstrap';
+import { ADMIN, BY_TAG, BY_TITLE, POSTS, TAG, USER, USERS_EMAIL, USERS_NAME, USERS_USERNAME } from '../../common/common.js';
 
 /**
  * The SearchBar component provides a search bar with various options for searching content.
@@ -15,23 +16,23 @@ const SearchBar = () => {
   const [showError, setShowError] = useState(false);
   const { loggedInUser, user } = useContext(AuthContext);
   const [userRole, setUserRole] = useState('');
-  const [searchType, setSearchType] = useState('posts');
+  const [searchType, setSearchType] = useState(POSTS);
   const [checkType, setCheckType] = useState('by title');
   const navigate = useNavigate();
 
   const handleClickOnCheck = () => {
-    if (checkType === 'by title') {
-      setCheckType("by tag");
-      setSearchType("tag");
+    if (checkType === BY_TITLE) {
+      setCheckType(BY_TAG);
+      setSearchType(TAG);
     } else {
-      setCheckType("by title");
-      setSearchType("posts");
+      setCheckType(BY_TITLE);
+      setSearchType(POSTS);
     }
   }
 
   useEffect(() => {
     if (!user) {
-      setUserRole('user');
+      setUserRole(USER);
       return;
     }
     if (loggedInUser) {
@@ -55,17 +56,17 @@ const SearchBar = () => {
     <>
       <Form style={styles.form}>
         <InputGroup>
-          {userRole === 'admin' && (
+          {userRole === ADMIN && (
             <DropdownButton
               variant="outline-secondary"
               title={`Search in ${searchType}`}
               id="input-group-dropdown-1">
 
-              <Dropdown.Item onClick={() => setSearchType("posts")} href="#">Posts</Dropdown.Item>
-              <Dropdown.Item onClick={() => setSearchType("users-username")} href="#">Users by username</Dropdown.Item>
-              <Dropdown.Item onClick={() => setSearchType("users-email")} href="#">Users by email</Dropdown.Item>
-              <Dropdown.Item onClick={() => setSearchType("users-name")} href="#">Users by name</Dropdown.Item>
-              <Dropdown.Item onClick={() => setSearchType("tag")} href="#">By post tag</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSearchType(POSTS)} href="#">Posts</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSearchType(USERS_USERNAME)} href="#">Users by username</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSearchType(USERS_EMAIL)} href="#">Users by email</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSearchType(USERS_NAME)} href="#">Users by name</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSearchType(TAG)} href="#">By post tag</Dropdown.Item>
 
             </DropdownButton>
           )}
@@ -75,9 +76,9 @@ const SearchBar = () => {
             value={searchTerm}
             name="topic"
             onChange={(e) => { setSearchTerm(e.target.value); setShowError(false) }}
-            placeholder={showError ? "Please enter a search term" : searchType === 'posts' ? "Enter a topic" : searchType === "tag" ? "Enter tag" : "Enter username, email, or display name"}
+            placeholder={showError ? "Please enter a search term" : searchType === POSTS ? "Enter a topic" : searchType === TAG ? "Enter tag" : "Enter username, email, or display name"}
           />
-          {userRole !== 'admin' &&
+          {userRole !== ADMIN &&
             <Form.Check
               style={{position: 'absolute', right: '1em', verticalAlign: "baseline", marginTop: "0.4em", zIndex: "10"}}
               type="switch"

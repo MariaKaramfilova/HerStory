@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import { makeAdminUser, removeAdminRights } from '../../services/users.services.js';
 import PropTypes from "prop-types";
 import Error from '../Error/Error.jsx';
+import { ADMIN } from '../../common/common.js';
 
 /**
  * The MakeAdminButton component allows toggling a user's admin status.
@@ -11,7 +12,7 @@ import Error from '../Error/Error.jsx';
  * @returns {JSX.Element} - JSX representing the MakeAdminButton component.
  */
 export default function MakeAdminButton({ user }) {
-  const [adminStatus, setAdminStatus] = useState(user.role === "admin");
+  const [adminStatus, setAdminStatus] = useState(user.role === ADMIN);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 

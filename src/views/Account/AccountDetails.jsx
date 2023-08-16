@@ -3,7 +3,7 @@ import { Card, ListGroup } from 'react-bootstrap';
 import BlockUserButton from '../BlockUserButton/BlockUserButton.jsx';
 import MakeAdminButton from '../MakeAdminButton/MakeAdminButton.jsx';
 import { AuthContext } from '../../context/AuthContext.js';
-import { ACCOUNT_DETAILS } from "../../common/common.js";
+import { ACCOUNT_DETAILS, ADMIN } from "../../common/common.js";
 import PropTypes from "prop-types";
 
 export default function AccountDetails({ userInfo }) {
@@ -30,7 +30,7 @@ export default function AccountDetails({ userInfo }) {
                 {new Date(userInfo.createdOn).toLocaleString()}
               </ListGroup.Item>
             </ListGroup>
-            {loggedInUser.role === "admin" && (
+            {loggedInUser.role === ADMIN && (
               <>
                 <BlockUserButton user={userInfo} />
                 <MakeAdminButton user={userInfo} />

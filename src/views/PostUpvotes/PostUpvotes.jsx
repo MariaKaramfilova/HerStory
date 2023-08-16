@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import ViewUpvoted from "../ViewUpvoted/ViewUpvoted";
 import _ from "lodash";
 import PropTypes from "prop-types";
+import { ADMIN, DOWN, UP } from "../../common/common.js";
 import { LOG_IN_PATH } from "../../common/common";
 
 /**
@@ -44,7 +45,7 @@ export default function PostUpvotes({ post }) {
 
   const handleClick = (direction) => {
     if (user) {
-      if (direction === "up") {
+      if (direction === UP) {
         upVote();
         setIsUpDisabled(true);
         setIsDownDisabled(false);
@@ -78,7 +79,7 @@ export default function PostUpvotes({ post }) {
 
   const isAuthorOrAdmin =
     loggedInUser &&
-    (loggedInUser.role === "admin" || loggedInUser.username === post.author);
+    (loggedInUser.role === ADMIN || loggedInUser.username === post.author);
 
   return (
     <div className="d-flex">
@@ -90,7 +91,7 @@ export default function PostUpvotes({ post }) {
         //       : "dark"
         //   }
         onClick={() => {
-          handleClick("up");
+          handleClick(UP);
         }}
         variant="dark"
         disabled={isUpDisabled}
@@ -126,7 +127,7 @@ export default function PostUpvotes({ post }) {
       <Button
         type="submit"
         onClick={() => {
-          handleClick("down");
+          handleClick(DOWN);
         }}
         disabled={isDownDisabled}
         variant="dark"
