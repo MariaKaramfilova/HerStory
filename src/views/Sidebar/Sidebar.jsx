@@ -41,7 +41,7 @@ function SideBar() {
     "Violence Against Women",
     "Equal Pay",
     "Maternity Leave",
-    "Women's Education",
+    "Women`s Education",
   ];
 
   const handleTopicSelect = (topic) => {
