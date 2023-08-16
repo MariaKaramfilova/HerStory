@@ -26,7 +26,7 @@ import Error from '../../views/Error/Error.jsx';
  */
 export default function Posts({ searchTerm, userName, tag }) {
   const [filter, setFilter] = useState('new');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [renderedPosts, setRenderedPosts] = useState([]);
   const [error, setError] = useState(null);
   const [selectedButton, setSelectedButton] = useState(1);
@@ -42,14 +42,11 @@ export default function Posts({ searchTerm, userName, tag }) {
   };
   
   useEffect(() => {
-    setLoading(true);
     if (_.isEmpty(allPosts)) {
       return;
     }
-    
     const sortPosts = (result) => {
-      console.log(filter);
-      
+
       let sortedPosts;
       if (filter === 'new') {
         sortedPosts = result.sort((a, b) => b.createdOn - a.createdOn);
@@ -60,6 +57,7 @@ export default function Posts({ searchTerm, userName, tag }) {
       }
       return sortedPosts;
     }
+    setLoading(true);
     
     let result = [...allPosts];
     if (searchTerm) {
@@ -70,6 +68,7 @@ export default function Posts({ searchTerm, userName, tag }) {
       result = result.filter(el => el.tags ? Object.keys(el.tags).filter(el => el.toLowerCase().startsWith(tag.toLowerCase())).length > 0 : false);
     } else if (params.type === "topics") {
       result = result.filter(el => el.topic.split(" ").join("") === params.id);
+      console.log('here');
     }
     
     const sortedPosts = sortPosts(result);
@@ -120,7 +119,7 @@ export default function Posts({ searchTerm, userName, tag }) {
         </Row>
       </Container>)}
       <Container>
-        {_.isEmpty(allPosts) || !renderedPosts.length || loading ? <Skeleton height={400} count={5} style={{ marginBottom: "20px" }} /> : postsToShow}
+        {_.isEmpty(allPosts) || loading ? <Skeleton height={400} count={5} style={{ marginBottom: "20px" }} /> : postsToShow}
       </Container>
     </>
   )
