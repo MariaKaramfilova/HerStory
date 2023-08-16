@@ -81,6 +81,10 @@ export default function RegistrationForm() {
       setError('Password should be more than 6 characters!')
       return;
     }
+    if (!email.includes('@gmail.com') || !email.includes('@abv.bg')) {
+      setError('Email is not valid!')
+    }
+
     try {
       const snapshot = await getUserByUsername(userName);
       if (snapshot.exists()) {
