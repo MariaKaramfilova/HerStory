@@ -8,6 +8,15 @@ import SideBar from "./views/Sidebar/Sidebar";
 import "react-loading-skeleton/dist/skeleton.css";
 import PostsContextProvider from './components/PostsContextProvider/PostsContextProvider.jsx';
 
+/**
+ * The main application component.
+ *
+ * This component serves as the entry point for the entire application. It sets up the necessary
+ * context providers, routers, and layout components.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered JSX element of the application.
+ */
 function App() {
   return (
     <Router>
