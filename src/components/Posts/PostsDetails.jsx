@@ -91,7 +91,7 @@ export default function PostsDetails({ ...post }) {
   const limitContent = (content) => {
     const words = content.split(' ');
     if (words.length > 100) {
-      return words.slice(0, 100).join(' ') + '...';
+      return words.slice(0, 180).join(' ') + '...';
     }
     return content;
   };
