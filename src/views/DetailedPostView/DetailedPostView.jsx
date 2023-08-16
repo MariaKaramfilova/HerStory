@@ -146,10 +146,6 @@ export default function DetailedPostView() {
     }
   }
 
-  // if (_.isEmpty(loggedInUser) && loggedInUser !== null) {
-  //   return;
-  // }
-
   return (
     <div className="container-auto mt-3">
       <div className="container-auto mt-3">

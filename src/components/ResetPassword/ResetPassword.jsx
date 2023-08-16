@@ -25,6 +25,10 @@ export default function ForgottenPassword() {
 
   const navigate = useNavigate();
 
+  /**
+   * Handle password reset submission.
+   * @param {Event} e - The submit event.
+   */
   async function handleResetPassword(e) {
     e.preventDefault();
 
@@ -44,7 +48,7 @@ export default function ForgottenPassword() {
   }
 
   if (error) {
-    return <Error error={error}/>
+    return <Error error={error} />
   }
 
   return (

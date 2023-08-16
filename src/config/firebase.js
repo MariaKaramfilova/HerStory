@@ -21,18 +21,6 @@ import { getStorage } from 'firebase/storage';
  * @property {string} appId - The app ID for your Firebase project.
  *
  * @see {@link https://firebase.google.com/docs/web/setup#config-object | Firebase Configuration Object}
- *
- * @example
- * // Replace these values with your actual Firebase configuration values
- * const firebaseConfig = {
- *   apiKey: "YOUR_API_KEY",
- *   authDomain: "your-project-id.firebaseapp.com",
- *   databaseURL: "https://your-project-id.firebaseio.com",
- *   projectId: "your-project-id",
- *   storageBucket: "your-project-id.appspot.com",
- *   messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
- *   appId: "YOUR_APP_ID"
- * };
  */
 
 const firebaseConfig = {

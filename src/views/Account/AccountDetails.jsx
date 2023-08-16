@@ -6,6 +6,20 @@ import { AuthContext } from '../../context/AuthContext.js';
 import { ACCOUNT_DETAILS, ADMIN } from "../../common/common.js";
 import PropTypes from "prop-types";
 
+/**
+ * Component for displaying user account details.
+ *
+ * Displays user information like username, email, first name, last name, and creation date.
+ * If the logged-in user is an admin, also displays buttons to block/unblock and make/unmake admin.
+ *
+ * @component
+ * @param {object} userInfo - User information object to display.
+ * @returns {JSX.Element} Rendered component displaying user account details.
+ * @example
+ * return (
+ *   <AccountDetails userInfo={userDetails} />
+ * );
+ */
 export default function AccountDetails({ userInfo }) {
   const { loggedInUser, user } = useContext(AuthContext);
 
@@ -24,7 +38,6 @@ export default function AccountDetails({ userInfo }) {
               <ListGroup.Item>
                 Last Name: {userInfo.lastName}
               </ListGroup.Item>
-              {/* If the createdOn is a timestamp, you can format it accordingly */}
               <ListGroup.Item>
                 Created On:{" "}
                 {new Date(userInfo.createdOn).toLocaleString()}

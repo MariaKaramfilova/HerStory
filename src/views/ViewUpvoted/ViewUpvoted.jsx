@@ -29,8 +29,6 @@ export default function ViewUpvoted({ upvotedBy }) {
     fetchUsersData();
   }, [upvotedBy]);
 
-  console.log(usersData);
-
   return (
     <Card>
       <Card.Header style={{ textAlign: "center", fontSize: "40px" }}>

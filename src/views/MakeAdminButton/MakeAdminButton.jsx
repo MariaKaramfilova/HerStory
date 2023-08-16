@@ -27,6 +27,12 @@ export default function MakeAdminButton({ user }) {
     }
   }
 
+  /**
+   * Handles the action to make the user an admin.
+   *
+   * @async
+   * @function
+   */
   const handleRemoveAdminRights = async () => {
     setLoading(true);
     try {

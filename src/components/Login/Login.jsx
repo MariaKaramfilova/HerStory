@@ -26,6 +26,10 @@ export default function Login() {
   const passwordRef = useRef();
   const navigate = useNavigate();
 
+  /**
+   * Handle form submission for user login.
+   * @param {Event} e - The form submission event.
+   */
   async function handleSubmit(e) {
     e.preventDefault();
 

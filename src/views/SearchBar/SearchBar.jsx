@@ -20,6 +20,11 @@ const SearchBar = () => {
   const [checkType, setCheckType] = useState('by title');
   const navigate = useNavigate();
 
+  /**
+   * Handles toggling between searching by title and searching by tag.
+   *
+   * @function
+   */
   const handleClickOnCheck = () => {
     if (checkType === BY_TITLE) {
       setCheckType(BY_TAG);
@@ -40,6 +45,12 @@ const SearchBar = () => {
     }
   }, [loggedInUser, user])
 
+  /**
+   * Handles the search button click event.
+   *
+   * @param {Event} e - The click event.
+   * @function
+   */
   const handleSearchClick = (e) => {
     e.preventDefault();
     if (searchTerm) {

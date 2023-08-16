@@ -62,6 +62,10 @@ export default function PostsDetails({ ...post }) {
     return <div></div>;
   }
 
+  /**
+   * Handle post deletion.
+   * @param {Event} e - The click event.
+   */
   const handleDeletePost = async (e) => {
     e.preventDefault();
     const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
@@ -79,6 +83,11 @@ export default function PostsDetails({ ...post }) {
     }
   }
 
+  /**
+   * Limit post content to a specific word count.
+   * @param {string} content - The post content.
+   * @returns {string} Limited content.
+   */
   const limitContent = (content) => {
     const words = content.split(' ');
     if (words.length > 100) {

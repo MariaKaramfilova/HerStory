@@ -1,6 +1,5 @@
 import { database } from "../config/firebase.js";
 import { get, ref, query, orderByChild, equalTo, push, update, remove } from "firebase/database";
-import { setFileToStorage } from "./storage.services.js";
 import { fromPostsDocument } from "./post.services.js";
 
 /**

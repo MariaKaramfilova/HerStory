@@ -24,10 +24,16 @@ const ProfileDropdown = () => {
   const [profilePictureURL, setProfilePictureURL] = useState(user ? loggedInUser.profilePictureURL : '');
   const navigate = useNavigate();
 
+  /**
+   * Navigate user to MyAccount view
+   */
   const handleMyAccount = () => {
     navigate(`/my-account`);
   }
 
+  /**
+   * Navigate user to Account settings.
+   */
   const handleAccountSettings = () => {
     navigate('/account-settings')
   }

@@ -35,6 +35,11 @@ export default function RegistrationForm() {
 
   const { setUser } = useContext(AuthContext);
 
+  /**
+   * Check if an email is already in use.
+   * @param {string} email - The email to check.
+   * @returns {boolean} True if the email is already in use, false otherwise.
+   */
   const checkEmailExistence = async (email) => {
     const auth = getAuth();
 
@@ -51,6 +56,11 @@ export default function RegistrationForm() {
       throw error;
     }
   };
+
+  /**
+   * Handle registration form submission.
+   * @param {Event} event - The form submit event.
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null)

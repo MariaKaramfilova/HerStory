@@ -43,6 +43,12 @@ function SideBar() {
     "Women`s Education",
   ];
 
+  /**
+   * Handles the selection of a topic and navigates to the topic page.
+   *
+   * @param {string} topic - The selected topic.
+   * @function
+   */
   const handleTopicSelect = (topic) => {
     navigate(`/topics/${topic.split(' ').join("")}`);
     return;

@@ -9,9 +9,7 @@ import { PostsContext } from '../../context/PostsContext.js';
 
 /**
  * A component for editing an existing post.
- *
- * @component
- * @example
+ *@component
  * return (
  *   <EditPost />
  * );
@@ -25,12 +23,12 @@ const EditPost = () => {
   const [tags, setTags] = useState([]);
   const { allPosts, setAllPosts } = useContext(PostsContext);
 
+  /**
+   * Handle change event for the SelectCreatable component.
+   * @param {Array} e - The selected tags.
+   */
   const handleSelectChange = (e) => {
     setTags(e);
-  }
-
-  const handleFileChange = (e) => {
-    setEditedFile(e.target.files[0]);
   }
 
   const params = useParams();
@@ -59,6 +57,11 @@ const EditPost = () => {
     fetchPostData();
   }, [currentPostID]);
 
+
+  /**
+   * Handle form submission for updating the post.
+   * @param {Event} e - The form submission event.
+   */
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 

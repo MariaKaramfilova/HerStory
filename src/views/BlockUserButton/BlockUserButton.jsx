@@ -17,6 +17,9 @@ export default function BlockUserButton({ user }) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Handles the blocking action for the user.
+   */
   const handleBlock = async () => {
     setLoading(true);
     try {
@@ -28,6 +31,9 @@ export default function BlockUserButton({ user }) {
     }
   }
 
+  /**
+     * Handles the unblocking action for the user.
+     */
   const handleUnblock = async () => {
     setLoading(true);
     try {
@@ -40,7 +46,7 @@ export default function BlockUserButton({ user }) {
   }
 
   if (error) {
-    return <Error error={error}/>;
+    return <Error error={error} />;
   }
 
   return (

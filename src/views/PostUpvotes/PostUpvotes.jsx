@@ -43,6 +43,12 @@ export default function PostUpvotes({ post }) {
     }
   }, [user, loggedInUser, post]);
 
+  /**
+   * Handles the upvoting or downvoting action based on the direction.
+   *
+   * @param {string} direction - The direction of the vote ("up" or "down").
+   * @function
+   */
   const handleClick = (direction) => {
     if (user) {
       if (direction === UP) {
@@ -59,6 +65,12 @@ export default function PostUpvotes({ post }) {
     }
   };
 
+  /**
+   * Handles the upvoting action for the post.
+   *
+   * @async
+   * @function
+   */
   const upVote = async () => {
     try {
       setVote((prev) => prev + 1);
@@ -68,6 +80,12 @@ export default function PostUpvotes({ post }) {
     }
   };
 
+  /**
+   * Handles the downvoting action for the post.
+   *
+   * @async
+   * @function
+   */
   const downVote = async () => {
     try {
       setVote((prev) => prev - 1);
