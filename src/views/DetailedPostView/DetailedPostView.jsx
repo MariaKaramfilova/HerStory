@@ -35,7 +35,7 @@ export default function DetailedPostView() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [userRole, setUserRole] = useState(
-    loggedInUser ? loggedInUser.userRole : null
+    loggedInUser ? loggedInUser.role : null
   );
   const [userName, setUserName] = useState(
     loggedInUser ? loggedInUser.username : null
